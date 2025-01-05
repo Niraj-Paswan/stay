@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stripe Payment Demo</title>
+    <link rel="stylesheet" href="/assets/css/styles.css" />
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+      .stripe-button {
+        background-color: #6772e5;
+        color: white;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100">
+    <div class="container mx-auto py-10 flex justify-center">
+      <div class="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
+        <h2 class="text-2xl font-semibold text-center text-gray-700 mb-4">
+          Pay with Stripe
+        </h2>
+
+        <form id="payment-form">
+          <div class="mb-4">
+            <label for="card-element" class="block text-gray-600"
+              >Credit or Debit Card</label
+            >
+            <div
+              id="card-element"
+              class="mt-2 p-4 border rounded-md border-gray-300"
+            >
+              <!-- A Stripe Element will be inserted here. -->
+            </div>
+          </div>
+          <button
+            id="submit"
+            class="stripe-button w-full py-2 rounded-md text-white font-semibold"
+          >
+            Pay $50.00
+          </button>
+          <div id="payment-status" class="mt-4 text-center text-gray-600"></div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      // Set your publishable key here
+      const stripe = Stripe(
+        "pk_test_51QdZIFIsZuG9rUaAUlU1SDR4OPVjRWrXaMJUTji3L5iYn7ZJGOKwfab9SolHF3H6OkAlX6uD8JicEs4eFMxJ153600sMKu54oZ"
+      ); // Replace with your test public key
+      const elements = stripe.elements();
+
+      // Create an instance of the card Element
+      const card = elements.create("card");
+      card.mount("#card-element");
+
+      // Form handling
+      const form = document.getElementById("payment-form");
+      const paymentStatus = document.getElementById("payment-status");
+      const submitButton = document.getElementById("submit");
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const { token, error } = await stripe.createToken(card);
+
+        if (error) {
+          paymentStatus.textContent = error.message;
+          paymentStatus.classList.add("text-red-500");
+        } else {
+          // You would send the token to your server here for processing
+          paymentStatus.textContent = "Payment Successful!";
+          paymentStatus.classList.add("text-green-500");
+        }
+      });
+    </script>
+  </body>
+</html>
