@@ -107,5 +107,3 @@ We would like to express our gratitude to our mentors, team members, and faculty
 
 Transform room rentals with **StayEase** today! 🚀
 ```
-
-This `README.md` file is structured with all relevant sections, including an introduction, features, installation instructions, tech stack details, and contribution guidelines. You can easily adapt or expand it as your project evolves.
