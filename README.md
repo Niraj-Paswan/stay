@@ -106,4 +106,3 @@ We would like to express our gratitude to our mentors, team members, and faculty
 ---
 
 Transform room rentals with **StayEase** today! 🚀
-```
