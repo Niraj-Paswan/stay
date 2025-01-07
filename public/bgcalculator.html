@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Budget Calculator</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://site-assets.fontawesome.com/releases/v6.5.1/css/all.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-image: url("../assets/img/beams-home@95.jpg");
+        background-size: cover;
+        background-position: center;
+        font-family: "Poppins", sans-serif;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-white min-h-screen flex items-center justify-center font-Nrj-fonts p-6"
+  >
+    <div
+      class="bg-white border border-gray-300 shadow-md rounded-lg w-full lg:w-[50%] p-6"
+    >
+      <h1 class="text-xl font-semibold text-center mb-6 text-black">
+        Budget Calculator
+      </h1>
+      <form id="budgetForm" class="space-y-6">
+        <div>
+          <label for="rent" class="block text-lg font-medium text-gray-700">
+            Rent
+            <i class="ml-1 fa-regular fa-house text-lg"></i>
+          </label>
+          <input
+            type="number"
+            id="rent"
+            class="p-1 text-sm font-semibold mt-1 block w-full h-10 border-b border-gray-300 outline-none focus:ring-0 lg:text-[16px]"
+            placeholder="e.g., 13000"
+            required
+          />
+        </div>
+        <div>
+          <label for="food" class="block text-sm font-medium text-gray-700"
+            >Food <i class="ml-1 fa-regular fa-pot-food text-lg"></i
+          ></label>
+          <input
+            type="number"
+            id="food"
+            class="p-1 text-sm font-semibold mt-1 block w-full h-10 border-b border-gray-300 outline-none focus:ring-0 lg:text-[16px]"
+            placeholder="e.g., 7000"
+            required
+          />
+        </div>
+        <div>
+          <label for="travel" class="block text-sm font-medium text-gray-700"
+            >Travel <i class="ml-1 fa-regular fa-plane text-lg"></i
+          ></label>
+          <input
+            type="number"
+            id="travel"
+            class="p-1 text-sm font-semibold mt-1 block w-full h-10 border-b border-gray-300 outline-none focus:ring-0 lg:text-[16px]"
+            placeholder="e.g., 4000"
+            required
+          />
+        </div>
+        <div>
+          <label for="shopping" class="block text-sm font-medium text-gray-700"
+            >Shopping <i class="ml-1 fa-regular fa-cart-shopping text-lg"></i
+          ></label>
+          <input
+            type="number"
+            id="shopping"
+            class="p-1 text-sm font-semibold mt-1 block w-full h-10 border-b border-gray-300 outline-none focus:ring-0 lg:text-[16px]"
+            placeholder="e.g., 3000"
+            required
+          />
+        </div>
+        <div>
+          <label for="medical" class="block text-sm font-medium text-gray-700"
+            >Medical
+            <i class="ml-1 fa-regular fa-truck-medical text-lg"></i>
+          </label>
+          <input
+            type="number"
+            id="medical"
+            class="p-1 text-sm font-semibold mt-1 block w-full h-10 border-b border-gray-300 outline-none focus:ring-0 lg:text-[16px]"
+            placeholder="e.g., 2000"
+            required
+          />
+        </div>
+        <button
+          type="submit"
+          class="font-semibold w-full bg-blue-500 text-white py-3 px-4 rounded-md shadow-lg hover:bg-blue-600"
+        >
+          Calculate Budget
+        </button>
+      </form>
+
+      <!-- Initially hidden content -->
+      <div
+        id="totalContainer"
+        class="hidden mt-6 text-center text-lg font-semibold text-black"
+      >
+        Total: <span id="totalAmount" class="text-blue-500">₹0</span>
+      </div>
+      <div class="mt-8 flex justify-center items-center">
+        <canvas
+          id="budgetChart"
+          class="w-full h-40"
+          style="display: none"
+        ></canvas>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const budgetForm = document.getElementById("budgetForm");
+        const budgetChartCtx = document
+          .getElementById("budgetChart")
+          .getContext("2d");
+        const totalContainer = document.getElementById("totalContainer");
+        const totalAmountElement = document.getElementById("totalAmount");
+        const budgetChartCanvas = document.getElementById("budgetChart");
+
+        const budgetData = {
+          labels: ["Rent", "Food", "Travel", "Shopping", "Medical"],
+          datasets: [
+            {
+              label: "Budget Distribution",
+              data: [],
+              backgroundColor: [
+                "#fbbf24", // Yellow
+                "#f97316", // Orange
+                "#3b82f6", // Blue
+                "#f43f5e", // Red
+                "#10b981", // Green
+              ],
+              hoverOffset: 4,
+            },
+          ],
+        };
+
+        const budgetChart = new Chart(budgetChartCtx, {
+          type: "doughnut",
+          data: budgetData,
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: "bottom",
+              },
+            },
+          },
+        });
+
+        budgetForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+
+          // Get values from the form inputs
+          const rent = parseFloat(document.getElementById("rent").value) || 0;
+          const food = parseFloat(document.getElementById("food").value) || 0;
+          const travel =
+            parseFloat(document.getElementById("travel").value) || 0;
+          const shopping =
+            parseFloat(document.getElementById("shopping").value) || 0;
+          const medical =
+            parseFloat(document.getElementById("medical").value) || 0;
+
+          // Calculate the total budget
+          const total = rent + food + travel + shopping + medical;
+
+          // Update the chart data
+          budgetData.datasets[0].data = [rent, food, travel, shopping, medical];
+          budgetChart.update();
+
+          // Display the total amount
+          totalAmountElement.textContent = `₹${total.toLocaleString()}`;
+          totalContainer.classList.remove("hidden");
+          budgetChartCanvas.style.display = "block"; // Show the chart
+        });
+      });
+    </script>
+  </body>
+</html>
