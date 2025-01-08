@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StayEase | Nearby</title>
+    <link
+      rel="shortcut icon"
+      href="../assets/img/icons/icon-192x192.png"
+      type="image/x-icon"
+    />
+    <link
+      rel="stylesheet"
+      href="https://site-assets.fontawesome.com/releases/v6.5.1/css/all.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://api.mapbox.com/mapbox-gl-js/v3.9.1/mapbox-gl.css"
+      rel="stylesheet"
+    />
+    <style>
+      /* Custom class to hide scrollbars */
+      .scrollbar-hidden {
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE 10+ */
+      }
+      .scrollbar-hidden::-webkit-scrollbar {
+        display: none; /* Chrome, Safari, and Opera */
+      }
+    </style>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.9.1/mapbox-gl.js"></script>
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+  </head>
+  <body class="h-screen font-Nrj-fonts">
+    <nav class="w-full h-14 shadow-md bg-white border-b border-gray-300 p-4">
+      <p class="font-semibold text-lg">
+        Your Location is :
+        <i class="fa-solid fa-location-dot text-lg text-red-600"></i>
+        <!-- Actual Location -->
+        <span id="user-location" class="text-lg font-semibold">Loading...</span>
+      </p>
+    </nav>
+
+    <div class="grid grid-cols-[60%_40%] h-full">
+      <!-- Left Section: Vertically Scrollable without Visible Scrollbar -->
+      <div class="overflow-y-auto scrollbar-hidden p-4">
+        <p>Left Section Content</p>
+      </div>
+
+      <!-- Right Section: Fixed with Map -->
+      <div class="bg-transparent p-4 h-full relative">
+        <div id="map" class="h-full rounded-md border border-gray-300"></div>
+      </div>
+    </div>
+  </body>
+  <script>
+    // Initialize Mapbox map
+    mapboxgl.accessToken =
+      "pk.eyJ1IjoidHlwcm9qZWN0IiwiYSI6ImNtNTZxdWx6bjEwamUyaXMyc2poczd4OHAifQ.tuR-aGDXJdcOWzsmYz4hnw";
+
+    let map = new mapboxgl.Map({
+      container: "map", // The ID of the container where the map will be displayed
+      style: "mapbox://styles/mapbox/streets-v11", // Default "streets" style
+      center: [77.1025, 28.7041], // Coordinates of New Delhi, India (default location)
+      zoom: 12, // Default zoom level
+    });
+
+    // Add navigation controls (zoom and rotation)
+    map.addControl(new mapboxgl.NavigationControl());
+
+    // Add Geolocate Control to the map (default "Find Current Location" button)
+    const geolocate = new mapboxgl.GeolocateControl({
+      positionOptions: {
+        enableHighAccuracy: true,
+      },
+      trackUserLocation: true, // This will keep the location centered
+    });
+
+    map.addControl(geolocate);
+
+    // Function to reverse geocode the latitude and longitude to human-readable address
+    function reverseGeocode(lat, lon) {
+      const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lon},${lat}.json?access_token=${mapboxgl.accessToken}`;
+
+      fetch(url)
+        .then((response) => response.json())
+        .then((data) => {
+          const place = data.features[0]?.place_name || "Unknown Location";
+          const userLocationElement = document.getElementById("user-location");
+          userLocationElement.textContent = place;
+        })
+        .catch((error) => {
+          console.error("Error fetching geocoding data:", error);
+          const userLocationElement = document.getElementById("user-location");
+          userLocationElement.textContent = "Unable to fetch location";
+        });
+    }
+
+    // Add a marker to show the current location when found
+    map.on("geolocate", (e) => {
+      const currentLocation = e.coords;
+      const lat = currentLocation.latitude;
+      const lon = currentLocation.longitude;
+
+      // Set the new marker to the updated location
+      new mapboxgl.Marker().setLngLat([lon, lat]).addTo(map);
+
+      // Reverse geocode the location and update the location in the span
+      reverseGeocode(lat, lon);
+    });
+
+    // Use geolocation API as a fallback to set location if needed
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        function (position) {
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+
+          // Update the location on page load if geolocation works
+          reverseGeocode(lat, lon);
+
+          // Also update map to this location
+          map.setCenter([lon, lat]);
+          map.setZoom(12);
+
+          // Add a marker at the user's location
+          new mapboxgl.Marker().setLngLat([lon, lat]).addTo(map);
+        },
+        function () {
+          document.getElementById("user-location").textContent =
+            "Location access denied.";
+        }
+      );
+    }
+  </script>
+</html>
