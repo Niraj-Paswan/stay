@@ -30,13 +30,75 @@
       .scrollbar-hidden::-webkit-scrollbar {
         display: none; /* Chrome, Safari, and Opera */
       }
+
+      /* Custom styles for hover card */
+      .hover-card {
+        width: 300px;
+        background: white;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        position: relative;
+      }
+
+      .hover-card img {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+      }
+
+      .hover-card i {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: white;
+        padding: 5px;
+        border-radius: 50%;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+      }
+
+      .hover-card .content {
+        padding: 16px;
+      }
+
+      .hover-card .content h3 {
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .hover-card .content h2 {
+        margin-top: 8px;
+        font-size: 16px;
+        font-weight: 500;
+        color: #555;
+      }
+
+      .hover-card .content h2 span {
+        color: #f53b57;
+        font-size: 20px;
+        font-weight: 700;
+      }
+
+      /* Remove extra white space and background in the popup */
+      .mapboxgl-popup-content {
+        padding: 0 !important; /* Remove padding */
+        background-color: transparent !important; /* Remove the white background */
+        border: none !important; /* Remove border */
+      }
+
+      .mapboxgl-popup-tip {
+        display: none !important; /* Remove the popup arrow */
+      }
     </style>
     <script src="https://api.mapbox.com/mapbox-gl-js/v3.9.1/mapbox-gl.js"></script>
     <link rel="stylesheet" href="../assets/css/styles.css" />
   </head>
   <body class="h-screen font-Nrj-fonts">
     <nav class="w-full h-14 shadow-md bg-white border-b border-gray-300 p-4">
-      <p class="font-semibold text-lg">
+      <p class="font-medium text-lg">
         Your Location is :
         <i class="fa-solid fa-location-dot text-lg text-red-600"></i>
         <!-- Actual Location -->
@@ -55,85 +117,159 @@
         <div id="map" class="h-full rounded-md border border-gray-300"></div>
       </div>
     </div>
-  </body>
-  <script>
-    // Initialize Mapbox map
-    mapboxgl.accessToken =
-      "pk.eyJ1IjoidHlwcm9qZWN0IiwiYSI6ImNtNTZxdWx6bjEwamUyaXMyc2poczd4OHAifQ.tuR-aGDXJdcOWzsmYz4hnw";
 
-    let map = new mapboxgl.Map({
-      container: "map", // The ID of the container where the map will be displayed
-      style: "mapbox://styles/mapbox/streets-v11", // Default "streets" style
-      center: [77.1025, 28.7041], // Coordinates of New Delhi, India (default location)
-      zoom: 12, // Default zoom level
-    });
+    <script>
+      // Initialize Mapbox map
+      mapboxgl.accessToken =
+        "pk.eyJ1IjoidHlwcm9qZWN0IiwiYSI6ImNtNTZxdWx6bjEwamUyaXMyc2poczd4OHAifQ.tuR-aGDXJdcOWzsmYz4hnw";
 
-    // Add navigation controls (zoom and rotation)
-    map.addControl(new mapboxgl.NavigationControl());
+      let map = new mapboxgl.Map({
+        container: "map", // The ID of the container where the map will be displayed
+        style: "mapbox://styles/mapbox/streets-v11", // Default "streets" style
+        center: [73.8567, 15.4909], // Coordinates of Goa (default location)
+        zoom: 10, // Default zoom level
+      });
 
-    // Add Geolocate Control to the map (default "Find Current Location" button)
-    const geolocate = new mapboxgl.GeolocateControl({
-      positionOptions: {
-        enableHighAccuracy: true,
-      },
-      trackUserLocation: true, // This will keep the location centered
-    });
+      // Add navigation controls (zoom and rotation)
+      map.addControl(new mapboxgl.NavigationControl());
 
-    map.addControl(geolocate);
-
-    // Function to reverse geocode the latitude and longitude to human-readable address
-    function reverseGeocode(lat, lon) {
-      const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lon},${lat}.json?access_token=${mapboxgl.accessToken}`;
-
-      fetch(url)
-        .then((response) => response.json())
-        .then((data) => {
-          const place = data.features[0]?.place_name || "Unknown Location";
-          const userLocationElement = document.getElementById("user-location");
-          userLocationElement.textContent = place;
-        })
-        .catch((error) => {
-          console.error("Error fetching geocoding data:", error);
-          const userLocationElement = document.getElementById("user-location");
-          userLocationElement.textContent = "Unable to fetch location";
-        });
-    }
-
-    // Add a marker to show the current location when found
-    map.on("geolocate", (e) => {
-      const currentLocation = e.coords;
-      const lat = currentLocation.latitude;
-      const lon = currentLocation.longitude;
-
-      // Set the new marker to the updated location
-      new mapboxgl.Marker().setLngLat([lon, lat]).addTo(map);
-
-      // Reverse geocode the location and update the location in the span
-      reverseGeocode(lat, lon);
-    });
-
-    // Use geolocation API as a fallback to set location if needed
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        function (position) {
-          const lat = position.coords.latitude;
-          const lon = position.coords.longitude;
-
-          // Update the location on page load if geolocation works
-          reverseGeocode(lat, lon);
-
-          // Also update map to this location
-          map.setCenter([lon, lat]);
-          map.setZoom(12);
-
-          // Add a marker at the user's location
-          new mapboxgl.Marker().setLngLat([lon, lat]).addTo(map);
+      // Add Geolocate Control to the map (default "Find Current Location" button)
+      const geolocate = new mapboxgl.GeolocateControl({
+        positionOptions: {
+          enableHighAccuracy: true,
         },
-        function () {
-          document.getElementById("user-location").textContent =
-            "Location access denied.";
+        trackUserLocation: true, // This will keep the location centered
+      });
+
+      map.addControl(geolocate);
+
+      // Function to reverse geocode the latitude and longitude to human-readable address
+      function reverseGeocode(lat, lon) {
+        const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lon},${lat}.json?access_token=${mapboxgl.accessToken}`;
+
+        fetch(url)
+          .then((response) => response.json())
+          .then((data) => {
+            const place = data.features[0]?.place_name || "Unknown Location";
+            const userLocationElement =
+              document.getElementById("user-location");
+            userLocationElement.textContent = place;
+          })
+          .catch((error) => {
+            console.error("Error fetching geocoding data:", error);
+            const userLocationElement =
+              document.getElementById("user-location");
+            userLocationElement.textContent = "Unable to fetch location";
+          });
+      }
+
+      // Array of markers in Goa with coordinates
+      const markers = [
+        {
+          name: "Vita Student First Street, Manchester",
+          coordinates: [73.8278, 15.4909],
+          price: "15,000",
+          image: "../assets/img/room1.jpg",
+        },
+        {
+          name: "Bicholim",
+          coordinates: [73.9516, 15.593],
+          price: "12,000",
+          image: "../assets/img/room2.jpg",
+        },
+        {
+          name: "Sankhalim",
+          coordinates: [74.0137, 15.5638],
+          price: "10,000",
+          image: "../assets/img/room3.jpg",
+        },
+        {
+          name: "Mapusa",
+          coordinates: [73.8138, 15.5896],
+          price: "14,000",
+          image: "../assets/img/room4.jpg",
+        },
+      ];
+
+      // Function to calculate distance between two coordinates
+      function getDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371; // Radius of the Earth in kilometers
+        const dLat = ((lat2 - lat1) * Math.PI) / 180;
+        const dLon = ((lon2 - lon1) * Math.PI) / 180;
+        const a =
+          Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+          Math.cos((lat1 * Math.PI) / 180) *
+            Math.cos((lat2 * Math.PI) / 180) *
+            Math.sin(dLon / 2) *
+            Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c; // Distance in kilometers
+      }
+
+      // Function to find the nearest marker
+      function findNearestMarker(userLat, userLon) {
+        let nearestMarker = null;
+        let minDistance = 10; // Maximum distance in km
+
+        markers.forEach((marker) => {
+          const [lon, lat] = marker.coordinates;
+          const distance = getDistance(userLat, userLon, lat, lon);
+          if (distance < minDistance) {
+            nearestMarker = marker;
+            minDistance = distance;
+          }
+        });
+
+        return nearestMarker;
+      }
+
+      // Add the markers to the map with hover cards
+      markers.forEach((marker) => {
+        const popup = new mapboxgl.Popup({
+          offset: 25,
+          closeButton: false,
+        }).setHTML(
+          `<div class="hover-card">
+              <img src="${marker.image}" alt="Property" />
+              <i class="fa-regular fa-xmark"></i>
+              <div class="content">
+                <h3>${marker.name}</h3>
+                <h2>From <span>${marker.price}</span> /Month</h2>
+              </div>
+            </div>`
+        );
+
+        new mapboxgl.Marker({ color: "blue" })
+          .setLngLat(marker.coordinates)
+          .setPopup(popup) // Add the popup
+          .addTo(map);
+      });
+
+      // Geolocate event listener
+      geolocate.on("geolocate", (event) => {
+        const { latitude, longitude } = event.coords;
+        reverseGeocode(latitude, longitude);
+
+        // Find the nearest marker and open its popup
+        const nearestMarker = findNearestMarker(latitude, longitude);
+        if (nearestMarker) {
+          const popup = new mapboxgl.Popup({
+            offset: 25,
+            closeButton: false,
+          }).setHTML(
+            `<div class="hover-card">
+                <img src="${nearestMarker.image}" alt="Property" />
+                <i class="fa-regular fa-xmark"></i>
+                <div class="content">
+                  <h3>${nearestMarker.name}</h3>
+                  <h2>From <span>${nearestMarker.price}</span> /Month</h2>
+                </div>
+              </div>`
+          );
+
+          popup.setLngLat(nearestMarker.coordinates).addTo(map);
         }
-      );
-    }
-  </script>
+      });
+    </script>
+  </body>
 </html>
