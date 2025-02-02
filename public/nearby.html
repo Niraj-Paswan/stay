@@ -22,15 +22,6 @@
       rel="stylesheet"
     />
     <style>
-      /* Custom class to hide scrollbars */
-      .scrollbar-hidden {
-        scrollbar-width: none; /* Firefox */
-        -ms-overflow-style: none; /* IE 10+ */
-      }
-      .scrollbar-hidden::-webkit-scrollbar {
-        display: none; /* Chrome, Safari, and Opera */
-      }
-
       /* Custom styles for hover card */
       .hover-card {
         width: 300px;
@@ -77,7 +68,7 @@
       }
 
       .hover-card .content h2 span {
-        color: #f53b57;
+        color: #080bae;
         font-size: 20px;
         font-weight: 700;
       }
@@ -166,28 +157,11 @@
       // Array of markers in Goa with coordinates
       const markers = [
         {
-          name: "Vita Student First Street, Manchester",
-          coordinates: [73.8278, 15.4909],
-          price: "15,000",
-          image: "../assets/img/room1.jpg",
-        },
-        {
+          property_name: "Royal Stays",
           name: "Bicholim",
-          coordinates: [73.9516, 15.593],
+          coordinates: [73.94635346, 15.59110281],
           price: "12,000",
           image: "../assets/img/room2.jpg",
-        },
-        {
-          name: "Sankhalim",
-          coordinates: [74.0137, 15.5638],
-          price: "10,000",
-          image: "../assets/img/room3.jpg",
-        },
-        {
-          name: "Mapusa",
-          coordinates: [73.8138, 15.5896],
-          price: "14,000",
-          image: "../assets/img/room4.jpg",
         },
       ];
 
@@ -230,13 +204,14 @@
           closeButton: false,
         }).setHTML(
           `<div class="hover-card">
-              <img src="${marker.image}" alt="Property" />
-              <i class="fa-regular fa-xmark"></i>
-              <div class="content">
-                <h3>${marker.name}</h3>
-                <h2>From <span>${marker.price}</span> /Month</h2>
-              </div>
-            </div>`
+      <img src="${marker.image}" alt="Property" />
+      <i class="fa-regular fa-xmark"></i>
+      <div class="content font-Nrj-fonts">
+        <h3 class="font-bold text-lg">${marker.property_name}</h3> 
+        <h1 class="font-normal text-sm">${marker.name}</h1> 
+        <h2>From <span>₹${marker.price}</span> /Month</h2>
+      </div>
+    </div>`
         );
 
         new mapboxgl.Marker({ color: "blue" })
@@ -260,9 +235,9 @@
             `<div class="hover-card">
                 <img src="${nearestMarker.image}" alt="Property" />
                 <i class="fa-regular fa-xmark"></i>
-                <div class="content">
+                <div class="content font-Nrj-fonts">
                   <h3>${nearestMarker.name}</h3>
-                  <h2>From <span>${nearestMarker.price}</span> /Month</h2>
+                  <h2>From <span>₹${nearestMarker.price}</span> /Month</h2>
                 </div>
               </div>`
           );
