@@ -6,7 +6,7 @@
     <title>StayEase | Nearby</title>
     <link
       rel="shortcut icon"
-      href="../assets/img/icons/icon-192x192.png"
+      href="../assets/img/stayease logo.svg"
       type="image/x-icon"
     />
     <link
@@ -99,8 +99,119 @@
 
     <div class="grid grid-cols-[60%_40%] h-full">
       <!-- Left Section: Vertically Scrollable without Visible Scrollbar -->
-      <div class="overflow-y-auto scrollbar-hidden p-4">
-        <p>Left Section Content</p>
+      <div class="overflow-y-auto scrollbar-hidden px-10 py-4">
+        <div
+          class="flex flex-row border-[1.5px] border-gray-300 rounded-lg shadow-sm overflow-hidden"
+        >
+          <!-- Image Section -->
+          <div class="relative w-80 h-52">
+            <img
+              class="w-full h-60 object-cover"
+              src="/assets/img/room1.jpg"
+              alt="Property Image"
+              id="property_image"
+              name="property_image"
+            />
+
+            <!-- Verified Badge -->
+            <div
+              class="absolute top-2 right-2 bg-white text-sm font-medium px-2 py-1 text-black flex items-center rounded-sm"
+              id="verified_badge"
+              name="verified_badge"
+            >
+              <i class="fa-solid fa-badge-check mr-1 text-blue-600"></i>
+              Verified
+            </div>
+          </div>
+
+          <!-- Property Info Section -->
+          <div class="flex flex-col flex-1 px-6 py-4">
+            <!-- Name & Type -->
+            <div class="flex justify-between items-center">
+              <h2
+                class="text-2xl font-semibold text-gray-800"
+                id="property_name_container"
+              >
+                <span name="property_name" id="property_name"
+                  >Suddha Apartment</span
+                >
+              </h2>
+              <div
+                class="text-sm border-[1.5px] bg-gray-50 border-gray-400 px-4 py-2 font-medium rounded-md"
+                id="property_type"
+                name="property_type"
+              >
+                Apartment
+              </div>
+            </div>
+
+            <!-- Location -->
+            <div class="flex items-center mt-1 text-gray-600 text-sm">
+              <i class="fa-solid fa-location-dot mr-1"></i>
+              <span id="property_location" name="property_location"
+                >Bicholim - Goa</span
+              >
+            </div>
+
+            <!-- Price -->
+            <h2 class="text-sm font-normal mt-2 text-gray-500">
+              Rent from
+              <span
+                class="text-black text-lg font-semibold"
+                id="property_price"
+                name="property_price"
+                >₹ 15,000/</span
+              >
+              month
+            </h2>
+
+            <!-- Property Features -->
+            <div class="flex justify-between mt-2">
+              <div class="flex items-center gap-2" data-bedrooms="2">
+                <i class="fa-light fa-bed text-lg text-blue-500"></i>
+                <p
+                  class="text-[16px] font-medium text-gray-800"
+                  id="bedrooms"
+                  name="bedrooms"
+                >
+                  2 Beds
+                </p>
+              </div>
+              <div class="flex items-center gap-2" data-bathrooms="1">
+                <i class="fa-light fa-bath text-lg text-blue-500"></i>
+                <p
+                  class="text-[16px] font-medium text-gray-800"
+                  id="bathrooms"
+                  name="bathrooms"
+                >
+                  1 Bath
+                </p>
+              </div>
+              <div class="flex items-center gap-2" data-size="1800">
+                <i
+                  class="fa-light fa-arrows-maximize text-lg text-blue-500"
+                ></i>
+                <p
+                  class="text-[16px] font-medium text-gray-800"
+                  id="area"
+                  name="area"
+                >
+                  1800 Sq.ft
+                </p>
+              </div>
+            </div>
+
+            <!-- Action Button -->
+            <button
+              class="w-full mt-4 py-2 bg-blue-500 text-white font-medium rounded hover:bg-blue-600 transition"
+              data-action="continue"
+              id="continue_button"
+              name="continue_button"
+            >
+              Continue
+            </button>
+          </div>
+        </div>
       </div>
 
       <!-- Right Section: Fixed with Map -->
