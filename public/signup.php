@@ -32,7 +32,7 @@ if (isset($_POST["submit"])) {
     // Execute query and handle the result
     if ($conn->query($sql) === TRUE) {
       // Redirect to login page after successful signup
-      echo "<script>alert('Signup successful. Redirecting you to the Login Page.'); window.location.href = 'login.html';</script>";
+      echo "<script>alert('Signup successful. Redirecting you to the Login Page.'); window.location.href = 'login.php';</script>";
     } else {
       echo "<script>alert('Failed: " . $sql . "<br />Error: " . $conn->error . "');</script>";
     }
@@ -214,7 +214,9 @@ if (isset($_POST["submit"])) {
 </head>
 
 <body class="bg-gray-100 flex justify-center items-center min-h-screen">
-  <div class="bg-white p-8 rounded-md shadow-lg max-w-sm w-full border border-gray-300">
+<div
+      class="bg-white p-8 rounded-md shadow-lg w-96 border-[0.5px] border-gray-300"
+    >
     <div class="flex justify-center items-center space-x-1 mb-4">
       <div class="flex justify-center items-center space-x-1">
         <img src="../assets/img/stayease logo.svg" class="w-8 h-8" alt="" />
@@ -246,7 +248,7 @@ if (isset($_POST["submit"])) {
       </div>
 
       <p class="mt-4 text-center">
-        <span class="text-black text-sm font-Nrj-fonts">Don't have an account?</span>
+        <span class="text-black text-sm font-Nrj-fonts">Already have an account?</span>
         <a href="login.php" class="text-blue-500 hover:underline font-Nrj-fonts">Log in</a>
       </p>
 
