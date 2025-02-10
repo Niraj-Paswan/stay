@@ -336,10 +336,18 @@ if (!isset($_SESSION["user_logged_in"]) || $_SESSION["user_logged_in"] !== true)
   </div>
 
   <!-- Steps label of Room Booking -->
-  <h1 class="font-Nrj-fonts font-semibold text-2xl md:text-4xl lg:text-4xl mt-12  leading-snug text-center">
+  <div class="text-center relative mt-12">
+  <h1 class="font-Nrj-fonts font-semibold text-2xl md:text-4xl lg:text-4xl leading-tight">
     Quickly Book Your Room in <br />
-    <span class="text-for text-xl md:text-3xl lg:text-3xl">Just 4 Easy Steps 🚀.</span>
+    <span class="text-for text-xl md:text-3xl lg:text-3xl relative inline-block text-black">
+      Just 4 Easy Steps 🚀
+      <svg class="absolute left-1/2 transform -translate-x-1/2 bottom-[-6px] w-48 md:w-64 lg:w-72" viewBox="0 0 220 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10 15 C50 25, 130 5, 210 15" stroke="#22c55e" stroke-width="4" fill="none" stroke-linecap="round"/>
+      </svg>
+    </span>
   </h1>
+</div>
+
   <!-- Actual Steps of Room Booking -->
   <div class="flex flex-row items-center mt-24 justify-evenly ">
     <ol
