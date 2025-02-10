@@ -173,7 +173,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       </div>
 
       <div id="login-form">
-        <form action="index.php" method="POST">
+        <form action="login.php" method="POST">
           <div class="mb-4">
             <label
               for="user-email"
