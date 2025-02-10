@@ -268,7 +268,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </head>
   <body class="bg-gray-100 flex justify-center items-center min-h-screen">
     <div
-      class="bg-white p-8 rounded-md shadow-lg max-w-sm w-full border border-gray-300"
+class="bg-white p-8 rounded-md shadow-lg w-96 border-[0.5px] border-gray-300"
     >
     <div class="flex justify-center items-center space-x-1 mb-4">
         <div class="flex justify-center items-center space-x-1">
