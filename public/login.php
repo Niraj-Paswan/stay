@@ -3,62 +3,69 @@ session_start();
 
 // Database connection
 $servername = "localhost:3307"; // Database host
-$username = "root";           // Database username
-$password = "";               // Database password
-$dbname = "stayease";       // Database name
+$username = "root";             // Database username
+$password = "";                 // Database password
+$dbname = "stayease";           // Database name
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Check connection
 if ($conn->connect_error) {
-  die("Connection failed: " . $conn->connect_error);
+    die("Connection failed: " . $conn->connect_error);
 }
 
-$email_error = ''; // Variable to hold the email error message
-$password_error = ''; // Variable to hold the password error message
+$email_error = $password_error = ""; // Error message variables
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  // Capture form data
-  $email = $_POST['email'];
-  $password = $_POST['password'];
+    // Capture and sanitize form data
+    $email = trim($_POST['email']);
+    $password = trim($_POST['password']);
 
-  // Check if email or password is empty
-  if (empty($email) || empty($password)) {
-    $email_error = 'Email is required';
-    $password_error = 'Password is required';
-  } else {
-    // SQL query to fetch user data based on email
-    $sql = "SELECT * FROM signup WHERE email = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows > 0) {
-      // Fetch user data
-      $user = $result->fetch_assoc();
-
-      // Check if password matches the database password
-      if ($password === $user['password']) {
-        // If login is successful, start session and redirect to index.php
-        $_SESSION['user_logged_in'] = true; // Store session variable
-        $_SESSION['user_id'] = $user['id']; // Store user ID in session
-        header("Location: index.php");
-        exit();
-      } else {
-        // Password is incorrect
-        $password_error = 'Incorrect password';
-      }
-    } else {
-      // No user found with that email
-      $email_error = 'No account found with that email';
+    // Validate input
+    if (empty($email)) {
+        $email_error = "Email is required";
     }
-  }
+    if (empty($password)) {
+        $password_error = "Password is required";
+    }
 
-  $conn->close();
+    if (empty($email_error) && empty($password_error)) {
+        // Prepare SQL query to fetch user data
+        $sql = "SELECT userID, email, password FROM signup WHERE email = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            // Fetch user data
+            $user = $result->fetch_assoc();
+
+            // Verify plain text password
+            if ($password === $user['password']) {
+                // Set session variables
+                $_SESSION['user_logged_in'] = true;
+                $_SESSION['userID'] = $user['userID'];
+                $_SESSION['user_email'] = $user['email'];
+
+                // Redirect to home page
+                header("Location: index.php");
+                exit();
+            } else {
+                $password_error = "Incorrect password";
+            }
+        } else {
+            $email_error = "No account found with that email";
+        }
+    }
+
+    // Close statement and connection
+    $stmt->close();
+    $conn->close();
 }
 ?>
+
 
 
 <!DOCTYPE html>
