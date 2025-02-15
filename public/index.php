@@ -166,7 +166,7 @@ if (!isset($_SESSION["user_logged_in"]) || $_SESSION["user_logged_in"] !== true)
         <div id="dropdown-menu"
           class="hidden absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5 transform opacity-0 scale-95 transition duration-300 ease-out group-hover:opacity-100 group-hover:scale-100"
           role="menu" aria-orientation="vertical" tabindex="-1">
-          <a href="#"
+          <a href="userinfo.php"
             class="block px-4 py-2 text-sm text-black font-Nrj-fonts hover:bg-gray-100 hover:pl-3 transition-all duration-300"
             role="menuitem">
             Your Profile
@@ -341,9 +341,6 @@ if (!isset($_SESSION["user_logged_in"]) || $_SESSION["user_logged_in"] !== true)
     Quickly Book Your Room in <br />
     <span class="text-for text-xl md:text-3xl lg:text-3xl relative inline-block text-black">
       Just 4 Easy Steps 🚀
-      <svg class="absolute left-1/2 transform -translate-x-1/2 bottom-[-6px] w-48 md:w-64 lg:w-72" viewBox="0 0 220 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M10 15 C50 25, 130 5, 210 15" stroke="#22c55e" stroke-width="4" fill="none" stroke-linecap="round"/>
-      </svg>
     </span>
   </h1>
 </div>
@@ -399,166 +396,6 @@ if (!isset($_SESSION["user_logged_in"]) || $_SESSION["user_logged_in"] !== true)
           class="max-w-90 max-h-90 -mt-12 md:-mt-9 lg:-mt-[107px] " />
       </div>
     </div>
-  </div>
-
-  <h1 class="font-Nrj-fonts font-medium text-2xl md:text-lg lg:text-lg mt-24  leading-snug text-center">
-    Curated
-    especially
-    for you<br />
-    <span class="text-for text-xl md:text-2xl lg:text-2xl">Recommended
-      properties 🏠</span>
-  </h1>
-
-  <!-- Property Cards -->
-  <div id="property-card"
-    class="flex justify-evenly items-center flex-col gap-8 md:gap-0 lg:gap-0 md:flex-row lg:flex-row mt-6 font-Nrj-fonts">
-    <div class="w-72 bg-white border border-gray-300 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-      <!-- Image -->
-      <a href="/bookings/listingview.html" id="property-link">
-        <img id="property-image" class="rounded-t-lg h-40 w-full object-cover" src="/assets/img/home.jpg"
-          alt="Property Image" />
-      </a>
-      <!-- Content Section -->
-      <div class="px-4 py-2">
-        <!-- Type Badge -->
-        <div id="property-type-container"
-          class="flex flex-row justify-center items-center w-24 h-6 bg-gray-200 rounded-sm">
-          <p id="property-type" class="font-Nrj-fonts font-normal text-sm text-gray-800">
-            Apartment
-          </p>
-        </div>
-        <!-- Property Name -->
-        <h5 id="property-name" class="mt-1 text-[16px] font-semibold tracking-tight text-gray-900 dark:text-white">
-          Sudha Appartments
-        </h5>
-        <!-- Location -->
-        <p id="property-location" class="text-sm font-normal text-gray-600 dark:text-gray-400 flex items-center">
-          Bicholim-Goa
-        </p>
-        <!-- Rent and View Link -->
-        <div id="property-details" class="flex flex-row items-center justify-between mt-2">
-          <p id="property-rent" class="text-lg font-semibold font-Nrj-fonts text-black">
-            <span class="text-sm font-normal">from</span> ₹15,000/
-            <span class="text-sm font-normal">month</span>
-          </p>
-          <a id="view-details-link" class="font-Nrj-fonts font-normal text-for hover:underline"
-            href="/bookings/listingview.html">
-            View
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <div class="w-72 bg-white border border-gray-300 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-      <!-- Image -->
-      <a href="#" id="property-link">
-        <img id="property-image" class="rounded-t-lg h-40 w-full object-cover" src="/assets/img/home.jpg"
-          alt="Property Image" />
-      </a>
-      <!-- Content Section -->
-      <div class="px-4 py-2">
-        <!-- Type Badge -->
-        <div id="property-type-container"
-          class="flex flex-row justify-center items-center w-24 h-6 bg-gray-200 rounded-sm">
-          <p id="property-type" class="font-Nrj-fonts font-normal text-sm text-gray-800">
-            Apartment
-          </p>
-        </div>
-        <!-- Property Name -->
-        <h5 id="property-name" class="mt-1 text-[16px] font-semibold tracking-tight text-gray-900 dark:text-white">
-          Sudha Appartments
-        </h5>
-        <!-- Location -->
-        <p id="property-location" class="text-sm font-normal text-gray-600 dark:text-gray-400 flex items-center">
-          Bicholim-Goa
-        </p>
-        <!-- Rent and View Link -->
-        <div id="property-details" class="flex flex-row items-center justify-between mt-2">
-          <p id="property-rent" class="text-lg font-semibold font-Nrj-fonts text-black">
-            <span class="text-sm font-normal">from</span> ₹15,000/
-            <span class="text-sm font-normal">month</span>
-          </p>
-          <a id="view-details-link" class="font-Nrj-fonts font-normal text-for hover:underline" href="#">
-            View
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <div class="w-72 bg-white border border-gray-300 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-      <!-- Image -->
-      <a href="#" id="property-link">
-        <img id="property-image" class="rounded-t-lg h-40 w-full object-cover" src="/assets/img/home.jpg"
-          alt="Property Image" />
-      </a>
-      <!-- Content Section -->
-      <div class="px-4 py-2">
-        <!-- Type Badge -->
-        <div id="property-type-container"
-          class="flex flex-row justify-center items-center w-24 h-6 bg-gray-200 rounded-sm">
-          <p id="property-type" class="font-Nrj-fonts font-normal text-sm text-gray-800">
-            Apartment
-          </p>
-        </div>
-        <!-- Property Name -->
-        <h5 id="property-name" class="mt-1 text-[16px] font-semibold tracking-tight text-gray-900 dark:text-white">
-          Sudha Appartments
-        </h5>
-        <!-- Location -->
-        <p id="property-location" class="text-sm font-normal text-gray-600 dark:text-gray-400 flex items-center">
-          Bicholim-Goa
-        </p>
-        <!-- Rent and View Link -->
-        <div id="property-details" class="flex flex-row items-center justify-between mt-2">
-          <p id="property-rent" class="text-lg font-semibold font-Nrj-fonts text-black">
-            <span class="text-sm font-normal">from</span> ₹15,000/
-            <span class="text-sm font-normal">month</span>
-          </p>
-          <a id="view-details-link" class="font-Nrj-fonts font-normal text-for hover:underline" href="#">
-            View
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <div class="w-72 bg-white border border-gray-300 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-      <!-- Image -->
-      <a href="#" id="property-link">
-        <img id="property-image" class="rounded-t-lg h-40 w-full object-cover" src="/assets/img/home.jpg"
-          alt="Property Image" />
-      </a>
-      <!-- Content Section -->
-      <div class="px-4 py-2">
-        <!-- Type Badge -->
-        <div id="property-type-container"
-          class="flex flex-row justify-center items-center w-24 h-6 bg-gray-200 rounded-sm">
-          <p id="property-type" class="font-Nrj-fonts font-normal text-sm text-gray-800">
-            Apartment
-          </p>
-        </div>
-        <!-- Property Name -->
-        <h5 id="property-name" class="mt-1 text-[16px] font-semibold tracking-tight text-gray-900 dark:text-white">
-          Sudha Appartments
-        </h5>
-        <!-- Location -->
-        <p id="property-location" class="text-sm font-normal text-gray-600 dark:text-gray-400 flex items-center">
-          Bicholim-Goa
-        </p>
-        <!-- Rent and View Link -->
-        <div id="property-details" class="flex flex-row items-center justify-between mt-2">
-          <p id="property-rent" class="text-lg font-semibold font-Nrj-fonts text-black">
-            <span class="text-sm font-normal">from</span> ₹15,000/
-            <span class="text-sm font-normal">month</span>
-          </p>
-          <a id="view-details-link" class="font-Nrj-fonts font-normal text-for hover:underline" href="#">
-            View
-          </a>
-        </div>
-      </div>
-    </div>
-
-
-  </div>
   </div>
 
   <!-- Testimonials -->
