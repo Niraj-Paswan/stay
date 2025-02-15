@@ -17,7 +17,7 @@ $properties = [];
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $properties[] = [
-            "id" => $row["id"],
+            "pid" => $row["id"],
             "property_name" => $row["property_name"],
             "location" => $row["property_location"],
             "coordinates" => [(float)$row["longitude"], (float)$row["latitude"]],
@@ -218,7 +218,7 @@ $conn->close();
           <div class="flex items-center gap-2">
             <i class="fa-light fa-bath text-lg text-blue-500"></i>
             <p class="text-[16px] font-medium text-gray-800">
-              <?= $property['bathrooms'] ?> Bath
+              <?= $property['bathrooms'] ?> Bathrooms
             </p>
           </div>
           <div class="flex items-center gap-2">
@@ -230,10 +230,12 @@ $conn->close();
         </div>
 
         <!-- Action Button -->
-        <button class="w-full mt-4 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 transition"
-          onclick="window.location.href='../bookings/payment.html';<?php $property['id'] ?>">
-          Continue
-        </button>
+        <form action="listingview.php" method="GET">
+  <input type="hidden" name="id" value="<?= $property['pid'] ?>">
+  <button type="submit" class="w-full mt-4 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 transition">
+    Continue
+  </button>
+</form>
       </div>
     </div>
     <?php endforeach; ?>
