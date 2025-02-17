@@ -30,6 +30,8 @@ if ($result->num_rows > 0) {
         ];
     }
 }
+
+        session_start();
 $conn->close();
 ?>
 
@@ -186,10 +188,10 @@ $conn->close();
         <!-- Name & Type -->
         <div class="flex justify-between items-center">
           <h2 class="text-2xl font-semibold text-gray-800">
-            <?= $property['property_name'] ?>
+        <?= $property['property_name'] ?>
           </h2>
           <div class="text-sm border-[1.5px] bg-gray-50 border-gray-400 px-4 py-2 font-medium rounded-md text-for">
-            <?= $property['type'] ?>
+        <?= $property['type'] ?>
           </div>
         </div>
 
@@ -203,39 +205,50 @@ $conn->close();
         <h2 class="text-sm font-normal mt-2 text-gray-500">
           Rent from
           <span class="text-black text-lg font-semibold">
-            <?= $property['price'] ?>/ month
+          ₹<?= $property['price'] ?>/ 
           </span>
+          month
         </h2>
 
         <!-- Property Features -->
         <div class="flex justify-between mt-2">
           <div class="flex items-center gap-2">
-            <i class="fa-light fa-bed text-lg text-blue-500"></i>
-            <p class="text-[16px] font-medium text-gray-800">
-              <?= $property['bedrooms'] ?> Bedrooms
-            </p>
+        <i class="fa-light fa-bed text-lg text-blue-500"></i>
+        <p class="text-[16px] font-medium text-gray-800">
+          <?= $property['bedrooms'] ?> Bedrooms
+        </p>
           </div>
           <div class="flex items-center gap-2">
-            <i class="fa-light fa-bath text-lg text-blue-500"></i>
-            <p class="text-[16px] font-medium text-gray-800">
-              <?= $property['bathrooms'] ?> Bathrooms
-            </p>
+        <i class="fa-light fa-bath text-lg text-blue-500"></i>
+        <p class="text-[16px] font-medium text-gray-800">
+          <?= $property['bathrooms'] ?> Bathrooms
+        </p>
           </div>
           <div class="flex items-center gap-2">
-            <i class="fa-light fa-arrows-maximize text-lg text-blue-500"></i>
-            <p class="text-[16px] font-medium text-gray-800">
-              <?= $property['area'] ?> Sq.ft
-            </p>
+        <i class="fa-light fa-arrows-maximize text-lg text-blue-500"></i>
+        <p class="text-[16px] font-medium text-gray-800">
+          <?= $property['area'] ?> Sq.ft
+        </p>
           </div>
         </div>
 
         <!-- Action Button -->
         <form action="listingview.php" method="GET">
-  <input type="hidden" name="id" value="<?= $property['pid'] ?>">
-  <button type="submit" class="w-full mt-4 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 transition">
-    Continue
-  </button>
-</form>
+        <input type="hidden" name="id" value="<?= $property['pid'] ?>">
+        <input type="hidden" name="property_name" value="<?= $property['property_name'] ?>">
+        <input type="hidden" name="location" value="<?= $property['location'] ?>">
+        <input type="hidden" name="price" value="<?= $property['price'] ?>">
+        <input type="hidden" name="image" value="<?= $property['image'] ?>">
+        <input type="hidden" name="type" value="<?= $property['type'] ?>">
+        <input type="hidden" name="bathrooms" value="<?= $property['bathrooms'] ?>">
+        <input type="hidden" name="bedrooms" value="<?= $property['bedrooms'] ?>">
+        <input type="hidden" name="area" value="<?= $property['area'] ?>">
+        <input type="hidden" name="userID" value="<?= $_SESSION['userID'] ?>">
+        <input type="hidden" name="user_email" value="<?= $_SESSION['user_email'] ?>">
+        <button type="submit" class="w-full mt-4 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 transition">
+          Continue
+        </button>
+      </form>
       </div>
     </div>
     <?php endforeach; ?>
