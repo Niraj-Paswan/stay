@@ -78,7 +78,7 @@ $conn->close();
       rel="stylesheet"
       href="https://site-assets.fontawesome.com/releases/v6.5.1/css/all.css"
     />
-
+  <link rel="stylesheet" href="../assets/css/styles.css" />
     <style>
       /* Rotate the second icon when it has the rotate-180 class */
       .rotate-180 {
@@ -186,11 +186,11 @@ $conn->close();
                   > <?= $property['property_name'] ?></span
                 >
                 <div
-                  class="flex items-center justify-start text-sm border-[1.5px] bg-gray-50 border-gray-400 w-[15%] px-4 py-2 font-medium text-for rounded-md"
+                  class="flex items-center justify-center text-sm border-[1.5px] bg-gray-50 border-gray-400 w-[15%] px-4 py-2 font-medium text-for rounded-md"
                   name="property_type"
                   id="property_type"
                 >
-                  Apartment
+                <?= $property['type'] ?>
                 </div>
               </h2>
               <div
@@ -229,19 +229,21 @@ $conn->close();
             </h2>
             <h2 class="text-sm font-normal mb-2 text-gray-500">
               Rent from
-              <span class="text-black text-lg font-semibold"><?= $property['price'] ?></span
-              >month
+              <span class="text-black text-lg font-semibold">₹<?= $property['price'] ?>/</span
+              > month
             </h2>
             <!-- Action Buttons -->
             <button
               class="w-full py-2 bg-blue-500 text-white font-medium rounded hover:bg-for mb-4"
               data-action="continue"
+              onclick = "window.location.href = '../bookings/personal_info.php';";
             >
               Continue
             </button>
             <button
               class="w-full py-2 bg-gray-200 text-gray-700 font-medium rounded hover:bg-gray-300"
               data-action="go-back"
+              onclick = "window.history.back();"
             >
               Go Back
             </button>
@@ -443,13 +445,13 @@ $conn->close();
               </div>
               <div class="flex items-center gap-2" data-bathrooms="1">
                 <i class="fa-light fa-bath text-lg text-blue-500"></i>
-                <p class="text-[16px] font-medium text-gray-800"><?= $property['bathrooms'] ?> Bathrooms>
+                <p class="text-[16px] font-medium text-gray-800"><?= $property['bathrooms'] ?> Bathroom
               </div>
               <div class="flex items-center gap-2" data-size="1800">
                 <i
                   class="fa-light fa-arrows-maximize text-lg text-blue-500"
                 ></i>
-                <p class="text-[16px] font-medium text-gray-800"><?= $property['area'] ?>Sq.ft</p>
+                <p class="text-[16px] font-medium text-gray-800"><?= $property['area'] ?> Sq.ft</p>
               </div>
             </div>
           </div>
