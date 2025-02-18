@@ -3,16 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Sta</title>
     <!-- Link to Tailwind CSS -->
-    <link rel="stylesheet" href="/assets/css/styles.css" />
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <link
+      rel="shortcut icon"
+      href="../assets/img/stayease logo.svg"
+      type="image/x-icon"
+    />
     <!-- Font Awesome for icons -->
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
+      href="https://site-assets.fontawesome.com/releases/v6.5.1/css/all.css"
     />
     <!-- Google Fonts for Poppins -->
     <link
@@ -32,8 +34,356 @@
             Total Listings :
           </h3>
           <p class="text-2xl font-semibold text-gray-800 mb-2 ml-2">
-            40 Properties
+            4 Properties
           </p>
+        </div>
+
+        <div
+          class="flex flex-row justify-center items-center gap-4 p-1 overflow-hidden"
+        >
+          <!-- Property Cards 1-->
+          <div
+            id="property-card"
+            class="flex justify-evenly items-center flex-col gap-8 md:flex-row lg:flex-row mt-6 font-Nrj-fonts"
+          >
+            <div
+              class="w-64 bg-white border border-gray-300 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+            >
+              <!-- Image -->
+              <div class="relative">
+                <img
+                  id="property-image"
+                  class="rounded-t-lg h-40 w-full object-cover"
+                  src="/assets/img/room1.jpg"
+                  alt="Property Image"
+                />
+                <!-- Verified Badge -->
+                <div
+                  class="absolute top-2 right-2 bg-white text-sm font-medium px-2 py-1 text-black flex items-center rounded-sm shadow"
+                >
+                  <i class="fa-solid fa-badge-check mr-1 text-blue-600"></i>
+                  Verified
+                </div>
+              </div>
+
+              <!-- Content Section -->
+              <div class="px-4 py-2">
+                <!-- Type Badge -->
+                <div
+                  id="property-type-container"
+                  class="flex flex-row justify-center items-center w-24 h-6 bg-gray-50 rounded-sm border-[1.5px] border-gray-300"
+                >
+                  <p
+                    id="property-type"
+                    class="font-Nrj-fonts font-normal text-sm text-gray-800"
+                  >
+                    Apartment
+                  </p>
+                </div>
+                <!-- Property Name -->
+                <h5
+                  id="property-name"
+                  class="mt-1 text-[16px] font-semibold tracking-tight text-gray-900 dark:text-white"
+                >
+                  Sudha Appartments
+                </h5>
+                <!-- Location -->
+                <p
+                  id="property-location"
+                  class="text-sm font-normal text-gray-600 dark:text-gray-400 flex items-center"
+                >
+                  Bicholim-Goa
+                </p>
+                <!-- Rent and View Link -->
+                <div
+                  id="property-details"
+                  class="flex flex-row items-center justify-between mt-2"
+                >
+                  <p
+                    id="property-rent"
+                    class="text-lg font-semibold font-Nrj-fonts text-black"
+                  >
+                    <span class="text-sm font-normal">from</span> ₹15,000/
+                    <span class="text-sm font-normal">month</span>
+                  </p>
+                </div>
+
+                <!-- Edit & Delete Buttons -->
+                <div class="flex justify-evenly py-2 mt-2 gap-4">
+                  <!-- Edit Button -->
+                  <button
+                    class="w-full h-9 flex justify-center items-center gap-1 bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-for transition duration-200"
+                  >
+                    <i class="fa-solid fa-pen mr-1"></i> Edit
+                  </button>
+                  <!-- Delete Button -->
+                  <button
+                    class="w-full flex justify-center items-center gap-1 bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition duration-200"
+                  >
+                    <i class="fa-solid fa-trash mr-1"></i> Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Property Cards 2-->
+          <div
+            id="property-card"
+            class="flex justify-evenly items-center flex-col gap-8 md:flex-row lg:flex-row mt-6 font-Nrj-fonts"
+          >
+            <div
+              class="w-64 bg-white border border-gray-300 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+            >
+              <!-- Image -->
+              <div class="relative">
+                <img
+                  id="property-image"
+                  class="rounded-t-lg h-40 w-full object-cover"
+                  src="/assets/img/Facade.jpg"
+                  alt="Property Image"
+                />
+                <!-- Verified Badge -->
+                <div
+                  class="absolute top-2 right-2 bg-white text-sm font-medium px-2 py-1 text-black flex items-center rounded-sm shadow"
+                >
+                  <i class="fa-solid fa-badge-check mr-1 text-blue-600"></i>
+                  Verified
+                </div>
+              </div>
+
+              <!-- Content Section -->
+              <div class="px-4 py-2">
+                <!-- Type Badge -->
+                <div
+                  id="property-type-container"
+                  class="flex flex-row justify-center items-center w-24 h-6 bg-gray-50 rounded-sm border-[1.5px] border-gray-300"
+                >
+                  <p
+                    id="property-type"
+                    class="font-Nrj-fonts font-normal text-sm text-gray-800"
+                  >
+                    House
+                  </p>
+                </div>
+                <!-- Property Name -->
+                <h5
+                  id="property-name"
+                  class="mt-1 text-[16px] font-semibold tracking-tight text-gray-900 dark:text-white"
+                >
+                  Aarav Stays
+                </h5>
+                <!-- Location -->
+                <p
+                  id="property-location"
+                  class="text-sm font-normal text-gray-600 dark:text-gray-400 flex items-center"
+                >
+                  Karaswada-Goa
+                </p>
+                <!-- Rent and View Link -->
+                <div
+                  id="property-details"
+                  class="flex flex-row items-center justify-between mt-2"
+                >
+                  <p
+                    id="property-rent"
+                    class="text-lg font-semibold font-Nrj-fonts text-black"
+                  >
+                    <span class="text-sm font-normal">from</span> ₹17,000/
+                    <span class="text-sm font-normal">month</span>
+                  </p>
+                </div>
+
+                <!-- Edit & Delete Buttons -->
+                <div class="flex justify-evenly py-2 mt-2 gap-4">
+                  <!-- Edit Button -->
+                  <button
+                    class="w-full h-9 flex justify-center items-center gap-1 bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-for transition duration-200"
+                  >
+                    <i class="fa-solid fa-pen mr-1"></i> Edit
+                  </button>
+                  <!-- Delete Button -->
+                  <button
+                    class="w-full flex justify-center items-center gap-1 bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition duration-200"
+                  >
+                    <i class="fa-solid fa-trash mr-1"></i> Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Property Cards 3-->
+          <div
+            id="property-card"
+            class="flex justify-evenly items-center flex-col gap-8 md:flex-row lg:flex-row mt-6 font-Nrj-fonts"
+          >
+            <div
+              class="w-64 bg-white border border-gray-300 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+            >
+              <!-- Image -->
+              <div class="relative">
+                <img
+                  id="property-image"
+                  class="rounded-t-lg h-40 w-full object-cover"
+                  src="/assets/img/Main.jpg"
+                  alt="Property Image"
+                />
+                <!-- Verified Badge -->
+                <div
+                  class="absolute top-2 right-2 bg-white text-sm font-medium px-2 py-1 text-black flex items-center rounded-sm shadow"
+                >
+                  <i class="fa-solid fa-badge-check mr-1 text-blue-600"></i>
+                  Verified
+                </div>
+              </div>
+
+              <!-- Content Section -->
+              <div class="px-4 py-2">
+                <!-- Type Badge -->
+                <div
+                  id="property-type-container"
+                  class="flex flex-row justify-center items-center w-24 h-6 bg-gray-50 rounded-sm border-[1.5px] border-gray-300"
+                >
+                  <p
+                    id="property-type"
+                    class="font-Nrj-fonts font-normal text-sm text-gray-800"
+                  >
+                    Apartment
+                  </p>
+                </div>
+                <!-- Property Name -->
+                <h5
+                  id="property-name"
+                  class="mt-1 text-[16px] font-semibold tracking-tight text-gray-900 dark:text-white"
+                >
+                  King Paradise
+                </h5>
+                <!-- Location -->
+                <p
+                  id="property-location"
+                  class="text-sm font-normal text-gray-600 dark:text-gray-400 flex items-center"
+                >
+                  Khorlim-Mapusa
+                </p>
+                <!-- Rent and View Link -->
+                <div
+                  id="property-details"
+                  class="flex flex-row items-center justify-between mt-2"
+                >
+                  <p
+                    id="property-rent"
+                    class="text-lg font-semibold font-Nrj-fonts text-black"
+                  >
+                    <span class="text-sm font-normal">from</span> ₹7,500/
+                    <span class="text-sm font-normal">month</span>
+                  </p>
+                </div>
+
+                <!-- Edit & Delete Buttons -->
+                <div class="flex justify-evenly py-2 mt-2 gap-4">
+                  <!-- Edit Button -->
+                  <button
+                    class="w-full h-9 flex justify-center items-center gap-1 bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-for transition duration-200"
+                  >
+                    <i class="fa-solid fa-pen mr-1"></i> Edit
+                  </button>
+                  <!-- Delete Button -->
+                  <button
+                    class="w-full flex justify-center items-center gap-1 bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition duration-200"
+                  >
+                    <i class="fa-solid fa-trash mr-1"></i> Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Property Cards 4-->
+          <div
+            id="property-card"
+            class="flex justify-evenly items-center flex-col gap-8 md:flex-row lg:flex-row mt-6 font-Nrj-fonts"
+          >
+            <div
+              class="w-64 bg-white border border-gray-300 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+            >
+              <!-- Image -->
+              <div class="relative">
+                <img
+                  id="property-image"
+                  class="rounded-t-lg h-40 w-full object-cover"
+                  src="/assets/img/mainimage.jpg"
+                  alt="Property Image"
+                />
+                <!-- Verified Badge -->
+                <div
+                  class="absolute top-2 right-2 bg-white text-sm font-medium px-2 py-1 text-black flex items-center rounded-sm shadow"
+                >
+                  <i class="fa-solid fa-badge-check mr-1 text-blue-600"></i>
+                  Verified
+                </div>
+              </div>
+
+              <!-- Content Section -->
+              <div class="px-4 py-2">
+                <!-- Type Badge -->
+                <div
+                  id="property-type-container"
+                  class="flex flex-row justify-center items-center w-24 h-6 bg-gray-50 rounded-sm border-[1.5px] border-gray-300"
+                >
+                  <p
+                    id="property-type"
+                    class="font-Nrj-fonts font-normal text-sm text-gray-800"
+                  >
+                    House
+                  </p>
+                </div>
+                <!-- Property Name -->
+                <h5
+                  id="property-name"
+                  class="mt-1 text-[16px] font-semibold tracking-tight text-gray-900 dark:text-white"
+                >
+                  Neelaya Nivas
+                </h5>
+                <!-- Location -->
+                <p
+                  id="property-location"
+                  class="text-sm font-normal text-gray-600 dark:text-gray-400 flex items-center"
+                >
+                  Guirim-Goa
+                </p>
+                <!-- Rent and View Link -->
+                <div
+                  id="property-details"
+                  class="flex flex-row items-center justify-between mt-2"
+                >
+                  <p
+                    id="property-rent"
+                    class="text-lg font-semibold font-Nrj-fonts text-black"
+                  >
+                    <span class="text-sm font-normal">from</span> ₹6,400/
+                    <span class="text-sm font-normal">month</span>
+                  </p>
+                </div>
+
+                <!-- Edit & Delete Buttons -->
+                <div class="flex justify-evenly py-2 mt-2 gap-4">
+                  <!-- Edit Button -->
+                  <button
+                    class="w-full h-9 flex justify-center items-center gap-1 bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-for transition duration-200"
+                  >
+                    <i class="fa-solid fa-pen mr-1"></i> Edit
+                  </button>
+                  <!-- Delete Button -->
+                  <button
+                    class="w-full flex justify-center items-center gap-1 bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition duration-200"
+                  >
+                    <i class="fa-solid fa-trash mr-1"></i> Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

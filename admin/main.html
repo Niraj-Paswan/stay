@@ -3,11 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Room Rental Admin Dashboard</title>
+    <title>StyaEase | Admin Dashboard</title>
     <link rel="stylesheet" href="../assets/css/styles.css" />
     <link
       rel="stylesheet"
       href="https://site-assets.fontawesome.com/releases/v6.5.1/css/all.css"
+    />
+    <link
+      rel="shortcut icon"
+      href="../assets/img/stayease logo.svg"
+      type="image/x-icon"
     />
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
@@ -22,6 +27,45 @@
       .active-link {
         background-color: #1d4ed8;
         color: white !important;
+      }
+      /* Floating Button Styles */
+      .floating-button {
+        position: fixed;
+        bottom: 20px;
+        right: 40px;
+        background-color: white;
+        border: 2px solid gray;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .floating-button:hover {
+        background-color: #f3f3f3;
+      }
+      .floating-button::after {
+        content: "Add New Listing";
+        position: absolute;
+        bottom: 60px;
+        right: 50%;
+        transform: translateX(50%);
+        background-color: black;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 12px;
+        white-space: nowrap;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+      }
+      .floating-button:hover::after {
+        opacity: 1;
       }
     </style>
   </head>
@@ -95,46 +139,46 @@
       </header>
 
       <!-- Sidebar -->
-      <aside class="bg-white w-64 shadow-md h-screen z-0 pt-16 pl-4 pr-4">
-        <nav class="mt-4">
+      <aside class="bg-white w-64 shadow-md z-0 pt-16 pl-4 pr-4">
+        <nav class="mt-4 mr-4">
           <a
             href="#"
-            class="flex items-center px-4 py-4 rounded-md text-gray-600"
+            class="flex items-center px-4 py-4 rounded-md text-gray-600 hover:text-black"
             onclick="showContent('dashboard', this)"
           >
             <i class="fas fa-home mr-3"></i> Listings
           </a>
           <a
             href="#"
-            class="flex items-center px-4 py-4 rounded-md text-gray-600"
+            class="flex items-center px-4 py-4 rounded-md text-gray-600 hover:text-black"
             onclick="showContent('bookings', this)"
           >
             <i class="fas fa-calendar-check mr-3"></i> Bookings
           </a>
           <a
             href="#"
-            class="flex items-center px-4 py-4 rounded-md text-gray-600"
+            class="flex items-center px-4 py-4 rounded-md text-gray-600 hover:text-black"
             onclick="showContent('users', this)"
           >
             <i class="fas fa-users mr-3"></i> Users
           </a>
           <a
             href="#"
-            class="flex items-center px-4 py-4 rounded-md text-gray-600"
+            class="flex items-center px-4 py-4 rounded-md text-gray-600 hover:text-black"
             onclick="showContent('payments', this)"
           >
             <i class="fas fa-credit-card mr-3"></i> Payments
           </a>
           <a
             href="#"
-            class="flex items-center px-4 py-4 rounded-md text-gray-600"
+            class="flex items-center px-4 py-4 rounded-md text-gray-600 hover:text-black"
             onclick="showContent('reports', this)"
           >
             <i class="fas fa-chart-line mr-3"></i> Reports
           </a>
           <a
             href="#"
-            class="flex items-center px-4 py-4 rounded-md text-gray-600"
+            class="flex items-center px-4 py-4 rounded-md text-gray-600 hover:text-black"
             onclick="showContent('negotiations', this)"
           >
             <i class="fa-solid fa-indian-rupee-sign mr-3"></i> Negotiations
@@ -145,9 +189,17 @@
       <!-- Main Content -->
       <div class="flex-1 pt-16 overflow-y-auto">
         <div class="p-6" id="main-content">
+          <img
+            src="../assets/img/5357539_2796424.svg"
+            alt=""
+            class="w-[50%] h-[50%] ml-72"
+          />
           <!-- Content will be loaded dynamically here -->
         </div>
       </div>
+    </div>
+    <div class="floating-button" onclick="location.href='property_upload.html'">
+      <i class="fa-solid fa-house-circle-check text-black text-xl"></i>
     </div>
 
     <script>
