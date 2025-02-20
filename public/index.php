@@ -171,7 +171,7 @@ if (!isset($_SESSION["user_logged_in"]) || $_SESSION["user_logged_in"] !== true)
             role="menuitem">
             Your Profile
           </a>
-          <a href="#"
+          <a href="logout.php"
             class="block px-4 py-2 text-sm text-red-600 font-Nrj-fonts hover:bg-gray-100 hover:pl-3 transition-all duration-300"
             role="menuitem">
             Sign Out
