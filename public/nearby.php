@@ -169,9 +169,9 @@ $conn->close();
     <?php foreach ($properties as $property): ?>
     <div class="property-item flex flex-row border-[1.5px] border-gray-300 rounded-lg overflow-hidden bg-white mb-8 shadow-md transition">
       <!-- Image Section -->
-      <div class="relative w-80 h-52">
+      <div class="relative w-80 h-64">
         <img
-          class="w-full h-60 object-cover"
+          class="w-full h-64 object-cover"
           src="<?= $property['image'] ?>" 
           alt="Property Image"
         />
@@ -195,12 +195,19 @@ $conn->close();
           </div>
         </div>
 
+        <div class="flex flex-row justify-between items-end mt-2">
         <!-- Location -->
         <div class="flex items-center mt-1 text-gray-600 text-sm">
           <i class="fa-solid fa-location-dot mr-1"></i>
           <?= $property['location'] ?>
         </div>
-
+        <!-- //Sharable  part remove it letter -->
+        <div class=" flex items-center gap-2 border border-gray-400 bg-white rounded-md px-4 py-2 shadow-sm">
+        <i class="fa-regular fa-user-group text-for text-sm"></i>
+        <span class="text-black text-sm font-medium">Sharable</span>
+    </div>
+        </div>
+        
         <!-- Price -->
         <h2 class="text-sm font-normal mt-2 text-gray-500">
           Rent from
