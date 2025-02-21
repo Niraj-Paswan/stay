@@ -27,24 +27,39 @@ exit();
     <link rel="stylesheet" href="../assets/css/styles.css" />
     <style>
       body {
-        background-image: url("../assets/img/beams-home@95.jpg");
+        background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+          url("../assets/img/beams-home@95.jpg");
         background-size: cover;
         background-position: center;
         font-family: "Poppins", sans-serif;
       }
+      .logout-icon {
+        animation: bounce 1s infinite alternate;
+      }
+      @keyframes bounce {
+        from {
+          transform: translateY(0px);
+        }
+        to {
+          transform: translateY(-5px);
+        }
+      }
     </style>
   </head>
 
-  <body
-    class="flex items-center justify-center min-h-screen bg-gray-100 text-gray-800 font-Nrj-fonts"
-  >
+  <body class="flex items-center justify-center min-h-screen text-gray-100">
     <div
-      class="bg-white p-8 rounded-md text-center max-w-md w-full border-[1.5px] border-gray-300 shadow-sm"
+      class="bg-white/90 backdrop-blur-sm p-8 rounded-lg text-center max-w-md w-full border-[1.5px] border-gray-300 shadow-xl"
     >
-      <!-- Icon -->
-      <i class="fa-solid fa-arrow-right-from-bracket text-3xl"></i>
+      <!-- Icon with Animation -->
+      <i
+        class="fa-solid fa-arrow-right-from-bracket text-4xl text-black logout-icon"
+      ></i>
+
       <!-- Message -->
-      <h2 class="text-2xl font-semibold mt-4">You’ve Been Logged Out</h2>
+      <h2 class="text-2xl font-semibold mt-4 text-gray-900">
+        You’ve Been Logged Out
+      </h2>
       <p class="text-gray-600 mt-2 text-sm">
         Thank you for using StayEase. We hope to see you again soon!
       </p>
@@ -52,9 +67,9 @@ exit();
       <!-- Action Button -->
       <a
         href="login.php"
-        class="mt-6 inline-block w-full px-3 py-3 text-lg font-semibold text-white bg-blue-500 hover:bg-for rounded-md transition duration-300"
+        class="mt-6 inline-block w-full px-4 py-3 font-semibold text-white bg-blue-500 hover:bg-for transition duration-300 rounded-md"
       >
-        Log In Again
+      Log in again
       </a>
     </div>
   </body>
