@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StayEase | Terms & Conditions</title>
+    <link
+      rel="shortcut icon"
+      href="../assets/img/stayease logo.svg"
+      type="image/x-icon"
+    />
+    <link
+      rel="stylesheet"
+      href="https://site-assets.fontawesome.com/releases/v6.5.1/css/all.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <style>
+      body {
+        background: url("../assets/img/beams-home@95.jpg");
+        background-size: cover;
+        background-position: center;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-gray-50 text-gray-800 flex flex-col min-h-screen font-Nrj-fonts px-8"
+  >
+    <!-- Back Button -->
+    <div class="p-4">
+      <button
+        onclick="history.back()"
+        class="flex items-center text-blue-600 font-medium hover:underline"
+      >
+        <i class="fa-solid fa-arrow-left mr-2"></i> Back
+      </button>
+    </div>
+
+    <!-- Page Content -->
+    <div
+      class="mt-4 max-w-3xl mx-auto p-6 bg-white shadow-md rounded-md border-[1.5px] border-gray-300"
+    >
+      <h1 class="text-3xl font-bold text-gray-800">Terms & Conditions</h1>
+      <p class="text-gray-600 mt-2">Last Updated: February 2025</p>
+
+      <!-- Accordion Sections -->
+      <div class="mt-6 space-y-4">
+        <!-- Section 1 -->
+        <div class="border rounded-md overflow-hidden">
+          <button
+            class="w-full flex justify-between items-center p-4 bg-gray-100 hover:bg-gray-200"
+            onclick="toggleDropdown('section1')"
+          >
+            <span
+              ><i class="fa-solid fa-file-contract mr-2 text-blue-600"></i>
+              Acceptance of Terms</span
+            >
+            <i class="fa-solid fa-chevron-up"></i>
+          </button>
+          <div id="section1" class="p-4 text-gray-700">
+            By accessing or using StayEase, you agree to comply with these terms
+            and conditions. If you do not agree, please do not use our services.
+          </div>
+        </div>
+
+        <!-- Section 2 -->
+        <div class="border rounded-md overflow-hidden">
+          <button
+            class="w-full flex justify-between items-center p-4 bg-gray-100 hover:bg-gray-200"
+            onclick="toggleDropdown('section2')"
+          >
+            <span
+              ><i class="fa-solid fa-user-check mr-2 text-blue-600"></i> User
+              Responsibilities</span
+            >
+            <i class="fa-solid fa-chevron-up"></i>
+          </button>
+          <div id="section2" class="p-4 text-gray-700">
+            Users must provide accurate information when booking properties and
+            must comply with local rental laws.
+          </div>
+        </div>
+
+        <!-- Section 3 -->
+        <div class="border rounded-md overflow-hidden">
+          <button
+            class="w-full flex justify-between items-center p-4 bg-gray-100 hover:bg-gray-200"
+            onclick="toggleDropdown('section3')"
+          >
+            <span
+              ><i class="fa-solid fa-credit-card mr-2 text-blue-600"></i>
+              Payment & Refund Policy</span
+            >
+            <i class="fa-solid fa-chevron-up"></i>
+          </button>
+          <div id="section3" class="p-4 text-gray-700">
+            Payments must be made securely through our platform. Refunds are
+            subject to cancellation policies set by the property owner.
+          </div>
+        </div>
+
+        <!-- Section 4 -->
+        <div class="border rounded-md overflow-hidden">
+          <button
+            class="w-full flex justify-between items-center p-4 bg-gray-100 hover:bg-gray-200"
+            onclick="toggleDropdown('section4')"
+          >
+            <span
+              ><i class="fa-solid fa-building mr-2 text-blue-600"></i> Property
+              Listings & Accuracy</span
+            >
+            <i class="fa-solid fa-chevron-up"></i>
+          </button>
+          <div id="section4" class="p-4 text-gray-700">
+            StayEase does not own the properties listed but ensures all listings
+            meet quality standards.
+          </div>
+        </div>
+
+        <!-- Section 5 -->
+        <div class="border rounded-md overflow-hidden">
+          <button
+            class="w-full flex justify-between items-center p-4 bg-gray-100 hover:bg-gray-200"
+            onclick="toggleDropdown('section5')"
+          >
+            <span
+              ><i class="fa-solid fa-ban mr-2 text-blue-600"></i> Termination of
+              Services</span
+            >
+            <i class="fa-solid fa-chevron-up"></i>
+          </button>
+          <div id="section5" class="p-4 text-gray-700">
+            We reserve the right to suspend or terminate accounts that violate
+            our policies.
+          </div>
+        </div>
+
+        <!-- Section 6 -->
+        <div class="border rounded-md overflow-hidden">
+          <button
+            class="w-full flex justify-between items-center p-4 bg-gray-100 hover:bg-gray-200"
+            onclick="toggleDropdown('section6')"
+          >
+            <span
+              ><i class="fa-solid fa-envelope mr-2 text-blue-600"></i> Contact
+              Us</span
+            >
+            <i class="fa-solid fa-chevron-up"></i>
+          </button>
+          <div id="section6" class="p-4 text-gray-700">
+            If you have any questions, please contact us at
+            <a
+              href="mailto:support@stayease.com"
+              class="text-blue-600 underline"
+              >support@stayease.com</a
+            >.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center py-6 mt-10 text-gray-600">
+      © 2025 StayEase. All Rights Reserved.
+    </footer>
+
+    <!-- JavaScript for Accordion -->
+    <script>
+      function toggleDropdown(id) {
+        const section = document.getElementById(id);
+        const icon =
+          section.previousElementSibling.querySelector("i.fa-chevron-up");
+
+        if (section.classList.contains("hidden")) {
+          section.classList.remove("hidden");
+          icon.classList.replace("fa-chevron-down", "fa-chevron-up");
+        } else {
+          section.classList.add("hidden");
+          icon.classList.replace("fa-chevron-up", "fa-chevron-down");
+        }
+      }
+    </script>
+  </body>
+</html>
