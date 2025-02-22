@@ -131,23 +131,23 @@ if (!isset($_SESSION["user_logged_in"]) || $_SESSION["user_logged_in"] !== true)
         <hr
           class="opacity-100 w-[80%] h-1 rounded-full bg-for mx-auto transition-all duration-300 ease-in-out transform scale-x-100 origin-center absolute left-1/2 transform -translate-x-1/2" />
       </a>
-      <a class="font-Nrj-fonts text-white text-md font-semibold group inline-block text-center relative"
+      <!-- <a class="font-Nrj-fonts text-white text-md font-semibold group inline-block text-center relative"
         href="#">Property
         <hr
           class="opacity-0 group-hover:opacity-100 w-[80%] h-1 rounded-full bg-for mx-auto transition-all duration-300 ease-in-out transform scale-x-0 group-hover:scale-x-100 origin-center absolute left-1/2 transform -translate-x-1/2" />
-      </a>
-      <a class="font-Nrj-fonts text-md text-white font-semibold group inline-block text-center relative" href="#">Near
-        By
+      </a> -->
+      <a class="font-Nrj-fonts text-md text-white font-semibold group inline-block text-center relative" href="nearby.php">Near
+        By Property
         <hr
           class="opacity-0 group-hover:opacity-100 w-[80%] h-1 rounded-full bg-for mx-auto transition-all duration-300 ease-in-out transform scale-x-0 group-hover:scale-x-100 origin-center absolute left-1/2 transform -translate-x-1/2" />
       </a>
-      <a class="font-Nrj-fonts text-md text-white font-semibold group inline-block text-center relative" href="#">Budget
+      <a class="font-Nrj-fonts text-md text-white font-semibold group inline-block text-center relative" href="../info/bgcalculator.html">Budget
         Calculator
         <hr
           class="opacity-0 group-hover:opacity-100 w-[80%] h-1 rounded-full bg-for mx-auto transition-all duration-300 ease-in-out transform scale-x-0 group-hover:scale-x-100 origin-center absolute left-1/2 transform -translate-x-1/2" />
       </a>
       <a class="font-Nrj-fonts text-white text-md font-semibold group inline-block text-center relative"
-        href="contactus.html">Contact Us
+        href="../info/contactus.html">Contact Us
         <hr
           class="opacity-0 group-hover:opacity-100 w-[80%] h-1 rounded-full bg-for mx-auto transition-all duration-300 ease-in-out transform scale-x-0 group-hover:scale-x-100 origin-center absolute left-1/2 transform -translate-x-1/2" />
       </a>
@@ -267,14 +267,16 @@ if (!isset($_SESSION["user_logged_in"]) || $_SESSION["user_logged_in"] !== true)
     </div>
 
     <!-- Buttons -->
-    <div id="button-container " class="mt-4 gap-5 flex flex-row">
+    <div id="button-container" class="mt-4 gap-5 flex flex-row">
       <button
-        class="px-8 py-3 font-Nrj-fonts font-medium rounded-full text-white bg-for border border-for hover:border-white hover:font-semibold">
-        Book Now
+      onclick="window.location.href='nearby.php';"
+      class="px-8 py-3 font-Nrj-fonts font-medium rounded-full text-white bg-for border border-for hover:border-white hover:font-semibold">
+      Book Now
       </button>
       <button
-        class="px-8 py-3 font-Nrj-fonts font-medium rounded-full bg-white border border-gray-300 hover:border-gray-800 hover:font-semibold">
-        Contact Us
+      onclick="window.location.href='../info/contactus.html';"
+      class="px-8 py-3 font-Nrj-fonts font-medium rounded-full bg-white border border-gray-300 hover:border-gray-800 hover:font-semibold">
+      Contact Us
       </button>
     </div>
 
@@ -565,7 +567,7 @@ if (!isset($_SESSION["user_logged_in"]) || $_SESSION["user_logged_in"] !== true)
                 <a href="#" class="hover:underline">StayEase</a>
               </li>
               <li>
-                <a href="#" class="hover:underline">Blog</a>
+                <a href="../info/blog.html" class="hover:underline">Blog</a>
               </li>
             </ul>
           </div>
@@ -584,10 +586,10 @@ if (!isset($_SESSION["user_logged_in"]) || $_SESSION["user_logged_in"] !== true)
             <h2 class="mb-6 text-sm font-semibold text-for uppercase dark:text-white">Legal</h2>
             <ul class="text-white dark:text-gray-400 font-medium">
               <li class="mb-4">
-                <a href="#" class="hover:underline">Privacy Policy</a>
+                <a href="../info/privacy.html" class="hover:underline">Privacy Policy</a>
               </li>
               <li>
-                <a href="#" class="hover:underline">Terms &amp; Conditions</a>
+                <a href="../info/tc.html" class="hover:underline">Terms &amp; Conditions</a>
               </li>
             </ul>
           </div>
