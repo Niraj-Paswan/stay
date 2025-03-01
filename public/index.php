@@ -6,9 +6,14 @@ if (!isset($_SESSION["user_logged_in"]) || $_SESSION["user_logged_in"] !== true)
   header("Location: login.php");
   exit();
 }
+
+// Fetch the logged-in user's userID from the session
+$userID = $_SESSION["userID"];
+?>
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -136,12 +141,14 @@ if (!isset($_SESSION["user_logged_in"]) || $_SESSION["user_logged_in"] !== true)
         <hr
           class="opacity-0 group-hover:opacity-100 w-[80%] h-1 rounded-full bg-for mx-auto transition-all duration-300 ease-in-out transform scale-x-0 group-hover:scale-x-100 origin-center absolute left-1/2 transform -translate-x-1/2" />
       </a> -->
-      <a class="font-Nrj-fonts text-md text-white font-semibold group inline-block text-center relative" href="nearby.php">Near
+      <a class="font-Nrj-fonts text-md text-white font-semibold group inline-block text-center relative"
+        href="nearby.php">Near
         By Property
         <hr
           class="opacity-0 group-hover:opacity-100 w-[80%] h-1 rounded-full bg-for mx-auto transition-all duration-300 ease-in-out transform scale-x-0 group-hover:scale-x-100 origin-center absolute left-1/2 transform -translate-x-1/2" />
       </a>
-      <a class="font-Nrj-fonts text-md text-white font-semibold group inline-block text-center relative" href="../info/bgcalculator.html">Budget
+      <a class="font-Nrj-fonts text-md text-white font-semibold group inline-block text-center relative"
+        href="../info/bgcalculator.html">Budget
         Calculator
         <hr
           class="opacity-0 group-hover:opacity-100 w-[80%] h-1 rounded-full bg-for mx-auto transition-all duration-300 ease-in-out transform scale-x-0 group-hover:scale-x-100 origin-center absolute left-1/2 transform -translate-x-1/2" />
@@ -268,15 +275,13 @@ if (!isset($_SESSION["user_logged_in"]) || $_SESSION["user_logged_in"] !== true)
 
     <!-- Buttons -->
     <div id="button-container" class="mt-4 gap-5 flex flex-row">
-      <button
-      onclick="window.location.href='nearby.php';"
-      class="px-8 py-3 font-Nrj-fonts font-medium rounded-full text-white bg-for border border-for hover:border-white hover:font-semibold">
-      Book Now
+      <button onclick="window.location.href='nearby.php';"
+        class="px-8 py-3 font-Nrj-fonts font-medium rounded-full text-white bg-for border border-for hover:border-white hover:font-semibold">
+        Book Now
       </button>
-      <button
-      onclick="window.location.href='../info/contactus.html';"
-      class="px-8 py-3 font-Nrj-fonts font-medium rounded-full bg-white border border-gray-300 hover:border-gray-800 hover:font-semibold">
-      Contact Us
+      <button onclick="window.location.href='../info/contactus.html';"
+        class="px-8 py-3 font-Nrj-fonts font-medium rounded-full bg-white border border-gray-300 hover:border-gray-800 hover:font-semibold">
+        Contact Us
       </button>
     </div>
 
@@ -339,13 +344,13 @@ if (!isset($_SESSION["user_logged_in"]) || $_SESSION["user_logged_in"] !== true)
 
   <!-- Steps label of Room Booking -->
   <div class="text-center relative mt-12">
-  <h1 class="font-Nrj-fonts font-semibold text-2xl md:text-4xl lg:text-4xl leading-tight">
-    Quickly Book Your Room in <br />
-    <span class="text-for text-xl md:text-3xl lg:text-3xl relative inline-block text-black">
-      Just 4 Easy Steps 🚀
-    </span>
-  </h1>
-</div>
+    <h1 class="font-Nrj-fonts font-semibold text-2xl md:text-4xl lg:text-4xl leading-tight">
+      Quickly Book Your Room in <br />
+      <span class="text-for text-xl md:text-3xl lg:text-3xl relative inline-block text-black">
+        Just 4 Easy Steps 🚀
+      </span>
+    </h1>
+  </div>
 
   <!-- Actual Steps of Room Booking -->
   <div class="flex flex-row items-center mt-24 justify-evenly ">
@@ -714,4 +719,5 @@ if (!isset($_SESSION["user_logged_in"]) || $_SESSION["user_logged_in"] !== true)
     });
   </script>
 </body>
+
 </html>
