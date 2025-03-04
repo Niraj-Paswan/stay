@@ -174,7 +174,7 @@
   <div class="sidebar">
     <nav>
       <a class="mt-2" href="#" class="active" onclick="showContent('main_dashboard', this)">
-        <i class="fas fa-chart-line"></i> Dashboard
+        <i class="fa-solid fa-chart-line"></i> Dashboard
       </a>
       <a href="#" onclick="showContent('dashboard', this)">
         <i class="fas fa-home"></i> Listings
@@ -187,6 +187,9 @@
       </a>
       <a href="#" onclick="showContent('payments', this)">
         <i class="fas fa-credit-card"></i> Payments
+      </a>
+      <a href="#" onclick="showContent('query_info', this)">
+        <i class="fa-solid fa-headset"></i> Queries
       </a>
     </nav>
   </div>
