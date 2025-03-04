@@ -3,7 +3,7 @@ module.exports = {
   content: [
     "./public/**/*.php",
     "./public/**/*.html",
-    "./admin/**/*.html",
+    "./admin/**/*.php",
     "./bookings/**/*.html",
     "./user/**/*.php",
     "./includes/**/*.php",
