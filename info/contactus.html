@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Contact Us</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>StayEase | Contact Us</title>
+    <link rel="stylesheet" href="../assets/css/styles.css" />
     <link
       rel="shortcut icon"
       href="../assets/img/stayease logo.svg"
@@ -18,7 +18,6 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="../assets/css/styles.css" />
     <style>
       body {
         background-image: url("../assets/img/beams-home@95.jpg");
@@ -37,9 +36,9 @@
         <i class="fa-solid fa-arrow-left mr-2"></i> Back
       </button>
     </div>
-    <div class="min-h-screen flex flex-col justify-center items-center">
+    <div class="min-h-screen flex flex-col justify-center items-center p-4">
       <div
-        class="bg-white shadow-md rounded-lg p-8 w-[550px] border border-gray-200"
+        class="bg-white shadow-md rounded-lg p-8 w-[40%] border border-gray-200"
       >
         <!-- Heading Section -->
         <div class="text-center mb-8">
@@ -50,7 +49,12 @@
         </div>
 
         <!-- Form Section -->
-        <form id="contactForm" class="space-y-6">
+        <form
+          id="contactForm"
+          class="space-y-6"
+          method="POST"
+          action="save_query.php"
+        >
           <div>
             <label
               for="name"
@@ -61,7 +65,7 @@
               type="text"
               id="name"
               name="name"
-              class="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+              class="block w-full mt-2 mb-2 px-4 py-2 border border-gray-300 rounded-lg focus:ring-[1.5px] focus:ring-gray-300 focus:border-gray-300"
               placeholder="Enter your name"
             />
             <p id="nameError" class="text-red-500 text-sm mt-1 hidden">
@@ -79,7 +83,7 @@
               type="email"
               id="email"
               name="email"
-              class="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+              class="block w-full mt-2 mb-2 px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
               placeholder="Enter your email"
             />
             <p id="emailError" class="text-red-500 text-sm mt-1 hidden">
@@ -97,7 +101,7 @@
               id="message"
               name="message"
               rows="4"
-              class="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+              class="block w-full mt-2 mb-4 px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
               placeholder="Write your message here"
             ></textarea>
             <p id="messageError" class="text-red-500 text-sm mt-1 hidden">
@@ -114,11 +118,9 @@
         </form>
 
         <!-- Additional Information -->
-        <div
-          class="flex flex-col md:flex-row justify-between items-start mt-10"
-        >
+        <div class="mt-10">
           <!-- Contact Details -->
-          <div class="mb-6 md:mb-0">
+          <div class="text-center">
             <h2 class="text-xl font-semibold text-gray-900">Contact Details</h2>
             <p class="text-gray-700 mt-2">
               <strong>Phone:</strong> +91 98765 43210
@@ -129,30 +131,27 @@
           </div>
 
           <!-- Social Media Links -->
-          <div>
+          <div class="mt-6 text-center">
             <h2 class="text-xl font-semibold text-gray-900 mb-2">Follow Us</h2>
-            <div class="flex space-x-5">
+            <div class="flex justify-center gap-4 space-x-5">
               <a
                 href="#"
                 class="text-gray-700 hover:text-blue-600"
                 aria-label="Facebook page"
-              >
-                <i class="fab fa-facebook-f text-lg"></i>
-              </a>
+                ><i class="fab fa-facebook-f text-lg"></i
+              ></a>
               <a
                 href="#"
                 class="text-gray-700 hover:text-blue-600"
                 aria-label="Twitter page"
-              >
-                <i class="fab fa-twitter text-lg"></i>
-              </a>
+                ><i class="fab fa-twitter text-lg"></i
+              ></a>
               <a
                 href="#"
                 class="text-gray-700 hover:text-blue-600"
                 aria-label="GitHub account"
-              >
-                <i class="fab fa-github text-lg"></i>
-              </a>
+                ><i class="fab fa-github text-lg"></i
+              ></a>
             </div>
           </div>
         </div>
@@ -163,42 +162,28 @@
       document
         .getElementById("contactForm")
         .addEventListener("submit", function (e) {
-          e.preventDefault(); // Prevent form submission for validation
+          e.preventDefault();
           let valid = true;
 
-          // Name validation
           const name = document.getElementById("name");
           const nameError = document.getElementById("nameError");
-          if (name.value.trim() === "") {
-            nameError.classList.remove("hidden");
-            valid = false;
-          } else {
-            nameError.classList.add("hidden");
-          }
+          name.value.trim() === ""
+            ? nameError.classList.remove("hidden")
+            : nameError.classList.add("hidden");
 
-          // Email validation
           const email = document.getElementById("email");
           const emailError = document.getElementById("emailError");
-          if (email.value.trim() === "" || !email.value.includes("@")) {
-            emailError.classList.remove("hidden");
-            valid = false;
-          } else {
-            emailError.classList.add("hidden");
-          }
+          email.value.trim() === "" || !email.value.includes("@")
+            ? emailError.classList.remove("hidden")
+            : emailError.classList.add("hidden");
 
-          // Message validation
           const message = document.getElementById("message");
           const messageError = document.getElementById("messageError");
-          if (message.value.trim() === "") {
-            messageError.classList.remove("hidden");
-            valid = false;
-          } else {
-            messageError.classList.add("hidden");
-          }
+          message.value.trim() === ""
+            ? messageError.classList.remove("hidden")
+            : messageError.classList.add("hidden");
 
-          if (valid) {
-            this.submit(); // Submit the form if all fields are valid
-          }
+          if (valid) this.submit();
         });
     </script>
   </body>
