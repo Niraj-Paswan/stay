@@ -25,7 +25,7 @@ $userID = $_SESSION["userID"];
   <link
     href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap"
     rel="stylesheet" />
-  <link rel="shortcut icon" href="../assets/img/stayease logo.svg" type="image/x-icon" />
+  <link rel="stylesheet" href="../assets\img\stayease logo.svg">
   <!-- Font Awsome Link -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
@@ -162,6 +162,21 @@ $userID = $_SESSION["userID"];
 
     <!-- User Dropdown -->
     <div class="flex flex-row justify-evenly">
+
+      <?php
+
+      // Assuming the email is stored in session as 'user_email'
+      $user_email = $_SESSION['user_email'] ?? 'User';
+
+      // Extract the first 5 letters
+      $short_email = substr($user_email, 0, 5);
+      ?>
+
+      <p class="font-medium font-Nrj-fonts text-white text-lg mr-4">
+        Heyy..👋 <?php echo htmlspecialchars($short_email); ?>
+      </p>
+
+
       <!-- User Menu -->
       <div class="relative mr-7">
         <button type="button"
