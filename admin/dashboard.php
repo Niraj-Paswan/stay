@@ -28,95 +28,50 @@ $conn->close();
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sta</title>
-  <!-- Link to Tailwind CSS -->
+  <title>StayEase - Properties</title>
   <link rel="stylesheet" href="../assets/css/styles.css" />
   <link rel="shortcut icon" href="../assets/img/stayease logo.svg" type="image/x-icon" />
-  <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.1/css/all.css" />
-  <!-- Google Fonts for Poppins -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
 </head>
 
-<body class="font-Poppins">
-  <div class="p-4 min-h-screen bg-gray-100" id="main-content">
-    <!-- Dashboard Section -->
-    <div id="dashboard" class="w-full h-[550px] bg-white p-8 rounded-md shadow-sm border border-gray-300">
-      <div class="flex flex-row justify-start items-start">
-        <h3 class="text-lg text-gray-600 font-normal mb-2">
-          Total Listings :
-        </h3>
-        <p class="text-2xl font-semibold text-gray-800 mb-2 ml-2">
-          <?php echo count($properties); ?> Properties
-        </p>
-      </div>
+<body class=" font-Nrj-fonts bg-gray-100 p-6">
+  <div class="container mx-auto">
 
-      <div class="flex flex-row justify-center items-center gap-4 p-1 overflow-hidden">
-        <?php foreach ($properties as $property): ?>
-          <!-- Property Cards 1-->
-          <div id="property-card"
-            class="flex justify-evenly items-center flex-col gap-8 md:flex-row lg:flex-row mt-6 font-Nrj-fonts">
-            <div class="w-64 bg-white border border-gray-300 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-              <!-- Image -->
-              <div class="relative">
-                <img id="property-image" class="rounded-t-lg h-40 w-full object-cover"
-                  src="../public/<?php echo $property['main_image']; ?>" alt="Property Image" />
-                <!-- Verified Badge -->
-                <div
-                  class="absolute top-2 right-2 bg-white text-sm font-medium px-2 py-1 text-black flex items-center rounded-sm shadow">
-                  <i class="fa-solid fa-badge-check mr-1 text-blue-600"></i>
-                  Verified
-                </div>
-              </div>
+    <h3 class="text-lg text-gray-600 font-normal">Total Listings: <span class="text-2xl font-semibold text-gray-800">
+        <?php echo count($properties); ?> Properties</span></h3>
 
-              <!-- Content Section -->
-              <div class="px-4 py-2">
-                <!-- Type Badge -->
-                <div id="property-type-container"
-                  class="flex flex-row justify-center items-center w-24 h-6 bg-gray-50 rounded-sm border-[1.5px] border-gray-300">
-                  <p id="property-type" class="font-Nrj-fonts font-normal text-sm text-gray-800">
-                    <?php echo $property['property_type']; ?>
-                  </p>
-                </div>
-                <!-- Property Name -->
-                <h5 id="property-name"
-                  class="mt-1 text-[16px] font-semibold tracking-tight text-gray-900 dark:text-white">
-                  <?php echo $property['property_name']; ?>
-                </h5>
-                <!-- Location -->
-                <p id="property-location" class="text-sm font-normal text-gray-600 dark:text-gray-400 flex items-center">
-                  <?php echo $property['property_location']; ?>
-                </p>
-                <!-- Rent and View Link -->
-                <div id="property-details" class="flex flex-row items-center justify-between mt-2">
-                  <p id="property-rent" class="text-lg font-semibold font-Nrj-fonts text-black">
-                    <span class="text-sm font-normal">from</span> ₹<?php echo $property['property_price'] ?>/
-                    <span class="text-sm font-normal">month</span>
-                  </p>
-                </div>
-
-                <!-- Edit & Delete Buttons -->
-                <div class="flex justify-evenly py-2 mt-2 gap-4">
-                  <!-- Edit Button -->
-                  <a href="edit_property.php?id=<?php echo $property['id']; ?>"
-                    class="w-full h-9 flex justify-center items-center gap-1 bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition duration-200">
-                    <i class="fa-solid fa-pen mr-1"></i> Edit
-                  </a>
-
-                  <!-- Delete Button with confirmation -->
-                  <button onclick="confirmDelete(<?php echo $property['id']; ?>)"
-                    class="w-full flex justify-center items-center gap-1 bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition duration-200">
-                    <i class="fa-solid fa-trash mr-1"></i> Delete
-                  </button>
-
-                </div>
-              </div>
+    <div class="grid grid-cols-4 gap-6 mt-6">
+      <?php foreach ($properties as $property): ?>
+        <div class="bg-white border border-gray-300 rounded-md overflow-hidden">
+          <div class="relative">
+            <img src="../public/<?php echo $property['main_image']; ?>" alt="Property Image"
+              class="w-full h-40 object-cover">
+            <div class="absolute top-2 right-2 bg-white text-sm px-2 py-1 text-black flex items-center rounded-sm shadow">
+              <i class="fa-solid fa-badge-check text-blue-600 mr-1"></i> Verified
             </div>
           </div>
-        <?php endforeach; ?>
-      </div>
+          <div class="p-4">
+            <div class="text-sm text-gray-800 bg-gray-100 border border-gray-300 rounded-sm px-2 py-1 w-fit">
+              <?php echo $property['property_type']; ?>
+            </div>
+            <h5 class="mt-2 text-lg font-semibold text-gray-900"> <?php echo $property['property_name']; ?> </h5>
+            <p class="text-sm text-gray-600"> <?php echo $property['property_location']; ?> </p>
+            <p class="mt-2 text-lg font-semibold text-black"> ₹<?php echo $property['property_price']; ?>/month </p>
+            <div class="flex justify-between items-center mt-4">
+              <a href="edit_property.php?id=<?php echo $property['id']; ?>"
+                class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"> <i class="fa-solid fa-pen"></i>
+                Edit </a>
+              <button onclick="confirmDelete(<?php echo $property['id']; ?>)"
+                class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"> <i class="fa-solid fa-trash"></i>
+                Delete </button>
+            </div>
+          </div>
+        </div>
+      <?php endforeach; ?>
     </div>
   </div>
+
   <script>
     function confirmDelete(id) {
       if (confirm("Are you sure you want to delete this property?")) {
@@ -124,7 +79,6 @@ $conn->close();
       }
     }
   </script>
-
 </body>
 
 </html>
