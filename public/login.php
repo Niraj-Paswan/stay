@@ -199,7 +199,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </p>
           <?php endif; ?>
           <a href="forgotpassword.php"
-            class="mt-2 font-Nrj-fonts text-for text-sm hover:underline text-blue-500 block text-right">Forgot
+            class="mt-2 font-Nrj-fonts text-for text-sm hover:underline  block text-right">Forgot
             Password</a>
         </div>
 
