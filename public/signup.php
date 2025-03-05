@@ -214,9 +214,7 @@ if (isset($_POST["submit"])) {
 </head>
 
 <body class="bg-gray-100 flex justify-center items-center min-h-screen">
-<div
-      class="bg-white p-8 rounded-md shadow-lg w-96 border-[0.5px] border-gray-300"
-    >
+  <div class="bg-white p-8 rounded-md shadow-lg w-96 border-[0.5px] border-gray-300">
     <div class="flex justify-center items-center space-x-1 mb-4">
       <div class="flex justify-center items-center space-x-1">
         <img src="../assets/img/stayease logo.svg" class="w-8 h-8" alt="" />
@@ -230,7 +228,7 @@ if (isset($_POST["submit"])) {
       <div class="mb-4">
         <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
         <input type="email" id="email" name="email" required
-          class="w-full px-2 py-2 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-[0.5px] focus:ring-black"
+          class="w-full px-2 py-2 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-[0.5px] focus:ring-black"
           placeholder="Enter your email" />
         <p id="email-error" class="text-red-500 text-xs mt-2"></p>
       </div>
