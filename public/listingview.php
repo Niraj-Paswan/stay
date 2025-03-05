@@ -184,7 +184,7 @@ $conn->close();
           <div class="w-full h-[100%] lg:w-1/3 bg-white p-4 rounded-lg border-[1.5px] border-gray-300 shadow-sm"
             data-property-id="1" data-property-name="Suddha Apartment" data-rent-price="15000" data-rent-duration="month"
             data-verified="1">
-            <h2 class="text-lg font-semibold text-gray-800 mt-4 flex flex-row justify-between mb-2">
+            <h2 class="text-lg font-semibold text-gray-800  flex flex-row justify-between mb-2">
               <?= $property['property_name'] ?>
               <div class="text-sm font-medium bg-gray-50 border-[1.5px] border-gray-300 rounded-md p-1 px-2  text-black"
                 data-verified="1">
@@ -293,16 +293,15 @@ $conn->close();
                   <span class="flex items-center text-sm font-medium text-gray-800 gap-4">
                     <div
                       class="icon-wrapper w-9 h-9 bg-blue-200 bg-opacity-25 rounded-full flex justify-center items-center">
-                      <i class="fa-light fa-percent text-[16px] text-for"></i>
+                      <i class="fa-light fa-eye-slash text-[16px] text-for"></i>
                     </div>
-                    Easily Price Negotiable
+                    No hidden charges
                   </span>
                   <i class="rotate-icon fa-solid fa-caret-down mr-4 text-sm text-gray-500"></i>
                 </button>
                 <div id="feature5" class="hidden px-4 py-2 text-gray-600 text-sm"
                   data-feature-description="Negotiate prices effortlessly to get the best deal that suits your budget!">
-                  Negotiate prices effortlessly to get the best deal that suits
-                  your budget!
+                  Transparent pricing with no unexpected fees or extra costs.
                 </div>
               </div>
             </div>
@@ -439,23 +438,6 @@ $conn->close();
                     Payment via
                     <span class="font-medium text-gray-600">easy transaction</span>
                     modes.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <!-- Negotiable Rent Section -->
-            <div class="flex flex-col justify-start items-start pt-1 hover:bg-gray-100" data-policy-id="negotiable-rent">
-              <div class="flex flex-row justify-center items-center gap-2">
-                <i class="fa-regular fa-circle-check text-green-600 text-xl ml-4" data-icon="checkmark"></i>
-                <div class="flex flex-col justify-start items-start">
-                  <h2 class="text-[16px] font-medium ml-2" data-policy-name="negotiable-rent">
-                    Negotiable Rent
-                  </h2>
-                  <p class="text-sm font-light ml-2 text-gray-500 mb-2" data-policy-description="rent-negotiable">
-                    The amount can be
-                    <span class="font-medium text-gray-600">easily</span>
-                    <span class="font-medium text-gray-600">Negotiable</span>
                   </p>
                 </div>
               </div>
