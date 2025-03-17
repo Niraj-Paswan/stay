@@ -33,14 +33,37 @@ $conn->close();
   <link rel="shortcut icon" href="../assets/img/stayease logo.svg" type="image/x-icon" />
   <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.1/css/all.css" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    /* Use Poppins font */
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+
+    /* Fade in animation for modal */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fadeInUp {
+      animation: fadeInUp 0.5s ease-out;
+    }
+  </style>
 </head>
 
-<body class=" font-Nrj-fonts bg-gray-100 p-6">
+<body class="bg-gray-100 p-6">
   <div class="container mx-auto">
-
-    <h3 class="text-lg text-gray-600 font-normal">Total Listings: <span class="text-2xl font-semibold text-gray-800">
-        <?php echo count($properties); ?> Properties</span></h3>
-
+    <h3 class="text-lg text-gray-600 font-normal">
+      Total Listings: <span class="text-2xl font-semibold text-gray-800"><?php echo count($properties); ?>
+        Properties</span>
+    </h3>
     <div class="grid grid-cols-4 gap-6 mt-6">
       <?php foreach ($properties as $property): ?>
         <div class="bg-white border border-gray-300 rounded-md overflow-hidden">
@@ -55,16 +78,18 @@ $conn->close();
             <div class="text-sm text-gray-800 bg-gray-100 border border-gray-300 rounded-sm px-2 py-1 w-fit">
               <?php echo $property['property_type']; ?>
             </div>
-            <h5 class="mt-2 text-lg font-semibold text-gray-900"> <?php echo $property['property_name']; ?> </h5>
-            <p class="text-sm text-gray-600"> <?php echo $property['property_location']; ?> </p>
-            <p class="mt-2 text-lg font-semibold text-black"> ₹<?php echo $property['property_price']; ?>/month </p>
+            <h5 class="mt-2 text-lg font-semibold text-gray-900"><?php echo $property['property_name']; ?></h5>
+            <p class="text-sm text-gray-600"><?php echo $property['property_location']; ?></p>
+            <p class="mt-2 text-lg font-semibold text-black">₹<?php echo $property['property_price']; ?>/month</p>
             <div class="flex justify-between items-center mt-4">
               <a href="edit_property.php?id=<?php echo $property['id']; ?>"
-                class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"> <i class="fa-solid fa-pen"></i>
-                Edit </a>
+                class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
+                <i class="fa-solid fa-pen"></i> Edit
+              </a>
               <button onclick="confirmDelete(<?php echo $property['id']; ?>)"
-                class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"> <i class="fa-solid fa-trash"></i>
-                Delete </button>
+                class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">
+                <i class="fa-solid fa-trash"></i> Delete
+              </button>
             </div>
           </div>
         </div>
@@ -72,12 +97,40 @@ $conn->close();
     </div>
   </div>
 
+  <!-- Delete Confirmation Modal -->
+  <div id="deleteModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+    <div class="bg-white rounded-md p-6 w-80 shadow-md animate-fadeInUp">
+      <div class="flex items-center">
+        <i class="fa-solid fa-exclamation-circle text-red-600 fa-2x"></i>
+        <h2 class="ml-4 text-xl font-semibold text-gray-800">Confirm Delete</h2>
+      </div>
+      <p class="mt-4 text-gray-600">Are you sure you want to delete this property?</p>
+      <div class="mt-6 flex justify-end">
+        <button id="cancelBtn"
+          class="mr-4 px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400">Cancel</button>
+        <button id="deleteBtn" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Delete</button>
+      </div>
+    </div>
+  </div>
+
   <script>
+    let propertyIdToDelete = null;
+
+    // Show modal popup for delete confirmation
     function confirmDelete(id) {
-      if (confirm("Are you sure you want to delete this property?")) {
-        window.location.href = "delete_property.php?id=" + id;
-      }
+      propertyIdToDelete = id;
+      document.getElementById("deleteModal").classList.remove("hidden");
     }
+
+    // Cancel button hides the modal
+    document.getElementById("cancelBtn").addEventListener("click", function () {
+      document.getElementById("deleteModal").classList.add("hidden");
+    });
+
+    // Delete button redirects to the delete URL
+    document.getElementById("deleteBtn").addEventListener("click", function () {
+      window.location.href = "delete_property.php?id=" + propertyIdToDelete;
+    });
   </script>
 </body>
 
