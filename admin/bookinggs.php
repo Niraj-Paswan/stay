@@ -22,7 +22,8 @@ $sql = "SELECT
             u.rent_start_date, 
             DATE_ADD(u.rent_start_date, INTERVAL 1 MONTH) AS next_due_date, 
             p.payment_status, 
-            p.payment_method 
+            p.payment_method ,
+            p.booking_type
         FROM payments p
         JOIN users u ON p.userID = u.userID
         JOIN properties pr ON p.property_id = pr.id";
@@ -54,7 +55,7 @@ $result = $conn->query($sql);
 
     <!-- Booking Table -->
     <div class="overflow-x-auto">
-      <table class="w-full bg-white border border-gray-200 table-auto rounded-lg shadow overflow-hidden">
+      <table class="min-w-full bg-white border border-gray-200 table-auto">
         <!-- Table Header -->
         <thead>
           <tr class="bg-for">
@@ -85,6 +86,10 @@ $result = $conn->query($sql);
             <th class="py-3 px-6 text-left text-sm font-semibold text-white rounded-tr-md">
               Payment Method
             </th>
+            <th class="py-3 px-6 text-left text-sm font-semibold text-white">
+              Booking Type
+            </th>
+
           </tr>
         </thead>
         <!-- Table Body -->
@@ -92,7 +97,7 @@ $result = $conn->query($sql);
           <?php
           if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
-              echo "<tr class='border-b border-gray-300'>";
+              echo "<tr class='border-b border-gray-200'>";
               echo "<td class='py-4 px-6 text-sm text-gray-800'>" . $row["userID"] . "</td>";
               echo "<td class='py-4 px-6 text-sm text-gray-800'>" . $row["transaction_id"] . "</td>";
               echo "<td class='py-4 px-6 text-sm text-gray-800'>" . $row["full_name"] . "</td>";
@@ -100,8 +105,10 @@ $result = $conn->query($sql);
               echo "<td class='py-4 px-6 text-sm text-gray-800'>" . $row["property_name"] . "</td>";
               echo "<td class='py-4 px-6 text-sm text-gray-800'>" . $row["rent_start_date"] . "</td>";
               echo "<td class='py-4 px-6 text-sm text-gray-800'>" . $row["next_due_date"] . "</td>";
-              echo "<td class='py-4 px-6 text-sm text-green-600'>" . $row["payment_status"] . "</td>";
+              echo "<td class='py-4 px-6 text-sm text-gray-800'>" . $row["payment_status"] . "</td>";
               echo "<td class='py-4 px-6 text-sm text-gray-800'>" . $row["payment_method"] . "</td>";
+              echo "<td class='py-4 px-6 text-sm text-gray-800'>" . $row["booking_type"] . "</td>";
+
               echo "</tr>";
             }
           } else {
