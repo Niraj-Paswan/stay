@@ -16,6 +16,49 @@
       font-family: 'Poppins', sans-serif;
     }
 
+    /* Floating Button Styles */
+    .floating-button {
+      position: fixed;
+      bottom: 20px;
+      right: 40px;
+      background-color: white;
+      border: 2px solid gray;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .floating-button:hover {
+      background-color: #f3f3f3;
+    }
+
+    .floating-button::after {
+      content: "Add New Listing";
+      position: absolute;
+      bottom: 60px;
+      right: 50%;
+      transform: translateX(50%);
+      background-color: black;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-size: 12px;
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .floating-button:hover::after {
+      opacity: 1;
+    }
+
     .navbar {
       width: 100%;
       background-color: #ffffff;
@@ -196,6 +239,9 @@
 
   <div class="main-content">
     <iframe class="w-full h-screen" src="../admin/main_dashboard.php" frameborder="0" id="content-frame"></iframe>
+  </div>
+  <div class="floating-button" onclick="location.href='property_upload.html'">
+    <i class="fa-solid fa-house-circle-check text-black text-xl"></i>
   </div>
 
   <script>
