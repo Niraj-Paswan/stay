@@ -30,7 +30,7 @@
     class="bg-gray-100 flex justify-center items-center min-h-screen font-Nrj-fonts p-12"
   >
     <div
-      class="bg-white shadow-lg rounded-lg p-10 w-full lg:w-[50%] border border-gray-300"
+      class="bg-white shadow-lg rounded-lg lg:w-[50%] p-12 border border-gray-300"
     >
       <h2 class="text-2xl font-bold mb-4 text-center">Add Property</h2>
       <form
@@ -62,7 +62,41 @@
             class="w-full mt-2 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-[0.5px] focus:ring-black"
           />
         </div>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+  const locationInput = document.querySelector('input[name="property_location"]');
+  const latitudeInput = document.querySelector('input[name="latitude"]');
+  const longitudeInput = document.querySelector('input[name="longitude"]');
 
+  locationInput.addEventListener("input", async function () {
+    const location = locationInput.value.trim();
+    if (location.length > 2) { // Fetch only if input has enough characters
+      fetchCoordinates(location);
+    }
+  });
+
+  async function fetchCoordinates(location) {
+    const MAPBOX_ACCESS_TOKEN = "pk.eyJ1IjoidHlwcm9qZWN0IiwiYSI6ImNtNTZxdWx6bjEwamUyaXMyc2poczd4OHAifQ.tuR-aGDXJdcOWzsmYz4hnw";
+    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(location)}.json?access_token=${MAPBOX_ACCESS_TOKEN}`;
+
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.features.length > 0) {
+        const [lon, lat] = data.features[0].center;
+        latitudeInput.value = lat;
+        longitudeInput.value = lon;
+      } else {
+        latitudeInput.value = "";
+        longitudeInput.value = "";
+      }
+    } catch (error) {
+      console.error("Error fetching coordinates:", error);
+    }
+  }
+});
+</script>
         <div>
           <label class="block font-medium text-sm text-gray-700">Price</label>
           <input
@@ -328,6 +362,18 @@
               class="text-red-500 text-xs error-message"
             ></p>
           </div>
+          <label for="is_sharable">
+            <input
+              type="checkbox"
+              id="is_sharable"
+              name="is_sharable"
+              value="1"
+            />
+            <span class="text-gray-600 text-sm font-medium"></span>
+              <span>Allow Room Sharing</span>(Only applicable for 2-bedroom
+              properties)</span
+            >
+          </label>
         </div>
 
         <button
