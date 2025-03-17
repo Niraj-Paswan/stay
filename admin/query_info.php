@@ -1,9 +1,8 @@
 <?php
-// Database connection settings
-$servername = "localhost:3307"; // Change if necessary
-$username = "root"; // Change to your database username
-$password = ""; // Change to your database password
-$database = "stayease"; // Change to your database name
+$servername = "localhost:3307";
+$username = "root";
+$password = "";
+$database = "stayease";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $database);
@@ -33,7 +32,7 @@ $result = $conn->query($sql);
 
 <body class="bg-gray-100 text-gray-800 font-Nrj-fonts">
     <div class="container mx-auto p-6">
-        <h1 class="text-3xl font-semibold text-gray-900 mb-6">User Queries</h1>
+        <h1 class="text-2xl font-bold text-center text-gray-900 mb-6">User Queries</h1>
 
         <div class="bg-white  rounded-md overflow-hidden border border-gray-300">
             <table class="w-full text-left border-collapse">
