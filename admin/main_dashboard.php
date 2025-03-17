@@ -87,23 +87,23 @@ $conn->close();
     <div class="flex flex-row gap-6 mb-6">
       <div
         class=" w-full bg-white p-6 rounded-md shadow-sm flex flex-col justify-between border-[1.5px] border-gray-300">
-        <h3 class="text-gray-600">Total Listings</h3>
+        <h3 class="text-gray-600"><i class="fa-regular fa-house text-for mr-2"></i>Total Listings</h3>
         <p class="text-3xl font-bold text-gray-900"><?php echo $totalListings; ?></p>
       </div>
       <div
         class=" w-full bg-white p-6 rounded-md shadow-sm flex flex-col justify-between border-[1.5px] border-gray-300">
-        <h3 class="text-gray-600">Total Users</h3>
+        <h3 class="text-gray-600"><i class="fa-regular fa-user text-for mr-2"></i>Total Users</h3>
         <p class="text-3xl font-bold text-gray-900"><?php echo $totalUsers; ?></p>
       </div>
       <div
         class="w-full bg-white p-6 rounded-md shadow-sm flex flex-col justify-between border-[1.5px] border-gray-300">
-        <h3 class="text-gray-600">Total Bookings</h3>
+        <h3 class="text-gray-600"><i class="fa-light fa-file-invoice-dollar text-for mr-2"></i>Total Bookings</h3>
         <p class="text-3xl font-bold text-gray-900"><?php echo $totalBookings; ?></p>
       </div>
       <div
         class=" w-full bg-white p-6 rounded-md shadow-sm flex flex-col justify-between border-[1.5px] border-gray-300">
-        <h3 class="text-gray-600">Revenue</h3>
-        <p class="text-3xl font-bold text-gray-900">₹<?php echo number_format($revenue, 2); ?></p>
+        <h3 class="text-gray-600"><i class="fa-regular fa-chart-line-up text-for mr-2"></i>Revenue</h3>
+        <p class="text-3xl font-bold text-green-600">₹<?php echo number_format($revenue, 2); ?></p>
 
       </div>
     </div>
