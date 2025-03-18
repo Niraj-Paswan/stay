@@ -267,6 +267,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </script>
   </head>
   <body class="bg-gray-100 flex justify-center items-center min-h-screen">
+  <div class="p-4 absolute left-2 top-2">
+        <button onclick="history.back()" class="flex items-center text-blue-600 font-medium hover:underline">
+            <i class="fa-solid fa-arrow-left mr-2"></i> Back
+        </button>
+    </div>
     <div
 class="bg-white p-8 rounded-md shadow-lg w-96 border-[0.5px] border-gray-300"
     >
