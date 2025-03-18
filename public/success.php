@@ -1,5 +1,11 @@
 <?php
 session_start();
+
+// Ensure all required session variables exist
+if (!isset($_SESSION['userID'], $_SESSION['property_id'], $_SESSION['total_payable'])) {
+    die("Error: Payment details missing.");
+}
+
 $conn = new mysqli("localhost:3307", "root", "", "stayease");
 
 if ($conn->connect_error) {
@@ -13,17 +19,19 @@ if (!$userID) {
     die("Error: User not logged in.");
 }
 
-// Fetch user, payment, and property details
-$query = "SELECT u.full_name, u.email_address,u.phone_number,u.rent_start_date, p.transaction_id, p.payment_id, 
-                 p.payment_date, p.payment_time, p.payment_amount,p.original_rent, 
-                 p.payment_status, p.payment_method, pr.property_name, pr.property_location, pr.property_price, 
-               pr.property_description, pr.latitude, pr.longitude, 
-               pr.main_image, pr.property_type, pr.bedrooms, pr.bathrooms, pr.area 
+$query = "SELECT u.full_name, u.email_address, u.phone_number, u.rent_start_date, 
+                 p.transaction_id, p.payment_id, p.payment_date, p.payment_time, 
+                 p.payment_amount, p.original_rent, p.payment_status, 
+                 p.payment_method, p.booking_type, p.discount_amount,  
+                 pr.property_name, pr.property_location, pr.property_price, 
+                 pr.property_description, pr.latitude, pr.longitude, 
+                 pr.main_image, pr.property_type, pr.bedrooms, pr.bathrooms, pr.area 
           FROM users u
           JOIN payments p ON u.userID = p.userID
           JOIN properties pr ON p.property_id = pr.id
           WHERE u.userID = ? 
           ORDER BY p.payment_date DESC LIMIT 1";
+
 
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $userID);
@@ -35,7 +43,12 @@ if (!$paymentData) {
     echo "<p style='color: red; text-align: center;'>No payment details found for this user.</p>";
     exit;
 }
+
+// Fetch booking type correctly
+$bookingType = $paymentData['booking_type'] ?? 'N/A';
+
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -84,10 +97,21 @@ if (!$paymentData) {
                     INR</span>
             </div>
             <div class="flex justify-between text-gray-600 text-sm mt-1">
-                <span>Security Deposit Paid:</span>
+                <span>Discount Applied:</span>
+                <span class="font-medium text-red-500">- ₹<?= htmlspecialchars($paymentData['discount_amount']) ?>
+                    INR</span>
+            </div>
+
+            <div class="flex justify-between text-gray-600 text-sm mt-1">
+                <span>Total Paid Amount :</span>
                 <span class="font-semibold text-green-600">₹<?= htmlspecialchars($paymentData['payment_amount']) ?>
                     INR</span>
             </div>
+            <div class="flex justify-between text-gray-600 text-sm mt-1">
+                <span>Booking Type:</span>
+                <span class="font-medium"><?= htmlspecialchars($bookingType) ?></span>
+            </div>
+
             <div class="flex justify-between text-gray-600 text-sm mt-1">
                 <span>Payment Status:</span>
                 <span class="font-medium text-green-600"><?= htmlspecialchars($paymentData['payment_status']) ?></span>
