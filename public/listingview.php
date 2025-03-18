@@ -1,17 +1,8 @@
 <?php
 
 session_start(); // Start session
+include '../Database/dbconfig.php';
 
-// Database connection
-$host = "localhost:3307";
-$username = "root";
-$password = "";
-$database = "stayease";
-
-$conn = new mysqli($host, $username, $password, $database);
-if ($conn->connect_error) {
-  die("Connection failed: " . $conn->connect_error);
-}
 // Check if the property ID is passed
 if (isset($_GET['id'])) {
   $property_id = intval($_GET['id']); // Change from pid to id
@@ -58,6 +49,55 @@ if (isset($_GET['id'])) {
   echo "No property selected!";
   exit;
 }
+// Fetch occupants from payments table
+$occupants_sql = "SELECT u.full_name, u.email_address, u.phone_number , u.gender , u.rent_start_date
+                  FROM payments p 
+                  JOIN users u ON p.userID = u.userID 
+                  WHERE p.property_id = ?";
+$stmt = $conn->prepare($occupants_sql);
+$stmt->bind_param("i", $property_id);
+$stmt->execute();
+$occupants_result = $stmt->get_result();
+
+$occupants = [];
+while ($occupant = $occupants_result->fetch_assoc()) {
+  $occupants[] = $occupant;
+}
+
+// Fetch property details including sharable status
+$sql = "SELECT id, property_name, property_location, property_price, is_sharable FROM properties WHERE id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $property_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$property = $result->fetch_assoc();
+
+// Check how many people have booked this property from the payments table
+$sql = "SELECT COUNT(*) as occupant_count FROM payments WHERE property_id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $property_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$occupantData = $result->fetch_assoc();
+$occupant_count = $occupantData['occupant_count'];
+
+// Determine status
+$status = "Vacant";
+$status_color = "text-green-600"; // Default green dot
+
+if ($occupant_count == 1) {
+  if ($property['is_sharable'] == 1) {
+    $status = "Partially Booked";
+    $status_color = "text-yellow-600"; // Yellow dot
+  } else {
+    $status = "Fully Booked"; // Since it's not sharable, one booking fills it
+    $status_color = "text-red-600"; // Red dot
+  }
+} elseif ($occupant_count == 2) {
+  $status = "Fully Booked";
+  $status_color = "text-red-600"; // Red dot
+}
+
 
 $conn->close();
 ?>
@@ -73,7 +113,7 @@ $conn->close();
     href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap"
     rel="stylesheet" />
   <link rel="shortcut icon" href="../assets/img/stayease logo.svg" type="image/x-icon" />
-  <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.1/css/all.css" />
+  <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.2/css/all.css" />
   <link rel="stylesheet" href="../assets/css/styles.css" />
   <style>
     /* Rotate the second icon when it has the rotate-180 class */
@@ -171,9 +211,57 @@ $conn->close();
                   <i class="fa-regular fa-circle-check text-for text-sm"></i>
                   <span class="text-black text-sm font-medium ">Status</span>
                   <span class="text-gray-500">|</span>
-                  <span class="text-sm font-medium text-for">Vacant</span>
-                  <i class="fa-solid fa-circle text-xs text-green-600"></i>
+                  <span class="text-sm font-medium text-for"><?= $status ?></span>
+                  <i class="fa-solid fa-circle text-xs"
+                    style="color: <?= $status_color == 'text-red-600' ? 'red' : ($status_color == 'text-yellow-600' ? 'yellow' : 'green') ?>;"></i>
                 </div>
+              </div>
+              <!-- Occupants Details Section -->
+              <div class="mt-4 ">
+                <h2 class="text-[16px] font-medium text-black mb-1">Occupants Details</h2>
+                <?php if (!empty($occupants)): ?>
+                  <?php foreach ($occupants as $occupant): ?>
+
+                    <!-- Occupant Card -->
+                    <div class="flex items-center gap-4 p-4 bg-white  rounded-md">
+
+                      <!-- Profile Picture (Icon-based) -->
+                      <img class="h-16 w-16 rounded-full p-0 border border-for" src="../assets\img\staying_user.png" alt="">
+
+                      <!-- User Info -->
+                      <div>
+                        <p class="text-lg font-semibold text-gray-900"><?= htmlspecialchars($occupant['full_name']) ?>
+                          <i class="fa-solid fa-badge-check ml-1 text-for text-sm"></i>
+                        </p>
+
+                        <!-- Email & Phone -->
+                        <div class="flex flex-row gap-4 mt-1">
+                          <p class="text-sm text-gray-600 flex items-center gap-2">
+                            <i class="fa-regular fa-envelope text-for"></i>
+                            <?= htmlspecialchars($occupant['email_address']) ?>
+                          </p>
+                          <!-- <span class="text-gray-500">|</span>
+                          <p class="text-sm text-gray-600 flex items-center gap-2">
+                            <i class="fa-regular fa-phone text-for"></i> <?= htmlspecialchars($occupant['phone_number']) ?>
+                          </p> -->
+
+                          <span class="text-gray-500">|</span>
+                          <p class="text-sm text-gray-600 flex items-center gap-2">
+                            <i class="fa-regular fa-mars text-for"></i> <?= htmlspecialchars($occupant['gender']) ?>
+                          </p>
+
+                          <span class="text-gray-500">|</span>
+                          <p class="text-sm text-gray-600 flex items-center gap-2">
+                            <i class="fa-regular fa-calendar-circle-user text-for"></i>
+                            <?= htmlspecialchars($occupant['rent_start_date']) ?>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  <?php endforeach; ?>
+                <?php else: ?>
+                  <p class="text-gray-500">No occupants yet.</p>
+                <?php endif; ?>
               </div>
 
 
@@ -191,15 +279,21 @@ $conn->close();
                 <i class="fa-solid fa-badge-check mr-1 text-blue-600"></i>Verified
               </div>
             </h2>
-            <h2 class="text-sm font-normal mb-2 text-gray-500">
-              Rent from
-              <span class="text-black text-lg font-semibold">₹<?= $property['price'] ?>/</span> month
+            <h2 class="text-sm font-normal text-gray-500 mb-2">From <span
+                class="text-black text-xl font-semibold">₹<?= number_format($property['price']) ?><span
+                  class="text-sm font-normal text-gray-500"> /month</span></span>
             </h2>
             <!-- Action Buttons -->
-            <button class="w-full py-2 bg-blue-500 text-white font-medium rounded hover:bg-for mb-4"
-              data-action="continue" onclick="window.location.href = '../bookings/personal_info.php';" ;>
-              Continue
-            </button>
+            <form action="../bookings/shared.php" method="GET">
+              <input type="hidden" name="id" value="<?= $property['pid'] ?>">
+              <button class="w-full py-2 bg-blue-500 text-white font-medium rounded hover:bg-for mb-4"
+                <?= ($status === "Fully Booked") ? 'disabled' : '' ?>>
+                Continue
+              </button>
+            </form>
+            <?php if ($status === "Fully Booked"): ?>
+              <p class="text-red-600 text-sm font-medium mt-1 mb-4">❌ Sorry, this property is fully booked.</p>
+            <?php endif; ?>
             <button class="w-full py-2 bg-gray-200 text-gray-700 font-medium rounded hover:bg-gray-300"
               data-action="go-back" onclick="window.history.back();">
               Go Back
@@ -218,7 +312,7 @@ $conn->close();
                   <span class="flex items-center text-sm font-medium text-gray-800 gap-4">
                     <div
                       class="icon-wrapper w-9 h-9 bg-blue-200 bg-opacity-25 rounded-full flex justify-center items-center">
-                      <i class="fa-light fa-calendar-check text-[16px] text-for"></i>
+                      <i class="fa-regular fa-calendar-check text-[16px] text-for"></i>
                     </div>
                     Instant Booking
                   </span>
@@ -237,7 +331,7 @@ $conn->close();
                   <span class="flex items-center text-sm font-medium text-gray-800 gap-4">
                     <div
                       class="icon-wrapper w-9 h-9 bg-blue-200 bg-opacity-25 rounded-full flex justify-center items-center">
-                      <i class="fa-light fa-hand-holding-dollar text-[16px] text-for"></i>
+                      <i class="fa-regular fa-hand-holding-dollar text-[16px] text-for"></i>
                     </div>
                     Lowest Price Guaranteed
                   </span>
@@ -255,7 +349,7 @@ $conn->close();
                   <span class="flex items-center text-sm font-medium text-gray-800 gap-4">
                     <div
                       class="icon-wrapper w-9 h-9 bg-blue-200 bg-opacity-25 rounded-full flex justify-center items-center">
-                      <i class="fa-light fa-circle-check text-[16px] text-for"></i>
+                      <i class="fa-regular fa-circle-check text-[16px] text-for"></i>
                     </div>
                     Verified Listings
                   </span>
@@ -274,7 +368,7 @@ $conn->close();
                   <span class="flex items-center text-sm font-medium text-gray-800 gap-4">
                     <div
                       class="icon-wrapper w-9 h-9 bg-blue-200 bg-opacity-25 rounded-full flex justify-center items-center">
-                      <i class="fa-light fa-tag text-[16px] text-for"></i>
+                      <i class="fa-regular fa-tag text-[16px] text-for"></i>
                     </div>
                     Instant Discounts
                   </span>
@@ -293,7 +387,7 @@ $conn->close();
                   <span class="flex items-center text-sm font-medium text-gray-800 gap-4">
                     <div
                       class="icon-wrapper w-9 h-9 bg-blue-200 bg-opacity-25 rounded-full flex justify-center items-center">
-                      <i class="fa-light fa-eye-slash text-[16px] text-for"></i>
+                      <i class="fa-regular fa-eye-slash text-[16px] text-for"></i>
                     </div>
                     No hidden charges
                   </span>
@@ -302,6 +396,39 @@ $conn->close();
                 <div id="feature5" class="hidden px-4 py-2 text-gray-600 text-sm"
                   data-feature-description="Negotiate prices effortlessly to get the best deal that suits your budget!">
                   Transparent pricing with no unexpected fees or extra costs.
+                </div>
+              </div>
+
+              <!-- Promo Codes Section -->
+              <!-- Promo Codes Section -->
+              <div class="mt-1 p-5 rounded-lg text-white bg-gradient-to-r from-blue-600 to-indigo-600 shadow-lg">
+                <h2 class="text-[16px] font-semibold mb-1">
+                  🎉 Exclusive Promo Codes - Save More!
+                </h2>
+                <p class="text-xs text-gray-200">Use these promo codes to get discounts on booking</p>
+
+                <div class="mt-3 space-y-2">
+                  <!-- Promo Code 1 -->
+                  <div class="flex justify-between items-center text-white font-normal text-sm">
+                    <div class="flex items-center gap-2">
+                      <i class="fa-solid fa-tag text-green-500"></i>
+                      <strong class="font-medium">SAVE10</strong> - Get 10% off
+                    </div>
+                    <button class="copy-btn text-white hover:text-gray-300" data-code="SAVE10">
+                      <i class="fa-regular fa-copy"></i>
+                    </button>
+                  </div>
+
+                  <!-- Promo Code 2 -->
+                  <div class="flex justify-between items-center text-white font-normal text-sm">
+                    <div class="flex items-center gap-2">
+                      <i class="fa-solid fa-tag text-green-500"></i>
+                      <strong class="font-medium">FLAT500</strong> - Flat ₹500 off
+                    </div>
+                    <button class="copy-btn text-white hover:text-gray-300" data-code="FLAT500">
+                      <i class="fa-regular fa-copy"></i>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -669,6 +796,17 @@ $conn->close();
         dropdownIconCancellation.classList.remove("fa-caret-down");
         dropdownIconCancellation.classList.add("fa-caret-up");
       }
+    });
+    document.querySelectorAll(".copy-btn").forEach((button) => {
+      button.addEventListener("click", function () {
+        const promoCode = this.getAttribute("data-code");
+        navigator.clipboard.writeText(promoCode).then(() => {
+          this.innerHTML = '<i class="fa-solid fa-check text-green-300"></i>';
+          setTimeout(() => {
+            this.innerHTML = '<i class="fa-regular fa-copy"></i>';
+          }, 1500);
+        });
+      });
     });
   </script>
 
