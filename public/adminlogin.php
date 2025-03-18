@@ -92,6 +92,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body class="bg-gray-100 flex items-center justify-center min-h-screen font-Nrj-fonts">
+    <div class="p-4 absolute left-2 top-2">
+        <button onclick="history.back()" class="flex items-center text-blue-600 font-medium hover:underline">
+            <i class="fa-solid fa-arrow-left mr-2"></i> Back
+        </button>
+    </div>
     <div class="bg-white p-8 rounded-lg shadow-md border border-gray-300 w-96">
         <div class="flex justify-center items-center space-x-1 mb-4">
             <div class="flex justify-center items-center space-x-1">
