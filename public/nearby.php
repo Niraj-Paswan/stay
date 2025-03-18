@@ -1,16 +1,7 @@
 <?php
-// Database connection
-$host = "localhost:3307";
-$username = "root";
-$password = "";
-$database = "stayease";
+include '../Database/dbconfig.php';
 
-$conn = new mysqli($host, $username, $password, $database);
-if ($conn->connect_error) {
-  die("Connection failed: " . $conn->connect_error);
-}
-
-$sql = "SELECT id,property_name, property_location, property_price, latitude, longitude, main_image, property_type, bathrooms, bedrooms, area FROM properties";
+$sql = "SELECT id, property_name, property_location, property_price, latitude, longitude, main_image,kitchen_img,gallery_img,washroom_img, property_type, bathrooms, bedrooms, area, is_sharable FROM properties";
 $result = $conn->query($sql);
 
 $properties = [];
@@ -23,10 +14,15 @@ if ($result->num_rows > 0) {
       "coordinates" => [(float) $row["longitude"], (float) $row["latitude"]],
       "price" => $row["property_price"],
       "image" => $row["main_image"],
+      "washroom" => $row["washroom_img"],
+      "gallery" => $row["gallery_img"],
+      "kitchen" => $row["kitchen_img"],
       "type" => $row["property_type"],
       "bathrooms" => $row["bathrooms"] ?? "N/A",
       "bedrooms" => $row["bedrooms"] ?? "N/A",
-      "area" => $row["area"] ?? "N/A"
+      "area" => $row["area"] ?? "N/A",
+      "is_sharable" => isset($row["is_sharable"]) ? $row["is_sharable"] : 0
+
     ];
   }
 }
@@ -131,116 +127,199 @@ $conn->close();
 </head>
 
 <body class="h-screen font-Nrj-fonts">
-  <nav class="w-full h-14 shadow-md bg-white border-b border-gray-300 p-4 flex items-center justify-start">
-    <!-- Back Button -->
-    <button onclick="history.back()" class="flex items-center text-blue-600 font-medium hover:underline mr-4">
-      <i class="fa-solid fa-arrow-left mr-2"></i> Back
+  <nav class="w-full h-16 bg-white border-b border-gray-300 px-6 flex items-center gap-6  ">
+    <!-- Logo -->
+    <a href="index.php" id="brands" class="font-Nrj-fonts font-semibold text-md flex items-center ml-2">
+      <img class="w-7 h-7 ml-2" src="../assets/img/stayease logo.svg" alt="" />
+      <p class="font-Nrj-fonts ml-2 text-lg text-black">StayEase</p>
+    </a>
+
+    <!-- Location Dropdown -->
+    <div class="relative flex items-center bg-gray-50 border-[1.5px] border-gray-300 rounded-full px-2 py-2">
+      <p class="font-medium text-sm px-2 py-1">
+        Your Location
+        <i class="fa-solid fa-location-dot text-sm text-red-600 mr-1"></i>:
+        <!-- Actual Location -->
+        <span id="user-location" class="text-sm font-semibold">Loading...</span>
+      </p>
+    </div>
+
+    <!-- Search Input Container -->
+    <div class="relative flex items-center w-full max-w-lg">
+      <!-- Input Field Wrapper -->
+      <div
+        class="flex items-center w-full border-[1.5px] border-gray-300 bg-gray-50 px-3 py-0.5 rounded-full shadow-sm">
+        <!-- Input Field -->
+        <input type="text" id="search-input" placeholder="Search Nearby Properties by City or State"
+          class="w-full bg-transparent text-gray-700 placeholder-gray-500 focus:outline-none text-sm p-3">
+
+        <!-- Clear Button (Hidden by default, shows when input has text) -->
+        <button id="clear-btn" onclick="document.getElementById('search-input').value=''; filterProperties();"
+          class="text-gray-700 hover:text-red-500 bg-gray-50 hover:bg-gray-200 rounded-full w-12 h-10 flex  transition hidden">
+          <i class="fa-solid fa-xmark "></i>
+        </button>
+
+        <!-- Search Button -->
+        <button onclick="filterProperties()"
+          class="bg-blue-500 text-white w-9 h-8 flex items-center justify-center rounded-full ml-2 hover:bg-blue-600 transition">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Contact Buttons (WhatsApp & Call) -->
+    <div class="flex items-center border-[1.5px] border-gray-300 bg-gray-50 rounded-full px-4 py-2 space-x-4">
+      <button class="text-blue-500 hover:text-for">
+        <i class="fa-regular fa-envelope text-sm"></i>
+      </button>
+      <span class="text-gray-400">|</span>
+      <button class="text-blue-500 hover:text-for">
+        <i class="fa-regular fa-phone text-sm"></i>
+      </button>
+    </div>
+
+    <!-- Get in Touch Button -->
+    <button class="bg-blue-500 text-white px-4 py-3 rounded-full text-sm font-medium hover:bg-blue-600 transition">
+      Contact Us
     </button>
-    <p class="font-medium text-lg">
-      Your Location is :
-      <i class="fa-solid fa-location-dot text-lg text-red-600"></i>
-      <!-- Actual Location -->
-      <span id="user-location" class="text-lg font-semibold">Loading...</span>
-    </p>
+
   </nav>
+  <script>
+    // Toggle Clear Button Visibility
+    document.getElementById('search-input').addEventListener('input', function () {
+      toggleClearButton();
+    });
+
+    function toggleClearButton() {
+      const clearBtn = document.getElementById('clear-btn');
+      const searchInput = document.getElementById('search-input').value;
+      clearBtn.style.display = searchInput.length > 0 ? 'block' : 'none';
+    }
+  </script>
+
+
 
   <div class="grid grid-cols-[60%_40%] h-full">
     <!-- Left Section: Vertically Scrollable without Visible Scrollbar -->
     <div class="overflow-y-auto scrollbar-hidden px-10 py-0">
-      <h2 class="text-lg font-semibold py-4">Nearby Properties</h2>
 
-      <!-- Search Input -->
-      <div class="relative w-full mb-4">
-        <!-- Input Field Wrapper -->
-        <div
-          class="flex items-center border-[1.5px] border-gray-300 rounded-md shadow-sm focus-within:border-gray-500 focus-within:ring-1.5 focus-within:ring-gray-300 overflow-hidden">
-
-          <!-- Input Field -->
-          <input type="text" id="search-input" placeholder="Search by the City " class="w-full p-3 focus:outline-none">
-
-          <!-- Search Button Inside Input -->
-          <button onclick="filterProperties()"
-            class="bg-blue-500 text-white px-4 py-2 rounded-md mr-2 hover:bg-blue-600 transition">
-            Search
-          </button>
-
+      <div class="flex flex-row justify-between items-center mb-4 mt-4">
+        <div class="flex  items-center space-x-4">
+          <nav class="flex items-center text-gray-600 text-[16px]">
+            <a href="index.php" class="hover:text-blue-500 transition hover:underline">Home</a>
+            <span class="mx-3 text-gray-400">/</span>
+            <p class="text-[16px] text-black font-medium mr-8">Properties</p>
+          </nav>
         </div>
       </div>
-
 
       <div id="properties-list">
         <?php foreach ($properties as $property): ?>
           <div
-            class="property-item flex flex-row border-[1.5px] border-gray-300 rounded-lg overflow-hidden bg-white mb-8 shadow-md transition">
-            <!-- Image Section -->
-            <div class="relative w-80 h-64">
-              <img class="w-full h-64 object-cover" src="<?= $property['image'] ?>" alt="Property Image" />
+            class="property-item flex flex-row border-[1.5px] border-gray-300 rounded-lg overflow-hidden bg-white mb-8 shadow-sm transition">
 
-              <!-- Verified Badge -->
-              <div
-                class="absolute top-2 right-2 bg-white text-sm font-medium px-2 py-1 text-black flex items-center rounded-sm">
-                <i class="fa-solid fa-badge-check mr-1 text-blue-600"></i>
-                Verified
+            <!-- Image Section -->
+            <!-- Image Carousel Section -->
+            <div class="relative w-80 overflow-hidden">
+              <div class="carousel relative">
+                <?php
+                $images = [$property['image'], $property['kitchen'], $property['gallery'], $property['washroom']];
+                foreach ($images as $index => $img):
+                  ?>
+                  <div
+                    class="carousel-item absolute inset-0 transition-opacity duration-500 <?= $index === 0 ? 'opacity-100' : 'opacity-0' ?>">
+                    <img class="w-full h-60 object-cover" src="<?= $img ?>" alt="Property Image" />
+                  </div>
+                  <div
+                    class="absolute top-0 left-0 bg-white text-sm font-medium px-2 py-1 text-black rounded-tl-lg rounded-br-lg flex items-center gap-2 ">
+                    <i class="fa-solid fa-badge-check mr-1 text-blue-600"></i> Verified
+                  </div>
+                <?php endforeach; ?>
+              </div>
+
+              <!-- Navigation Arrows -->
+              <button
+                class=" flex justify-center items-center absolute left-2 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full h-7 w-7 bg-opacity-70 prev "
+                onclick="prevSlide(this)">
+                <i class="fa-solid fa-chevron-left text-gray-600 text-xs"></i>
+              </button>
+              <button
+                class=" flex justify-center items-center absolute right-2 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full h-7 w-7 bg-opacity-70 next"
+                onclick="nextSlide(this)">
+                <i class="fa-solid fa-chevron-right text-gray-600 text-xs"></i>
+              </button>
+
+              <!-- Dots Indicator -->
+              <div class="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                <?php foreach ($images as $index => $img): ?>
+                  <span class="dot w-2 h-2 rounded-full bg-white opacity-50" data-index="<?= $index ?>"></span>
+                <?php endforeach; ?>
               </div>
             </div>
 
-            <!-- Property Info Section -->
-            <div class="flex flex-col flex-1 px-6 py-4">
-              <!-- Name & Type -->
-              <div class="flex justify-between items-center">
-                <h2 class="text-2xl font-semibold text-gray-800">
-                  <?= $property['property_name'] ?>
-                </h2>
-                <div class="text-sm border-[1.5px] bg-gray-50 border-gray-400 px-4 py-2 font-medium rounded-md text-for">
-                  <?= $property['type'] ?>
-                </div>
-              </div>
 
-              <div class="flex flex-row justify-between items-end mt-2">
-                <!-- Location -->
-                <div class="flex items-center mt-1 text-gray-600 text-sm">
-                  <i class="fa-solid fa-location-dot mr-1"></i>
+
+            <!-- Property Info Section -->
+            <div class="flex flex-col flex-1 px-6 py-5 space-y-4">
+
+              <!-- Name & Location -->
+              <div>
+                <h2 class="text-2xl font-semibold text-gray-800"><?= $property['property_name'] ?></h2>
+                <div class="flex items-center text-gray-600 text-sm mt-1">
+                  <i class="fa-regular fa-location-dot mr-1"></i>
                   <?= $property['location'] ?>
                 </div>
-                <!-- //Sharable  part remove it letter -->
-                <!-- <div class=" flex items-center gap-2 border border-gray-400 bg-white rounded-md px-4 py-2 shadow-sm">
-        <i class="fa-regular fa-user-group text-for text-sm"></i>
-        <span class="text-black text-sm font-medium">Sharable</span>
-    </div> -->
               </div>
 
-              <!-- Price -->
-              <h2 class="text-sm font-normal mt-2 text-gray-500">
-                Rent from
-                <span class="text-black text-lg font-semibold">
-                  ₹<?= $property['price'] ?>/
-                </span>
-                month
-              </h2>
+              <!-- Badges -->
+              <div class="flex flex-wrap gap-3">
+                <div
+                  class="badge flex items-center border border-gray-300 bg-white px-3 py-1 rounded-full text-gray-700 text-sm font-medium hover:shadow-sm">
+                  <i class="fa-regular fa-home text-for mr-2"></i>
+                  <span>Apartment</span>
+                </div>
 
-              <!-- Property Features -->
-              <div class="flex justify-between mt-2">
-                <div class="flex items-center gap-2">
-                  <i class="fa-light fa-bed text-lg text-blue-500"></i>
-                  <p class="text-[16px] font-medium text-gray-800">
+                <!-- Sharable or Sole Booking -->
+                <div class="badge flex items-center gap-2 border border-gray-300 bg-white rounded-full px-3 py-1 ">
+                  <i
+                    class="<?= ($property['bedrooms'] == 2 && isset($property['is_sharable']) && $property['is_sharable'] == 1) ? 'fa-regular fa-user-group' : 'fa-regular fa-user' ?> text-for text-sm"></i>
+                  <span class="text-gray-700 text-sm font-medium">
+                    <?= ($property['bedrooms'] == 2 && isset($property['is_sharable']) && $property['is_sharable'] == 1) ? 'Sharable' : 'Sole Booking' ?>
+                  </span>
+                </div>
+
+                <div
+                  class="badge flex items-center border border-gray-300 bg-white px-3 py-1 rounded-full text-gray-700 text-sm font-medium hover:shadow-sm">
+                  <i class="fa-regular fa-bolt text-for mr-2"></i>
+                  <span>Quick Booking</span>
+                </div>
+
+                <div
+                  class="badge flex items-center border border-gray-300 bg-white px-3 py-1 rounded-full text-gray-700 text-sm font-medium hover:shadow-sm">
+                  <i class="fa-light fa-bed text-for"></i>
+                  <p class="text-sm font-medium text-gray-800 ml-2">
                     <?= $property['bedrooms'] ?> Bedrooms
                   </p>
                 </div>
-                <div class="flex items-center gap-2">
-                  <i class="fa-light fa-bath text-lg text-blue-500"></i>
-                  <p class="text-[16px] font-medium text-gray-800">
+
+                <div
+                  class="badge flex items-center border border-gray-300 bg-white px-3 py-1 rounded-full text-gray-700 text-sm font-medium hover:shadow-sm">
+                  <i class="fa-light fa-bath text-for"></i>
+                  <p class="text-sm font-medium text-gray-800 ml-2">
                     <?= $property['bathrooms'] ?> Bathrooms
                   </p>
                 </div>
-                <div class="flex items-center gap-2">
-                  <i class="fa-light fa-arrows-maximize text-lg text-blue-500"></i>
-                  <p class="text-[16px] font-medium text-gray-800">
+
+                <div
+                  class="badge flex items-center border border-gray-300 bg-white px-3 py-1 rounded-full text-gray-700 text-sm font-medium hover:shadow-sm">
+                  <i class="fa-light fa-arrows-maximize text-for"></i>
+                  <p class="text-sm font-medium text-gray-800 ml-2">
                     <?= $property['area'] ?> Sq.ft
                   </p>
                 </div>
               </div>
 
-              <!-- Action Button -->
+              <!-- Price & Action Button -->
               <form action="listingview.php" method="GET">
                 <input type="hidden" name="id" value="<?= $property['pid'] ?>">
                 <input type="hidden" name="property_name" value="<?= $property['property_name'] ?>">
@@ -253,10 +332,19 @@ $conn->close();
                 <input type="hidden" name="area" value="<?= $property['area'] ?>">
                 <input type="hidden" name="userID" value="<?= $_SESSION['userID'] ?>">
                 <input type="hidden" name="user_email" value="<?= $_SESSION['user_email'] ?>">
-                <button type="submit"
-                  class="w-full mt-4 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 transition">
-                  Continue
-                </button>
+
+                <div class="flex flex-row justify-between items-center">
+                  <!-- Price -->
+                  <h2 class="text-sm font-normal text-gray-500">From <span
+                      class="text-black text-xl font-semibold">₹<?= number_format($property['price']) ?><span
+                        class="text-sm font-normal text-gray-500"> /month</span></span>
+                  </h2>
+
+                  <button type="submit"
+                    class="w-[45%] py-2 px-4 bg-blue-500 text-white font-medium rounded-md hover:bg-blue-600 shadow-sm">
+                    View Details
+                  </button>
+                </div>
               </form>
             </div>
           </div>
@@ -271,6 +359,29 @@ $conn->close();
   </div>
 
   <script>
+    function nextSlide(btn) {
+      let carousel = btn.closest('.property-item').querySelector('.carousel');
+      let items = carousel.querySelectorAll('.carousel-item');
+      let dots = btn.closest('.property-item').querySelectorAll('.dot');
+      let activeIndex = [...items].findIndex(item => item.classList.contains('opacity-100'));
+      items[activeIndex].classList.replace('opacity-100', 'opacity-0');
+      dots[activeIndex].classList.replace('opacity-100', 'opacity-50');
+      let nextIndex = (activeIndex + 1) % items.length;
+      items[nextIndex].classList.replace('opacity-0', 'opacity-100');
+      dots[nextIndex].classList.replace('opacity-50', 'opacity-100');
+    }
+
+    function prevSlide(btn) {
+      let carousel = btn.closest('.property-item').querySelector('.carousel');
+      let items = carousel.querySelectorAll('.carousel-item');
+      let dots = btn.closest('.property-item').querySelectorAll('.dot');
+      let activeIndex = [...items].findIndex(item => item.classList.contains('opacity-100'));
+      items[activeIndex].classList.replace('opacity-100', 'opacity-0');
+      dots[activeIndex].classList.replace('opacity-100', 'opacity-50');
+      let prevIndex = (activeIndex - 1 + items.length) % items.length;
+      items[prevIndex].classList.replace('opacity-0', 'opacity-100');
+      dots[prevIndex].classList.replace('opacity-50', 'opacity-100');
+    }
     function filterProperties() {
       const searchInput = document.getElementById('search-input').value.toLowerCase();
       const propertyItems = document.querySelectorAll('.property-item');
