@@ -1,15 +1,6 @@
 <?php
 // Database connection
-$servername = "localhost:3307";
-$username = "root";
-$password = "";
-$dbname = "stayease";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Database connection failed");
-}
+include "../Database/dbconfig.php";
 
 $properties = [];
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['city'])) {
@@ -22,8 +13,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['city'])) {
     }
 }
 $conn->close();
-?>
 
+// If the request is made via AJAX, output only the properties list markup.
+if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+    if (!empty($properties)) {
+        foreach ($properties as $property) {
+            ?>
+            <div class="bg-gray-50 p-4 border rounded-md shadow-md">
+                <h3 class="text-lg font-bold text-gray-700"><?= htmlspecialchars($property['property_name']) ?></h3>
+                <p class="text-sm text-gray-600"><?= htmlspecialchars($property['property_location']) ?></p>
+                <p class="text-sm text-blue-600 font-semibold">₹<?= htmlspecialchars($property['property_price']) ?></p>
+            </div>
+            <?php
+        }
+    } else {
+        echo "<p class='text-red-500 text-center'>No properties found.</p>";
+    }
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -31,7 +39,30 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Property Search</title>
+    <!-- Include jQuery and Tailwind -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        $(document).ready(function () {
+            // Intercept the form submission for AJAX
+            $('form').on('submit', function (e) {
+                e.preventDefault(); // Prevent the default form submission
+
+                $.ajax({
+                    url: '', // current file
+                    type: 'POST',
+                    data: $(this).serialize(), // serialize form data (includes 'city')
+                    success: function (response) {
+                        // Update the properties list container with the returned HTML
+                        $('#properties-list').html(response);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("AJAX Error: ", error);
+                    }
+                });
+            });
+        });
+    </script>
 </head>
 
 <body class="bg-gray-100 flex justify-center items-center min-h-screen">
@@ -43,17 +74,18 @@ $conn->close();
             <button type="submit"
                 class="absolute right-2 top-2 px-4 py-2 bg-blue-500 text-white rounded-md">Search</button>
         </form>
-        <div class="mt-4 space-y-3">
+        <!-- Properties List Container -->
+        <div id="properties-list" class="mt-4 space-y-3">
             <?php if (!empty($properties)): ?>
                 <?php foreach ($properties as $property): ?>
-                    <div class='bg-gray-50 p-4 border rounded-md shadow-md'>
-                        <h3 class='text-lg font-bold text-gray-700'><?= htmlspecialchars($property['property_name']) ?></h3>
-                        <p class='text-sm text-gray-600'><?= htmlspecialchars($property['property_location']) ?></p>
-                        <p class='text-sm text-blue-600 font-semibold'>₹<?= htmlspecialchars($property['property_price']) ?></p>
+                    <div class="bg-gray-50 p-4 border rounded-md shadow-md">
+                        <h3 class="text-lg font-bold text-gray-700"><?= htmlspecialchars($property['property_name']) ?></h3>
+                        <p class="text-sm text-gray-600"><?= htmlspecialchars($property['property_location']) ?></p>
+                        <p class="text-sm text-blue-600 font-semibold">₹<?= htmlspecialchars($property['property_price']) ?></p>
                     </div>
                 <?php endforeach; ?>
             <?php elseif ($_SERVER["REQUEST_METHOD"] == "POST"): ?>
-                <p class='text-red-500 text-center'>No properties found.</p>
+                <p class="text-red-500 text-center">No properties found.</p>
             <?php endif; ?>
         </div>
     </div>
