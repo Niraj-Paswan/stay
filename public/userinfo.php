@@ -21,7 +21,7 @@ if ($conn->connect_error) {
 }
 
 // Fetch user email
-$userID = $_SESSION['userID'];  // Fix: Changed user_id to userID
+$userID = $_SESSION['userID'];
 $sql = "SELECT email FROM signup WHERE userID = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $userID);
@@ -34,7 +34,7 @@ $stmt->close();
 $userID = $_SESSION['userID'];
 $sql = "SELECT u.full_name, u.phone_number, u.gender, u.email_address, u.rent_start_date,
                p.payment_id, p.transaction_id, p.payment_date, p.payment_amount, 
-               p.security_deposit, p.original_rent, p.payment_status, p.payment_method 
+               p.security_deposit, p.original_rent, p.payment_status, p.payment_method,p.total_payable,p.booking_type,p.discount_amount
         FROM users u 
         LEFT JOIN payments p ON u.userID = p.userID 
         WHERE u.userID = ? 
@@ -49,6 +49,17 @@ $conn->close();
 
 // Determine display name
 $displayName = !empty($user['full_name']) ? $user['full_name'] : $email;
+
+// Function to get user initials for avatar
+function getInitials($name)
+{
+  $words = explode(' ', $name);
+  $initials = '';
+  foreach ($words as $word) {
+    $initials .= strtoupper(substr($word, 0, 1));
+  }
+  return $initials;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -61,126 +72,219 @@ $displayName = !empty($user['full_name']) ? $user['full_name'] : $email;
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="shortcut icon" href="../assets/img/stayease logo.svg" type="image/x-icon">
   <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.0/css/all.css" />
-  <style>
-    th,
-    td {
-      white-space: nowrap;
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#1769ff', // This matches the "for" class in the original
+          },
+          fontFamily: {
+            'poppins': ['Poppins', 'sans-serif'],
+          },
+        }
+      }
     }
-
+  </script>
+  <style>
     body {
       background-image: url("../assets/img/beams-home@95.jpg");
       background-size: cover;
       background-position: center;
+      font-family: 'Poppins', sans-serif;
     }
 
-    .back-button {
-      position: absolute;
-      top: 16px;
-      left: 16px;
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .tab-button.active {
+      background-color: white;
+      color: #3b82f6;
+      font-weight: 600;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
   </style>
 </head>
 
-<body class="bg-gray-100 flex justify-center items-center min-h-screen font-Nrj-fonts">
+<body class="bg-white min-h-screen p-8 md:p-8">
   <!-- Back Button -->
-  <div class="back-button">
-    <button onclick="history.back()" class="flex items-center text-blue-600 font-medium hover:underline">
-      <i class="fa-solid fa-arrow-left mr-2"></i> Back
-    </button>
-  </div>
+  <button onclick="history.back()"
+    class="mb-6 flex items-center text-blue-600 font-medium hover:bg-gray-100 p-2 rounded-md">
+    <i class="fa-solid fa-arrow-left mr-2"></i> Back
+  </button>
+  <div class="max-w-6xl mx-auto bg-white p-8 border border-gray-300 rounded-lg">
 
-  <div class="bg-white p-8 rounded-md border-[1.5px] border-gray-300 shadow-md w-[70%] ">
-    <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Hey! 👋
-      <span class="text-for"><?php echo htmlspecialchars($displayName); ?></span>
-    </h2>
-    <p class="text-black mb-4 text-start font-semibold">Your Personal information</p>
-    <?php if ($user) { ?>
-      <div class="mb-4">
-        <i class="fa-solid fa-envelope text-gray-600 text-sm mr-1"></i>
-        <label class="text-gray-600 font-medium text-sm" for="email">Email </label>
-        <input type="text" name="email" value="<?php echo htmlspecialchars($email); ?>"
-          class="w-full p-3 border-[1.5px] border-gray-300 rounded-md bg-gray-100 mt-2" disabled>
+
+    <!-- Profile header -->
+    <div class="flex flex-col md:flex-row items-start md:items-center gap-4 mb-8">
+      <div
+        class="h-20 w-20 rounded-full bg-primary text-white flex items-center justify-center text-xl font-bold border-2 border-primary">
+        <?php echo getInitials($displayName); ?>
       </div>
-
-      <div class="mb-4">
-        <i class="fa-solid fa-phone text-gray-600 text-sm mr-1"></i>
-        <label class="text-gray-600 font-medium text-sm" for="phone">Phone Number </label>
-        <input type="text" name="phone" value="<?php echo htmlspecialchars($user['phone_number']); ?>"
-          class="w-full p-3 border-[1.5px] border-gray-300 rounded-md bg-gray-100 mt-2" disabled>
+      <div>
+        <h1 class="text-2xl font-bold text-gray-800">
+          Hey 👋 <?php echo htmlspecialchars($displayName); ?>
+        </h1>
+        <p class="text-gray-500">Welcome to your StayEase profile</p>
       </div>
+    </div>
 
-      <div class="mb-4">
-        <i class="fa-solid fa-mars text-gray-600 text-sm mr-1"></i>
-        <label class="text-gray-600 font-medium text-sm" for="gender">Gender</label>
-        <input type="text" name="gender" value="<?php echo htmlspecialchars($user['gender']); ?>"
-          class="w-full p-3 border-[1.5px] border-gray-300 rounded-md bg-gray-100 mt-2" disabled>
+    <!-- Tabs -->
+    <div class="mb-6">
+      <div class="grid grid-cols-2 max-w-md bg-gray-50 p-1 rounded-md border-[1.5px] border-gray-300">
+        <button id="tab-personal" class="tab-button active py-2 px-4 rounded-sm text-sm font-medium transition-colors">
+          Personal Information
+        </button>
+        <button id="tab-bookings" class="tab-button py-2 px-4 rounded-sm text-sm font-medium transition-colors">
+          Your Bookings
+        </button>
       </div>
-    <?php } else { ?>
-      <p class="text-red-500 text-sm font-medium">Data Not Found</p>
-    <?php } ?>
+    </div>
 
-    <p class="text-black py-4 text-start font-semibold">Your Recent Bookings</p>
+    <!-- Personal Information Tab -->
+    <div id="content-personal" class="tab-content active space-y-6">
+      <div class="bg-gray-50 rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+        <div class="p-4 border-b border-gray-200">
+          <h2 class="text-lg font-semibold flex items-center">
+            <i class="fa-regular fa-user mr-2"></i> Personal Information
+          </h2>
+        </div>
+        <div class="p-6">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="space-y-2">
+              <label class="text-sm font-medium text-gray-500">Email Address</label>
+              <div class="p-3 bg-gray-50 rounded-md border-[1.5px] border-gray-300 text-gray-800 font-medium">
+                <?php echo htmlspecialchars($email); ?>
+              </div>
+            </div>
 
-    <div class="overflow-x-auto">
-      <table class="w-full border-collapse border border-gray-300 shadow-sm rounded-lg overflow-hidden">
-        <thead>
-          <tr class="bg-for text-white text-center">
-            <th class="p-3 border border-gray-300 rounded-tl-xl font-semibold">Transaction ID</th>
-            <th class="p-3 border border-gray-300 font-semibold">Rent Start Date</th>
-            <th class="p-3 border border-gray-300 font-semibold">Original Rent</th>
-            <th class="p-3 border border-gray-300 font-semibold">Security Deposit</th>
-            <th class="p-3 border border-gray-300 font-semibold">Payment Date</th>
-            <th class="p-3 border border-gray-300 font-semibold">Method</th>
-            <th class="p-3 border border-gray-300 rounded-tr-xl font-semibold">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php if ($result->num_rows > 0) { // Check if bookings exist
-              do { ?>
-              <tr class="text-black text-center bg-gray-200 border-gray-600">
-                <td class="p-3 border border-gray-300 rounded-bl-xl">
-                  <?php echo htmlspecialchars($user['transaction_id'] ?? 'N/A'); ?>
-                </td>
-                <td class="p-3 border border-gray-300">
-                  <?php echo htmlspecialchars($user['rent_start_date'] ?? 'N/A'); ?>
-                </td>
-                <td class="p-3 border border-gray-300 font-semibold">
-                  &#8377;<?php echo htmlspecialchars($user['original_rent'] ?? '0'); ?>
-                </td>
-                <td class="p-3 border border-gray-300 font-semibold">
-                  &#8377;<?php echo htmlspecialchars($user['security_deposit'] ?? '0'); ?>
-                </td>
-                <td class="p-3 border border-gray-300">
-                  <?php echo htmlspecialchars($user['payment_date'] ?? 'N/A'); ?>
-                </td>
-                <td class="p-3 border border-gray-300">
-                  <?php echo htmlspecialchars($user['payment_method'] ?? 'N/A'); ?>
-                </td>
-                <td class="p-3 border border-gray-300 rounded-br-xl font-semibold text-center 
-                <?php echo ($user['payment_status'] == 'successful') ? 'text-green-600' : 'text-red-600'; ?>">
-                  <?php echo htmlspecialchars($user['payment_status'] ?? 'N/A'); ?>
-                </td>
-              </tr>
-            <?php } while ($user = $result->fetch_assoc());
-            } else { ?>
-            <!-- Show message when no bookings exist -->
-            <tr>
-              <td colspan="7" class="p-4 text-center text-red-500 font-semibold">No Bookings Found</td>
-            </tr>
+            <div class="space-y-2">
+              <label class="text-sm font-medium text-gray-500">Phone Number</label>
+              <div class="p-3 bg-gray-50 rounded-md border-[1.5px] border-gray-300 text-gray-800 font-medium">
+                <?php echo htmlspecialchars($user['phone_number'] ?? 'N/A'); ?>
+              </div>
+            </div>
+
+            <div class="space-y-2">
+              <label class="text-sm font-medium text-gray-500">Gender</label>
+              <div class="p-3  bg-gray-50 rounded-md border-[1.5px] border-gray-300 text-gray-800 font-medium">
+                <?php echo htmlspecialchars($user['gender'] ?? 'N/A'); ?>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bookings Tab -->
+    <div id="content-bookings" class="tab-content space-y-6">
+      <div class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+        <div class="p-4 border-b border-gray-200">
+          <h2 class="text-xl font-semibold">Recent Bookings</h2>
+        </div>
+        <div class="p-6">
+          <?php if ($result->num_rows > 0) {
+            // Reset the result pointer
+            $result->data_seek(0);
+            while ($booking = $result->fetch_assoc()) { ?>
+              <div class="border rounded-lg overflow-hidden mb-6">
+                <div class="bg-blue-50 p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
+                  <div>
+                    <p class="text-sm text-gray-500">Transaction ID</p>
+                    <p class="font-medium"><?php echo htmlspecialchars($booking['transaction_id'] ?? 'N/A'); ?></p>
+                  </div>
+                  <div>
+                    <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold 
+                      <?php echo ($booking['payment_status'] == 'successful')
+                        ? 'bg-green-100 text-green-800'
+                        : 'bg-red-100 text-red-800'; ?>">
+                      <?php echo htmlspecialchars($booking['payment_status'] ?? 'N/A'); ?>
+                    </span>
+                  </div>
+                </div>
+
+                <div class="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div>
+                    <p class="text-sm text-gray-500">Rent Start Date</p>
+                    <p class="font-medium"><?php echo htmlspecialchars($booking['rent_start_date'] ?? 'N/A'); ?></p>
+                  </div>
+                  <div>
+                    <p class="text-sm text-gray-500">Booking Type</p>
+                    <p class="font-medium"><?php echo htmlspecialchars($booking['booking_type'] ?? 'N/A'); ?></p>
+                  </div>
+                  <div>
+                    <p class="text-sm text-gray-500">Payment Date</p>
+                    <p class="font-medium"><?php echo htmlspecialchars($booking['payment_date'] ?? 'N/A'); ?></p>
+                  </div>
+                  <div>
+                    <p class="text-sm text-gray-500">Payment Method</p>
+                    <p class="font-medium"><?php echo htmlspecialchars($booking['payment_method'] ?? 'N/A'); ?></p>
+                  </div>
+                  <div>
+                    <p class="text-sm text-gray-500">Original Rent</p>
+                    <p class="font-medium">₹<?php echo number_format($booking['original_rent'] ?? 0); ?></p>
+                  </div>
+                  <div>
+                    <p class="text-sm text-gray-500">Security Deposit</p>
+                    <p class="font-medium">₹<?php echo number_format($booking['security_deposit'] ?? 0); ?></p>
+                  </div>
+                  <div>
+                    <p class="text-sm text-gray-500">Discount Amount</p>
+                    <p class="font-medium text-green-600">₹<?php echo number_format($booking['discount_amount'] ?? 0); ?>
+                    </p>
+                  </div>
+                  <div>
+                    <p class="text-sm text-gray-500">Total Paid</p>
+                    <p class="font-semibold text-lg">₹<?php echo number_format($booking['total_payable'] ?? 0); ?></p>
+                  </div>
+                </div>
+              </div>
+            <?php }
+          } else { ?>
+            <div class="text-center py-8">
+              <p class="text-red-500 font-medium">No Bookings Found</p>
+            </div>
           <?php } ?>
 
-        </tbody>
-      </table>
+          <div class="mt-6 flex justify-center">
+            <button onclick="window.location.href='download.php'"
+              class="w-full max-w-md bg-primary hover:bg-primary/90 text-white font-semibold py-3 px-4 rounded-md flex items-center justify-center">
+              <i class="fa-solid fa-arrow-down-to-bracket mr-2"></i> Download Booking Details
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <div class="flex justify-center mt-4">
-      <button onclick="window.location.href='download.php'"
-        class="mt-2 w-[50%] h-12 rounded-md bg-black hover:bg-opacity-80 text-white font-semibold">
-        Download <i class="fa-solid fa-folder-arrow-down ml-2"></i>
-      </button>
-    </div>
-
   </div>
+
+  <script>
+    // Tab switching functionality
+    document.addEventListener('DOMContentLoaded', function () {
+      const tabButtons = document.querySelectorAll('.tab-button');
+      const tabContents = document.querySelectorAll('.tab-content');
+
+      tabButtons.forEach(button => {
+        button.addEventListener('click', function () {
+          // Remove active class from all buttons and contents
+          tabButtons.forEach(btn => btn.classList.remove('active'));
+          tabContents.forEach(content => content.classList.remove('active'));
+
+          // Add active class to clicked button
+          this.classList.add('active');
+
+          // Get the content id based on the button id
+          const contentId = 'content-' + this.id.split('-')[1];
+          document.getElementById(contentId).classList.add('active');
+        });
+      });
+    });
+  </script>
 </body>
 
 </html>
