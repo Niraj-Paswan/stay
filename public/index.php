@@ -1,5 +1,7 @@
 <?php
+include '../Database/dbconfig.php';
 session_start();
+
 // Check if the user is logged in
 if (!isset($_SESSION["user_logged_in"]) || $_SESSION["user_logged_in"] !== true) {
   // If not logged in, redirect to login.php
@@ -7,10 +9,36 @@ if (!isset($_SESSION["user_logged_in"]) || $_SESSION["user_logged_in"] !== true)
   exit();
 }
 
+$sql = "SELECT id, property_name, property_location, property_price, latitude, longitude, main_image, kitchen_img, gallery_img, washroom_img, property_type, bathrooms, bedrooms, area, is_sharable FROM properties";
+$result = $conn->query($sql);
+
+$properties = [];
+if ($result->num_rows > 0) {
+  while ($row = $result->fetch_assoc()) {
+    $properties[] = [
+      "pid" => $row["id"],
+      "property_name" => $row["property_name"],
+      "location" => $row["property_location"],
+      "coordinates" => [(float) $row["longitude"], (float) $row["latitude"]],
+      "price" => $row["property_price"],
+      "image" => $row["main_image"],
+      "washroom" => $row["washroom_img"],
+      "gallery" => $row["gallery_img"],
+      "kitchen" => $row["kitchen_img"],
+      "type" => $row["property_type"],
+      "bathrooms" => $row["bathrooms"] ?? "N/A",
+      "bedrooms" => $row["bedrooms"] ?? "N/A",
+      "area" => $row["area"] ?? "N/A",
+      "is_sharable" => isset($row["is_sharable"]) ? $row["is_sharable"] : 0
+    ];
+  }
+}
+$conn->close();
+
 // Fetch the logged-in user's userID from the session
-$userID = $_SESSION["userID"];
+$userID = $_SESSION["userID"] ?? null;
 ?>
-?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -18,6 +46,7 @@ $userID = $_SESSION["userID"];
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>StayEase | Home page</title>
+  <link rel="shortcut icon" href="../assets/img/stayease logo.svg" type="image/x-icon" />
   <link href="../assets/css/styles.css" rel="stylesheet" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -25,7 +54,6 @@ $userID = $_SESSION["userID"];
   <link
     href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap"
     rel="stylesheet" />
-  <link rel="stylesheet" href="../assets\img\stayease logo.svg">
   <!-- Font Awsome Link -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
@@ -113,11 +141,156 @@ $userID = $_SESSION["userID"];
       transform: scale(1);
       /* Return to original size */
     }
-  </style>
 
+    .carousel-container {
+      overflow: hidden;
+      position: relative;
+    }
+
+    .carousel-track {
+      display: flex;
+      gap: 1.5rem;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .gradient-shadow {
+      position: absolute;
+      top: 0;
+      width: 50px;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .left-shadow {
+      left: 0;
+      background: linear-gradient(to right, rgba(255, 255, 255, 0.5), transparent);
+    }
+
+    .right-shadow {
+      right: 0;
+      background: linear-gradient(to left, rgba(255, 255, 255, 0.5), transparent);
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    .copied {
+      color: green;
+      font-weight: bold;
+    }
+
+    .rotate-smooth {
+      transition: transform 0.4s ease-in-out;
+    }
+
+    .rotate-smooth:hover {
+      transform: rotate(180deg);
+    }
+  </style>
+  <script>
+    function redirectToNearby(propertyId) {
+      window.location.href = `listingview.php?property_id=${propertyId}`;
+    }
+  </script>
 </head>
 
 <body>
+  <!-- Discount Modal -->
+  <div id="discountModal"
+    class="fixed inset-0 font-Nrj-fonts bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 animate-fade-in">
+    <div class="relative max-w-lg w-full bg-white rounded-xl shadow-xl overflow-hidden">
+      <!-- Close button -->
+      <button id="closeModal"
+        class="absolute top-3 right-3 text-gray-700 hover:text-gray-900 bg-white bg-opacity-70 rounded-full w-6 h-6">
+        <i class="fa-solid fa-xmark text-sm rotate-smooth"></i>
+      </button>
+
+      <!-- Header -->
+      <div class="bg-gradient-to-r from-cyan-600 to-for p-6 text-white flex items-center">
+        <img class="h-5 w-5 mr-2 mb-6" src="../assets/img/crown.png" alt="Crown Icon" />
+        <h2 class="text-2xl font-semibold">
+          Exclusive Offers! <br />
+          <p class="opacity-75 text-sm font-medium">
+            For your first booking with us
+          </p>
+        </h2>
+      </div>
+
+      <!-- Content -->
+      <div class="p-6 space-y-4">
+        <!-- Promo Code 1 -->
+        <div class="border border-dashed border-purple-300 rounded-lg p-4 bg-purple-50 hover:bg-purple-100 transition">
+          <div class="flex items-start">
+            <i class="fa-solid fa-tag text-purple-600 text-lg mr-3 mt-1"></i>
+            <div>
+              <h3 class="font-semibold text-lg text-purple-700">
+                10% Instant Discount
+              </h3>
+              <p class="text-sm text-gray-600 mb-2">
+                Save 10% on your first booking
+              </p>
+              <div class="flex items-center">
+                <span
+                  class="bg-white border border-purple-200 rounded px-3 py-1.5 font-Nrj-fonts font-semibold text-purple-700"
+                  id="SAVE10">SAVE10</span>
+                <button class="ml-2 text-xs text-black hover:text-purple-800 px-2 py-1 rounded"
+                  onclick="copyPromoCode('SAVE10', this)">
+                  Copy<i class="fa-regular fa-copy ml-1"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Promo Code 2 -->
+        <div class="border border-dashed border-blue-300 rounded-lg p-4 bg-blue-50 hover:bg-blue-100 transition">
+          <div class="flex items-start">
+            <i class="fa-solid fa-tags text-blue-600 text-lg mr-3 mt-1"></i>
+            <div>
+              <h3 class="font-semibold text-lg text-blue-700">
+                Flat ₹500 Off
+              </h3>
+              <p class="text-sm text-gray-600 mb-2">
+                Get ₹500 off on your first booking
+              </p>
+              <div class="flex items-center">
+                <span
+                  class="bg-white border border-blue-200 rounded px-3 py-1.5 font-Nrj-fonts font-semibold text-blue-700"
+                  id="FLAT500">FLAT500</span>
+                <button class="ml-2 text-xs text-black hover:text-blue-800 px-2 py-1 rounded"
+                  onclick="copyPromoCode('FLAT500', this)">
+                  Copy<i class="fa-regular fa-copy ml-1 text-black"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CTA Button -->
+        <div class="mt-6 text-center">
+          <button
+            class="bg-blue-500 hover:bg-for text-white w-full py-2 rounded-md hover:from-purple-700 hover:to-blue-600 transition"
+            id="startBookingBtn">
+            Start Booking Now
+          </button>
+          <p class="text-xs text-gray-500 mt-3">
+            *Terms and conditions apply.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
   <!-- Navbar -->
   <nav
     class="mt-2 h-16 border sm:border-[0.5px] flex bg-transparent justify-between items-center rounded-full w-[95%] absolute top-0 left-1/2 transform -translate-x-1/2 z-10 backdrop-blur-lg bg-white/10">
@@ -226,7 +399,8 @@ $userID = $_SESSION["userID"];
         <a href="#"
           class="font-Nrj-fonts font-semibold m-3 p-3 hover:bg-gray-100 hover:text-primary rounded-lg block">Property</a>
         <a href="#"
-          class="font-Nrj-fonts font-semibold m-3 p-3 hover:bg-gray-100 hover:text-primary rounded-lg block">Near By</a>
+          class="font-Nrj-fonts font-semibold m-3 p-3 hover:bg-gray-100 hover:text-primary rounded-lg block">Near
+          By</a>
         <a href="#"
           class="font-Nrj-fonts font-semibold m-3 p-3 hover:bg-gray-100 hover:text-primary rounded-lg block">Budget
           Calculator</a>
@@ -242,7 +416,7 @@ $userID = $_SESSION["userID"];
 
   <!-- Relaxing image with circle -->
   <div class="absolute top-0 left-0 right-0 bottom-0 z-0 flex justify-center items-start">
-    <img class="hidden md:block md:w-[1550px] w-full mt-0" src="../assets/img/relaxing-with-headphones.png"
+    <img class=" md:block md:w-[1550px] w-full mt-0" src="../assets/img/relaxing-with-headphones.png"
       alt="Person relaxing with headphones" loading="lazy" />
   </div>
 
@@ -300,68 +474,79 @@ $userID = $_SESSION["userID"];
       </button>
     </div>
 
-    <!-- Room Categories -->
-    <div
-      class="mt-10 w-[95%] h-60 md:h-72 lg:h-72 bg-white shadow-lg border-2 border-black border-opacity-20 rounded-md flex flex-col items-center">
-      <h1 class="font-Nrj-fonts font-semibold text-black text-lg mt-[30px] text-center">
-        Available Room Categories
-      </h1>
-      <!-- Steps Container -->
-      <div class="flex w-full justify-evenly mt-8">
-        <!-- House -->
-        <div class="flex flex-col items-center justify-center">
-          <div
-            class="w-[60px] h-[60px] sm:h-[50px] sm:w-[50px]  md:h-[75px] md:w-[75px] lg:h-[75px] lg:w-[75px] rounded-full bg-gray-100 border-[0.5px] border-opacity-30 border-black flex justify-center items-center">
-            <i class="fa-regular fa-house text-2xl md:text-3xl lg:text-3xl text-for"></i>
+    <div class="p-0 md:p-0 lg:p-0 ">
+      <div
+        class="mt-10 w-full max-w-7xl bg-white shadow-md border-[1.5px] border-gray-300 rounded-lg p-8  mb-2 font-Nrj-fonts">
+        <!-- Section Title -->
+        <h2 class="text-xl md:text-2xl font-semibold text-gray-800 text-center">
+          Why Choose Us?
+        </h2>
+        <!-- Categories Container -->
+        <div
+          class="flex flex-col md:flex-row justify-between items-center md:items-start mt-6 md:mt-8 gap-6 md:gap-10 ">
 
+          <!-- Properties Category -->
+          <div class="flex flex-col items-center text-center">
+            <div
+              class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-gray-100 border border-gray-300 flex justify-center items-center shadow-sm cursor-pointer 
+           hover:border-blue-500 hover:bg-blue-100 hover:scale-110 hover:-translate-y-1 transition-all duration-300 ease-in-out">
+              <i class="fa-regular fa-building text-3xl md:text-3xl text-for"></i>
+            </div>
+            <h3 class="mt-3 text-lg font-semibold text-gray-900">10+ Properties</h3>
+            <p class="text-gray-600 text-sm max-w-xs">
+              Discover a wide range of properties designed to fit different budgets.
+            </p>
           </div>
 
-          <p class="mt-2 font-Nrj-fonts font-semibold text-black">Houses</p>
-          <p class="font-Nrj-fonts font-normal text-start p-1 text-sm hidden md:block lg:text-sm">
-            Spacious and private, our houses offer comfort and
-            <br />independence for a complete living experience.
-          </p>
-
-        </div>
-        <!-- Apartment  -->
-        <div class="flex flex-col items-center justify-center">
-          <div
-            class="w-[60px] h-[60px] sm:h-[50px] sm:w-[50px]  md:h-[75px] md:w-[75px] lg:h-[75px] lg:w-[75px] rounded-full bg-gray-100 border-[0.5px] border-opacity-30 border-black flex justify-center items-center">
-            <i class="fa-regular fa-building text-2xl md:text-3xl lg:text-3xl text-for"></i>
+          <!-- Cities Covered -->
+          <div class="flex flex-col items-center text-center">
+            <div
+              class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-gray-100 border border-gray-300 flex justify-center items-center shadow-sm cursor-pointer 
+           hover:border-blue-500 hover:bg-blue-100 hover:scale-110 hover:-translate-y-1 transition-all duration-300 ease-in-out">
+              <i class="fa-regular fa-map-location-dot text-3xl md:text-3xl text-for"></i>
+            </div>
+            <h3 class="mt-3 text-lg font-semibold text-gray-900">5+ Cities Covered</h3>
+            <p class="text-gray-600 text-sm max-w-xs">
+              Our presence in multiple cities, you accommodation in prime locations.
+            </p>
           </div>
 
-          <p class="mt-2 font-Nrj-fonts font-semibold text-black">
-            Apartment
-          </p>
-          <p class="font-Nrj-fonts font-normal text-start p-1 text-sm hidden md:block lg:text-sm">
-            Modern and stylish, our apartments are perfect for urban living
-            <br />
-            with a focus on functionality and unmatched convenience.
-          </p>
-        </div>
-        <!-- Shared -->
-        <div class="flex flex-col items-center justify-center">
-          <div
-            class="w-[60px] h-[60px] sm:h-[50px] sm:w-[50px]  md:h-[75px] md:w-[75px] lg:h-[75px] lg:w-[75px] rounded-full bg-gray-100 border-[0.5px] border-opacity-30 border-black flex justify-center items-center">
-            <i class="fa-regular fa-users text-2xl md:text-3xl lg:text-3xl text-for"></i>
+          <!-- Nearby Amenities -->
+          <div class="flex flex-col items-center text-center">
+            <div
+              class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-gray-100 border border-gray-300 flex justify-center items-center shadow-sm cursor-pointer 
+           hover:border-blue-500 hover:bg-blue-100 hover:scale-110 hover:-translate-y-1 transition-all duration-300 ease-in-out">
+              <i class="fa-regular fa-store text-3xl md:text-3xl text-for"></i>
+            </div>
+            <h3 class="mt-3 text-lg font-semibold text-gray-900">Nearby Amenities</h3>
+            <p class="text-gray-600 text-sm max-w-xs">
+              Enjoy easy access to shopping centers, restaurants, hospitals , metros etc.
+            </p>
           </div>
 
-          <p class="mt-2 font-Nrj-fonts font-semibold text-black">Shared</p>
-          <p class="font-Nrj-fonts font-normal text-start p-1 text-sm hidden md:block lg:text-sm">
-            Budget-friendly shared rooms designed for comfort and
-            <br />
-            meaningful connections with like-minded individuals.
-          </p>
+          <!-- Secure Payments -->
+          <div class="flex flex-col items-center text-center">
+            <div
+              class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-gray-100 border border-gray-300 flex justify-center items-center shadow-sm cursor-pointer 
+           hover:border-blue-500 hover:bg-blue-100 hover:scale-110 hover:-translate-y-1 transition-all duration-300 ease-in-out">
+              <i class="fa-regular fa-shield-check text-3xl md:text-3xl text-for"></i>
+            </div>
+            <h3 class="mt-3 text-lg font-semibold text-gray-900">Secure Payments</h3>
+            <p class="text-gray-600 text-sm max-w-xs">
+              Experience hassle-free and encrypted payment methods for your security.
+            </p>
+          </div>
         </div>
       </div>
     </div>
+
   </div>
 
   <!-- Steps label of Room Booking -->
   <div class="text-center relative mt-12">
     <h1 class="font-Nrj-fonts font-semibold text-2xl md:text-4xl lg:text-4xl leading-tight">
       Quickly Book Your Room in <br />
-      <span class="text-for text-xl md:text-3xl lg:text-3xl relative inline-block text-black">
+      <span class="text-for text-xl md:text-3xl lg:text-3xl relative inline-block ">
         Just 4 Easy Steps 🚀
       </span>
     </h1>
@@ -373,39 +558,39 @@ $userID = $_SESSION["userID"];
       class="ml-12 relative text-gray-500 border-s-[3px] border-gray-200 dark:border-gray-700 dark:text-gray-400 font-Nrj-fonts text-lg">
       <li class="-mt-10 mb-[75px] ms-1 scroll-animation ">
         <span class="icon-container">
-          <i class="fa-regular fa-home text-lg text-black"></i>
+          <i class="fa-regular fa-home text-lg text-for"></i>
         </span>
-        <h3 class="font-medium leading-tight text-for ml-8">Discover Property.</h3>
+        <h3 class="font-medium leading-tight text-black ml-8">Discover Property.</h3>
         <p class="text-sm font-Nrj-fonts mt-2 ml-8">
           StayEase helps users quickly find and explore <br />
-          room rentals that fit your needs
+          room rentals that fit your needs.
         </p>
       </li>
       <li class="mb-[75px] ms-1 scroll-animation">
         <span class="icon-container">
-          <i class="fa-regular fa-handshake text-lg text-black"></i>
+          <i class="fa-regular fa-handshake text-lg text-for"></i>
         </span>
-        <h3 class="font-medium leading-tight text-for ml-8">Negotiate Price.</h3>
+        <h3 class="font-medium leading-tight text-black ml-8">Select Booking Option.</h3>
         <p class="text-sm font-Nrj-fonts mt-2 ml-8">
-          Tenants can directly discuss and agree on <br />
-          rental rates with landlords
+          Choose whether to book the room for yourself or <br /> share it with others, making it a more flexible
+          choice.
         </p>
       </li>
       <li class="mb-[75px] ms-1 scroll-animation">
         <span class="icon-container">
-          <i class="fa-regular fa-money-check text-lg text-black"></i>
+          <i class="fa-regular fa-money-check text-lg text-for"></i>
         </span>
-        <h3 class="font-medium leading-tight text-for ml-8">Pay Security Deposit.</h3>
+        <h3 class="font-medium leading-tight text-black ml-8">Pay Deposit.</h3>
         <p class="text-sm font-Nrj-fonts mt-2 ml-8">
-          Tenants securely submit their deposit online, <br />ensuring a
-          smooth transaction for both parties.
+          To secure your booking, pay one month’s rent in advance <br /> along with 25% of the monthly rent as a
+          security deposit.
         </p>
       </li>
       <li class="ms-1  scroll-animation">
         <span class="icon-container mt-1">
-          <i class="fa-regular fa-thumbs-up text-lg text-black"></i>
+          <i class="fa-regular fa-thumbs-up text-lg text-for  "></i>
         </span>
-        <h3 class="font-medium leading-tight text-for ml-8">Booking Done!</h3>
+        <h3 class="font-medium leading-tight text-black ml-8">Booking Done!</h3>
         <p class="text-sm ml-8">Congrats your property is Booked Successfully!</p>
       </li>
     </ol>
@@ -420,8 +605,98 @@ $userID = $_SESSION["userID"];
     </div>
   </div>
 
+  <h1 class="text-center font-Nrj-fonts font-medium text-xl md:text-3xl lg:text-3xl mt-12">
+    Recommended Properties for
+    <span class="font-Nrj-fonts text-for">You</span>
+  </h1>
+
+  <div class="bg-white flex justify-center items-center mt-12 font-Nrj-fonts">
+    <div class="relative w-full max-w-6xl">
+      <!-- Gradient Shadows -->
+      <div class="gradient-shadow left-shadow"></div>
+      <div class="gradient-shadow right-shadow"></div>
+
+      <div class="carousel-container">
+        <div id="carousel" class="carousel-track">
+          <?php foreach ($properties as $property): ?>
+            <div class="bg-white rounded-xl shadow-md border-[1.5px] border-gray-300 w-72 h-80 flex-shrink-0">
+              <div class="relative">
+                <img class="w-full h-40 object-cover rounded-t-xl" src="<?= $property['image'] ?>" alt="Property Image" />
+
+                <?php
+                // Show the "Recommended" badge on random properties (e.g., 30% chance)
+                if (rand(1, 100) <= 60):
+                  ?>
+                  <!-- Recommended Badge (Left Side) -->
+                  <div class="absolute top-0 left-0 bg-gradient-to-r from-cyan-500 to-blue-600 text-white text-sm font-medium px-3 py-1 
+                    rounded-tl-lg rounded-br-lg flex items-center gap-2 shadow-md">
+                    <img class="w-3 h-3" src="../assets/img/crown.png" alt="Crown Icon"> Recommended
+                  </div>
+                <?php endif; ?>
+              </div>
+
+
+              <div class="p-4">
+                <h3 class="text-lg font-semibold "> <?= $property['property_name'] ?> </h3>
+                <div class="flex items-center text-gray-600 text-sm mt-1 mb-1">
+                  <i class="fa-regular fa-location-dot mr-1"></i>
+                  <?= $property['location'] ?>
+                </div>
+                <!-- Price & Action Button -->
+                <form action="listingview.php" method="GET">
+                  <input type="hidden" name="id" value="<?= $property['pid'] ?>">
+                  <input type="hidden" name="property_name" value="<?= $property['property_name'] ?>">
+                  <input type="hidden" name="location" value="<?= $property['location'] ?>">
+                  <input type="hidden" name="price" value="<?= $property['price'] ?>">
+                  <input type="hidden" name="image" value="<?= $property['image'] ?>">
+                  <input type="hidden" name="type" value="<?= $property['type'] ?>">
+                  <input type="hidden" name="bathrooms" value="<?= $property['bathrooms'] ?>">
+                  <input type="hidden" name="bedrooms" value="<?= $property['bedrooms'] ?>">
+                  <input type="hidden" name="area" value="<?= $property['area'] ?>">
+                  <input type="hidden" name="userID" value="<?= $_SESSION['userID'] ?>">
+                  <input type="hidden" name="user_email" value="<?= $_SESSION['user_email'] ?>">
+
+
+                  <!-- Price -->
+                  <h2 class="text-sm font-normal text-gray-500"><span
+                      class="text-black text-xl font-semibold">₹<?= number_format($property['price']) ?><span
+                        class="text-sm font-normal text-gray-500"> /month</span></span>
+                  </h2>
+
+                  <button type="submit"
+                    class="w-full py-2 px-4 mt-2 bg-blue-500 text-white font-medium rounded-md hover:bg-blue-600 shadow-sm">View
+                    Details
+                  </button>
+                </form>
+              </div>
+            </div>
+          <?php endforeach; ?>
+        </div>
+      </div>
+
+      <!-- Navigation Buttons -->
+      <button onclick="moveSlide(-1)"
+        class="absolute -left-16 top-1/2 transform -translate-y-1/2 bg-gray-50 hover:bg-gray-100 text-for border border-gray-300 p-2 rounded-full h-12 w-12 shadow-lg "><i
+          class='fa-solid fa-chevron-left text-sm'></i></button>
+      <button onclick="moveSlide(1)"
+        class="absolute -right-16 top-1/2 transform -translate-y-1/2 bg-gray-50 hover:bg-gray-100  text-for border border-gray-300 p-2 rounded-full shadow-lg h-12 w-12"><i
+          class='fa-solid fa-chevron-right text-sm'></i></button>
+    </div>
+  </div>
+  <script>
+    let currentIndex = 0;
+    const track = document.getElementById("carousel");
+    const cards = document.querySelectorAll(".carousel-track > div");
+    const cardWidth = cards[0].offsetWidth + 30; // Adjust for gap
+
+    function moveSlide(direction) {
+      const maxIndex = cards.length - 1;
+      currentIndex = Math.max(0, Math.min(maxIndex, currentIndex + direction));
+      track.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
+    }
+  </script>
   <!-- Testimonials -->
-  <div class="mt-72 md:mt-12 lg:mt-12 w-full h-96 to-transparent flex justify-center items-center flex-col">
+  <div class="mt-72 md:mt-12 lg:mt-12 w-full h-96 to-transparent flex justify-center items-center flex-col p-8">
     <div class="">
       <h1 class="text-center font-Nrj-fonts font-medium text-xl md:text-3xl lg:text-3xl">
         Hear from our
@@ -552,7 +827,8 @@ $userID = $_SESSION["userID"];
           <i class="fa-solid fa-caret-down transition-transform"></i>
         </dt>
         <dd id="faq-5" class="hidden text-sm font-Nrj-fonts font-normal mt-6">
-          <p>Payments are securely processed through Stripe, allowing for various payment methods, including credit and
+          <p>Payments are securely processed through Stripe, allowing for various payment methods, including credit
+            and
             debit cards.</p>
         </dd>
       </div>
@@ -562,7 +838,8 @@ $userID = $_SESSION["userID"];
           <i class="fa-solid fa-caret-down  transition-transform"></i>
         </dt>
         <dd id="faq-6" class="hidden text-sm font-Nrj-fonts font-normal mt-6">
-          <p>Amenities vary by listing, but many include Wi-Fi, laundry facilities, and kitchen access. Check individual
+          <p>Amenities vary by listing, but many include Wi-Fi, laundry facilities, and kitchen access. Check
+            individual
             listings for details.</p>
         </dd>
       </div>
@@ -731,6 +1008,44 @@ $userID = $_SESSION["userID"];
         ddElement.classList.toggle('hidden');
         ddArrowIcon.classList.toggle('-rotate-180');
       });
+    });
+    function copyPromoCode(code, btn) {
+      navigator.clipboard.writeText(code).then(() => {
+        btn.innerHTML = '<i class="fa-solid fa-check text-green-600"></i> Copied';
+        btn.classList.add("copied");
+      });
+    }
+
+    function showModal() {
+
+      setTimeout(() => {
+        const modal = document.getElementById("discountModal");
+        modal.classList.remove("hidden");
+        modal.classList.add("animate-popup");
+      }, 2000);
+    }
+
+    function hideModal() {
+      document.getElementById("discountModal").classList.add("hidden");
+      // Ensure the modal does NOT show again by setting a flag in localStorage
+      localStorage.setItem("hasSeenDiscountModal", "true");
+    }
+
+    // Wait for page load
+    document.addEventListener("DOMContentLoaded", function () {
+      // Check if the modal has already been seen
+      if (!localStorage.getItem("hasSeenDiscountModal")) {
+        setTimeout(showModal, 2000); // Show after 2 seconds
+      }
+    });
+
+    // Event Listeners
+    document.getElementById("closeModal").addEventListener("click", hideModal);
+    document.getElementById("startBookingBtn").addEventListener("click", hideModal);
+    document.getElementById("discountModal").addEventListener("click", function (event) {
+      if (event.target === this) {
+        hideModal();
+      }
     });
   </script>
 </body>
