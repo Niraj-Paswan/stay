@@ -18,18 +18,17 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
       body {
         background-image: url("../assets/img/beams-home@95.jpg");
         background-size: cover;
         background-position: center;
-        font-family: "Poppins", sans-serif;
       }
     </style>
   </head>
   <body
-    class="bg-white flex flex-col items-center justify-center font-Nrj-fonts p-6"
+    class="bg-white flex flex-col items-center justify-center p-6 font-[Poppins]"
   >
     <!-- Back Button -->
     <div class="w-full p-4 flex justify-start">
@@ -42,121 +41,109 @@
     </div>
 
     <div
-      class="bg-white border border-gray-300 shadow-md rounded-lg w-full lg:w-[50%] p-6 text-start"
+      class="bg-white border border-gray-300 shadow-lg rounded-lg w-full max-w-xl p-8"
     >
-      <h1 class="text-xl font-semibold text-center mb-6 text-black">
+      <h1 class="text-2xl font-semibold text-center mb-6 text-black">
         Budget Calculator
       </h1>
-      <form id="budgetForm" class="space-y-6">
-        <div>
-          <label for="rent" class="block text-lg font-medium text-gray-700">
-            <i class="mr-2 fa-regular fa-house text-lg text-for"></i>
-            Rent
-          </label>
+
+      <form id="budgetForm" class="space-y-5">
+        <div class="relative flex items-center">
+          <i class="fa-regular fa-house absolute left-4 text-blue-600"></i>
           <input
             type="number"
             id="rent"
-            class="p-1 text-sm font-semibold mt-1 block w-full h-10 border-b border-gray-300 outline-none focus:ring-0 lg:text-[16px]"
-            placeholder="e.g., 13000"
+            placeholder="Rent (e.g., 13000)"
+            class="w-full py-3 pl-12 pr-4 border border-gray-300 rounded-lg outline-none focus:border-gray-400 transition"
             required
           />
         </div>
-        <div>
-          <label
-            for="food"
-            class="block ml-1 text-lg font-medium text-gray-700"
-          >
-            <i class="mr-2 fa-regular fa-pot-food text-lg text-for"></i
-            >Food</label
-          >
+
+        <div class="relative flex items-center">
+          <i class="fa-regular fa-pot-food absolute left-4 text-blue-600"></i>
           <input
             type="number"
             id="food"
-            class="p-1 text-sm font-semibold mt-1 block w-full h-10 border-b border-gray-300 outline-none focus:ring-0 lg:text-[16px]"
-            placeholder="e.g., 7000"
+            placeholder="Food (e.g., 7000)"
+            class="w-full py-3 pl-12 pr-4 border border-gray-300 rounded-lg outline-none focus:border-gray-400 transition"
             required
           />
         </div>
-        <div>
-          <label for="travel" class="block text-sm font-medium text-gray-700">
-            <i class="mr-2 fa-regular fa-plane text-lg text-for"></i
-            >Travel</label
-          >
+
+        <div class="relative flex items-center">
+          <i class="fa-regular fa-plane absolute left-4 text-blue-600"></i>
           <input
             type="number"
             id="travel"
-            class="p-1 text-sm font-semibold mt-1 block w-full h-10 border-b border-gray-300 outline-none focus:ring-0 lg:text-[16px]"
-            placeholder="e.g., 4000"
+            placeholder="Travel (e.g., 4000)"
+            class="w-full py-3 pl-12 pr-4 border border-gray-300 rounded-lg outline-none focus:border-gray-400 transition"
             required
           />
         </div>
-        <div>
-          <label for="shopping" class="block text-lg font-medium text-gray-700">
-            <i class="mr-2 fa-regular fa-cart-shopping text-lg text-for"></i
-            >Shopping</label
-          >
+
+        <div class="relative flex items-center">
+          <i
+            class="fa-regular fa-cart-shopping absolute left-4 text-blue-600"
+          ></i>
           <input
             type="number"
             id="shopping"
-            class="p-1 text-sm font-semibold mt-1 block w-full h-10 border-b border-gray-300 outline-none focus:ring-0 lg:text-[16px]"
-            placeholder="e.g., 3000"
+            placeholder="Shopping (e.g., 3000)"
+            class="w-full py-3 pl-12 pr-4 border border-gray-300 rounded-lg outline-none focus:border-gray-400 transition"
             required
           />
         </div>
-        <div>
-          <label for="medical" class="block text-sm font-medium text-gray-700"
-            ><i class="mr-2 fa-regular fa-truck-medical text-lg text-for"></i
-            >Medical
-          </label>
+
+        <div class="relative flex items-center">
+          <i
+            class="fa-regular fa-truck-medical absolute left-4 text-blue-600"
+          ></i>
           <input
             type="number"
             id="medical"
-            class="p-1 text-sm font-semibold mt-1 block w-full h-10 border-b border-gray-300 outline-none focus:ring-0 lg:text-[16px]"
-            placeholder="e.g., 2000"
+            placeholder="Medical (e.g., 2000)"
+            class="w-full py-3 pl-12 pr-4 border border-gray-300 rounded-lg outline-none focus:border-gray-400 transition"
             required
           />
         </div>
+
         <button
           type="submit"
-          class="font-semibold w-full bg-blue-500 text-white py-3 px-4 rounded-md hover:bg-blue-600"
+          class="w-full bg-blue-500 text-white py-3 px-4 rounded-lg hover:bg-blue-600 transition font-semibold"
         >
           Calculate Budget
         </button>
         <button
           type="button"
           id="resetButton"
-          class="font-semibold w-full bg-gray-300 text-black py-3 px-4 rounded-md hover:bg-gray-400"
+          class="w-full bg-gray-300 text-black py-3 px-4 rounded-lg hover:bg-gray-400 transition"
         >
           Reset
         </button>
       </form>
 
-      <!-- Initially hidden content -->
+      <!-- Initially Hidden Results Section -->
       <div
         id="totalContainer"
         class="hidden mt-6 text-center text-lg font-semibold text-black"
       >
         Total: <span id="totalAmount" class="text-blue-500">₹0</span>
       </div>
+
       <div class="mt-8 flex justify-center items-center">
-        <canvas
-          id="budgetChart"
-          class="w-full h-40"
-          style="display: none"
-        ></canvas>
+        <canvas id="budgetChart" class="w-full h-40 hidden"></canvas>
       </div>
     </div>
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
         const budgetForm = document.getElementById("budgetForm");
-        const budgetChartCtx = document
-          .getElementById("budgetChart")
-          .getContext("2d");
         const totalContainer = document.getElementById("totalContainer");
         const totalAmountElement = document.getElementById("totalAmount");
         const budgetChartCanvas = document.getElementById("budgetChart");
         const resetButton = document.getElementById("resetButton");
+
+        const budgetChartCtx = budgetChartCanvas.getContext("2d");
 
         const budgetData = {
           labels: ["Rent", "Food", "Travel", "Shopping", "Medical"],
@@ -165,11 +152,11 @@
               label: "Budget Distribution",
               data: [],
               backgroundColor: [
-                "#fbbf24", // Yellow
-                "#f97316", // Orange
-                "#3b82f6", // Blue
-                "#f43f5e", // Red
-                "#10b981", // Green
+                "#fbbf24",
+                "#f97316",
+                "#3b82f6",
+                "#f43f5e",
+                "#10b981",
               ],
               hoverOffset: 4,
             },
@@ -182,9 +169,7 @@
           options: {
             responsive: true,
             plugins: {
-              legend: {
-                position: "bottom",
-              },
+              legend: { position: "bottom" },
             },
           },
         });
@@ -192,7 +177,6 @@
         budgetForm.addEventListener("submit", (e) => {
           e.preventDefault();
 
-          // Get values from the form inputs
           const rent = parseFloat(document.getElementById("rent").value) || 0;
           const food = parseFloat(document.getElementById("food").value) || 0;
           const travel =
@@ -202,28 +186,22 @@
           const medical =
             parseFloat(document.getElementById("medical").value) || 0;
 
-          // Calculate the total budget
           const total = rent + food + travel + shopping + medical;
 
-          // Update the chart data
           budgetData.datasets[0].data = [rent, food, travel, shopping, medical];
           budgetChart.update();
 
-          // Display the total amount
           totalAmountElement.textContent = `₹${total.toLocaleString()}`;
           totalContainer.classList.remove("hidden");
-          budgetChartCanvas.style.display = "block"; // Show the chart
+          budgetChartCanvas.style.display = "block";
         });
 
         resetButton.addEventListener("click", () => {
-          // Reset form inputs
           budgetForm.reset();
 
-          // Hide the total amount and chart
           totalContainer.classList.add("hidden");
           budgetChartCanvas.style.display = "none";
 
-          // Clear the chart data
           budgetData.datasets[0].data = [];
           budgetChart.update();
         });
