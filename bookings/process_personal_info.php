@@ -44,7 +44,7 @@ if (isset($_FILES['idProof']) && $_FILES['idProof']['error'] == 0) {
     if (!is_dir($upload_dir)) {
         mkdir($upload_dir, 0777, true); // Create directory if it doesn't exist
     }
-    
+
     $file_extension = strtolower(pathinfo($_FILES['idProof']['name'], PATHINFO_EXTENSION));
 
     // Validate file type
@@ -69,7 +69,7 @@ $stmt = $conn->prepare("INSERT INTO users (userID, full_name, phone_number, rent
 $stmt->bind_param("issssss", $userID, $full_name, $phone_number, $rent_start_date, $gender, $email_address, $id_proof_path);
 
 if ($stmt->execute()) {
-    header("Location: payment.php"); 
+    header("Location: payment.php");
     exit();
 } else {
     echo "Error: " . $stmt->error;

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StayEase | Room Sharing</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="shortcut icon"
+      href="../assets/img/stayease logo.svg"
+      type="image/x-icon"
+    />
+    <link
+      rel="stylesheet"
+      href="https://site-assets.fontawesome.com/releases/v6.5.2/css/all.css"
+    />
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+
+    <style>
+      .active-option {
+        border: 1px solid #2563eb; /* Blue Border for Selected Option */
+        background-color: #e0f2fe; /* Light Blue */
+      }
+      body {
+        background-image: url("../assets/img/beams-home@95.jpg");
+        background-size: cover;
+        background-position: center;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-gray-100 flex justify-center items-center min-h-screen p-6 font-Nrj-fonts"
+  >
+    <div class="p-4 absolute left-2 top-2">
+      <button
+        onclick="history.back()"
+        class="flex items-center text-blue-600 font-medium hover:underline"
+      >
+        <i class="fa-solid fa-arrow-left mr-2"></i> Back
+      </button>
+    </div>
+    <div
+      class="bg-white p-8 rounded-xl shadow-lg max-w-xl w-full border-[1.5px] border-gray-300"
+    >
+      <h2 class="text-xl font-semibold text-gray-800 mb-4 text-center">
+        Choose Your Room Booking Option
+      </h2>
+
+      <!-- Booking Options -->
+      <form>
+        <!-- Sole Booking -->
+        <label
+          id="sole-option"
+          class="block bg-gray-100 p-4 rounded-md mb-4 cursor-pointer hover:bg-gray-200 transition relative"
+        >
+          <input
+            type="radio"
+            name="booking_option"
+            value="solely"
+            class="hidden"
+          />
+          <p
+            class="bg-yellow-100 rounded-md border-[1px] border-gray-300 absolute top-2 right-2 text-sm p-1 text-amber-900"
+          >
+            recommended
+          </p>
+
+          <div class="flex items-center gap-3">
+            <i class="fa-solid fa-user-lock text-xl text-blue-700"></i>
+            <div>
+              <span class="block text-lg font-medium text-gray-900"
+                >Book Solely</span
+              >
+              <p class="text-gray-700 text-sm mt-1">
+                Pay full rent & full security deposit.
+              </p>
+            </div>
+          </div>
+        </label>
+
+        <!-- Shared Booking -->
+        <label
+          id="share-option"
+          class="block bg-gray-100 p-4 rounded-md mb-4 cursor-pointer hover:bg-gray-200 transition relative"
+        >
+          <input
+            type="radio"
+            name="booking_option"
+            value="shared"
+            class="hidden"
+          />
+          <div class="flex items-center gap-3">
+            <i class="fa-solid fa-user-group text-xl text-blue-700"></i>
+            <div>
+              <span class="block text-lg font-medium text-gray-900"
+                >Share Room</span
+              >
+              <p class="text-gray-700 text-sm mt-1">
+                Split rent & security deposit 50-50.
+              </p>
+            </div>
+          </div>
+        </label>
+
+        <!-- Available Promo Codes -->
+        <div
+          class="promo-box mb-4 bg-gray-100 p-3 rounded-md border border-gray-300"
+        >
+          <p class="font-medium text-black text-sm">Available Promo Codes:</p>
+          <ul class="text-sm mt-1">
+            <li class="flex items-center gap-2">
+              <i class="fa-solid fa-tag text-green-600"></i
+              ><strong class="font-semibold">SAVE10</strong> - 10% off
+            </li>
+            <li class="flex items-center gap-2">
+              <i class="fa-solid fa-tag text-green-600"></i
+              ><strong class="font-semibold">FLAT500</strong> - ₹500 off
+            </li>
+          </ul>
+        </div>
+
+        <!-- Promo Code Section -->
+        <div class="mt-4">
+          <label class="block text-gray-700 font-medium mb-1"
+            >Apply Promo Code:</label
+          >
+          <div class="flex">
+            <input
+              type="text"
+              id="promo-code"
+              class="w-full p-2 border border-gray-300 rounded-l-md shadow-sm focus:ring-blue-500 focus:outline-none focus:border-gray-500"
+              placeholder="Enter promo code"
+            />
+            <button
+              type="button"
+              id="apply-code"
+              class="bg-blue-600 text-white px-4 rounded-r-md hover:bg-blue-700"
+            >
+              Apply
+            </button>
+          </div>
+          <p id="promo-message" class="text-green-600 text-sm mt-1 hidden"></p>
+        </div>
+
+        <!-- Rent Summary -->
+        <div
+          class="bg-blue-50 border-[1.5px] border-gray-300 text-black p-4 rounded-md mb-4 text-sm mt-5"
+        >
+          <div class="flex justify-between items-center mb-1">
+            <p class="font-medium">Room Rent:</p>
+            <p class="font-semibold">₹<span id="rent">5000</span></p>
+          </div>
+
+          <div class="flex justify-between items-center mb-1">
+            <p class="font-medium">Security Deposit (25% of Rent):</p>
+            <p class="font-semibold">₹<span id="deposit">1250</span></p>
+          </div>
+
+          <div class="flex justify-between items-center mb-1">
+            <p class="font-medium">Discount:</p>
+            <p class="font-semibold text-green-600">
+              -₹<span id="discount">0</span>
+            </p>
+          </div>
+
+          <div
+            class="border-t-2 border-gray-300 mt-2 pt-2 flex justify-between items-center text-lg font-semibold"
+          >
+            <p class="text-gray-800">Total Payable:</p>
+            <p class="text-blue-700">₹<span id="total">6250</span></p>
+          </div>
+        </div>
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          class="w-full mt-4 bg-blue-600 text-white py-3 rounded-lg text-lg font-medium hover:bg-blue-700 transition"
+        >
+          Confirm Booking
+        </button>
+      </form>
+    </div>
+
+    <!-- JavaScript for Real-Time Calculation -->
+    <script>
+      // Base Rent and Security Deposit Percentage
+      const fullRent = 5000;
+      const securityPercentage = 0.25;
+
+      // Elements
+      const rentEl = document.getElementById("rent");
+      const depositEl = document.getElementById("deposit");
+      const totalEl = document.getElementById("total");
+      const discountEl = document.getElementById("discount");
+
+      let discountAmount = 0;
+
+      // Selection Logic
+      document
+        .getElementById("sole-option")
+        .addEventListener("click", () =>
+          updateAmount(fullRent, fullRent * securityPercentage)
+        );
+      document
+        .getElementById("share-option")
+        .addEventListener("click", () =>
+          updateAmount(fullRent / 2, (fullRent / 2) * securityPercentage)
+        );
+
+      function updateAmount(rent, deposit) {
+        rentEl.textContent = rent;
+        depositEl.textContent = deposit;
+        totalEl.textContent = rent + deposit - discountAmount;
+
+        // Remove highlight from all and add to selected
+        document
+          .querySelectorAll("label")
+          .forEach((label) => label.classList.remove("active-option"));
+        event.currentTarget.classList.add("active-option");
+      }
+
+      // Promo Code Logic
+      const promoCodes = {
+        SAVE10: 10, // 10% discount
+        FLAT500: 500, // Flat ₹500 discount
+      };
+
+      document.getElementById("apply-code").addEventListener("click", () => {
+        const promoInput = document
+          .getElementById("promo-code")
+          .value.trim()
+          .toUpperCase();
+        const promoMessage = document.getElementById("promo-message");
+
+        if (promoCodes[promoInput]) {
+          if (promoInput.startsWith("SAVE")) {
+            discountAmount =
+              (parseInt(promoCodes[promoInput]) / 100) *
+              (parseInt(rentEl.textContent) + parseInt(depositEl.textContent));
+          } else {
+            discountAmount = promoCodes[promoInput];
+          }
+          discountEl.textContent = discountAmount;
+          promoMessage.textContent = `✅ Promo code applied! You saved ₹${discountAmount}.`;
+          promoMessage.classList.remove("hidden");
+        } else {
+          discountAmount = 0;
+          discountEl.textContent = discountAmount;
+          promoMessage.textContent = "❌ Invalid promo code.";
+          promoMessage.classList.add("text-red-600");
+          promoMessage.classList.remove("hidden");
+        }
+
+        totalEl.textContent =
+          parseInt(rentEl.textContent) +
+          parseInt(depositEl.textContent) -
+          discountAmount;
+      });
+    </script>
+  </body>
+</html>
