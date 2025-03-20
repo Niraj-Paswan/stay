@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StayEase Rental Agreement</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100 p-6">
+    <div class="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-lg">
+      <h2 class="text-3xl font-bold text-center mb-6 text-blue-600">
+        StayEase Rental Agreement
+      </h2>
+
+      <p class="mb-6 text-gray-700">
+        This agreement is made between <strong>StayEase</strong>, the room
+        rental application, and the landlord (<strong>Property Owner</strong>)
+        who wishes to list their property on the platform.
+      </p>
+
+      <div class="border p-6 mb-6 bg-gray-50 rounded-lg shadow-sm">
+        <h3 class="text-xl font-semibold text-blue-500 mb-4">
+          Contract Details
+        </h3>
+        <div class="space-y-2 text-gray-600">
+          <p>
+            <strong>Property Owner:</strong>
+            <span id="landlordName">[Landlord's Name]</span>
+          </p>
+          <p>
+            <strong>Property Name:</strong>
+            <span id="propertyName">XYZ Apartment</span>
+          </p>
+          <p>
+            <strong>Location:</strong>
+            <span id="propertyLocation">New Delhi, India</span>
+          </p>
+          <p><strong>Monthly Rent:</strong> ₹<span id="rent">15,000</span></p>
+          <p>
+            <strong>Commission:</strong> 2% of total rent payable to StayEase
+          </p>
+          <p>
+            <strong>Security Deposit:</strong> ₹<span id="deposit">30,000</span>
+          </p>
+          <p>
+            <strong>Listing Duration:</strong> Until property is rented or
+            removed by the landlord.
+          </p>
+        </div>
+      </div>
+
+      <div class="border p-6 mb-6 bg-gray-50 rounded-lg shadow-sm">
+        <h3 class="text-xl font-semibold text-blue-500 mb-4">
+          Terms & Conditions
+        </h3>
+        <div class="space-y-2 text-gray-600">
+          <p>
+            1. The landlord agrees to list the property exclusively or
+            non-exclusively on StayEase.
+          </p>
+          <p>
+            2. StayEase will charge a commission of 2% on each successful rental
+            transaction.
+          </p>
+          <p>
+            3. The landlord is responsible for providing accurate property
+            details and maintaining the listing.
+          </p>
+          <p>
+            4. The tenant must pay rent via StayEase’s secure payment gateway.
+          </p>
+          <p>
+            5. StayEase is not liable for property damage; this remains the
+            responsibility of the landlord and tenant.
+          </p>
+          <p>
+            6. The landlord can remove the listing with a 7-day prior notice.
+          </p>
+        </div>
+      </div>
+
+      <div class="border p-6 mb-6 bg-gray-50 rounded-lg shadow-sm">
+        <h3 class="text-xl font-semibold text-blue-500 mb-4">Privacy Policy</h3>
+        <p class="text-gray-600">
+          All landlord information is confidential and used only for property
+          listing and transactions on StayEase.
+        </p>
+      </div>
+
+      <div class="flex items-center justify-between mt-6">
+        <label class="flex items-center text-gray-700">
+          <input type="checkbox" id="agree" class="mr-2" />
+          I agree to the Terms & Conditions and Privacy Policy.
+        </label>
+        <button
+          id="signContract"
+          disabled
+          class="bg-gray-400 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+        >
+          Sign Contract
+        </button>
+      </div>
+    </div>
+
+    <script>
+      document.getElementById("agree").addEventListener("change", function () {
+        document.getElementById("signContract").disabled = !this.checked;
+        document
+          .getElementById("signContract")
+          .classList.toggle("bg-blue-600", this.checked);
+      });
+
+      document
+        .getElementById("signContract")
+        .addEventListener("click", function () {
+          alert("Contract Signed Successfully with StayEase!");
+        });
+    </script>
+  </body>
+</html>
