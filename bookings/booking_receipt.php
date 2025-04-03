@@ -68,19 +68,36 @@ $bookingType = $paymentData['booking_type'] ?? 'N/A';
       background-position: center;
       font-family: "Poppins", sans-serif;
     }
+
+    .animate-fade-in {
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
   </style>
 </head>
 
 <body class="min-h-screen flex items-center justify-center p-8 bg-white font-Nrj-fonts">
   <!-- Back Button -->
   <div class="back-button absolute top-2 left-2 ml-4">
-    <a href="../public/signout.html">
+    <a href="../public/index.php">
       <button class="flex items-center text-black font-medium hover:underline">
         <i class="fa-regular fa-arrow-left-from-bracket mr-2"></i> Back
       </button>
     </a>
   </div>
-  <div class="w-full max-w-3xl mx-auto bg-white shadow-sm rounded-lg overflow-hidden border border-gray-300"
+  <div
+    class="w-full max-w-3xl mx-auto bg-white shadow-sm rounded-lg overflow-hidden border border-gray-300 animate-fade-in"
     id="booking-receipt">
     <!-- Header -->
     <div class="bg-for p-6 text-white relative overflow-hidden">
@@ -232,39 +249,54 @@ $bookingType = $paymentData['booking_type'] ?? 'N/A';
 
       <hr class="border-gray-300" />
 
-      <!-- Additional Notes & QR Code -->
-      <div class="p-6 bg-gray-50 border border-gray-300 rounded-lg shadow-sm">
-        <h2 class="text-xl font-semibold text-black mb-4 text-center">
+      <!-- Booking Verification Section -->
+      <div class="p-6 bg-white border border-gray-200 rounded-xl max-w-2xl mx-auto">
+        <h2 class="text-2xl font-bold text-gray-900 text-center">
           Booking Verification
-          <span class="text-sm text-gray-700 font-medium">- For Landlords Only</span>
+          <span class="block text-sm text-gray-600 font-medium">For Landlords Only</span>
         </h2>
 
-        <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="mt-6 flex flex-col md:flex-row items-center justify-between gap-8">
           <!-- Verification Instructions -->
           <div class="flex-1">
-            <p class="text-sm text-gray-600">
+            <p class="text-sm text-gray-700 leading-relaxed">
               Landlords can verify this booking by scanning the QR code.
               Please ensure the following:
             </p>
-            <ul class="text-sm text-gray-700 mt-3 space-y-1 list-disc list-inside">
+            <ul class="text-sm text-gray-800 mt-4 space-y-3 list-disc list-inside">
               <li>Match the tenant's details with booking records.</li>
               <li>Check the <strong>Transaction ID</strong> for validity.</li>
               <li>Confirm the <strong>rent amount & due date</strong>.</li>
               <li>
                 Ensure the payment status is marked as
-                <strong>"Successfull"</strong>.
+                <strong class="text-green-600">"Successful"</strong>.
               </li>
-              <li>
-                Verify the tenant’s <strong>Identity Proof</strong> if
-                required.
-              </li>
+              <li>Verify the tenant’s <strong>Identity Proof</strong> if required.</li>
             </ul>
           </div>
 
           <!-- QR Code Section -->
+          <?php
+          $qr_data = "Payment Date: " . htmlspecialchars($paymentData['payment_date']) . "\n" .
+            "Full Name: " . htmlspecialchars($paymentData['full_name']) . "\n" .
+            "Email: " . htmlspecialchars($paymentData['email_address']) . "\n" .
+            "Booking Type: " . htmlspecialchars($bookingType) . "\n" .
+            "Rent Start Date: " . htmlspecialchars($paymentData['rent_start_date']) . "\n" .
+            "Property Name: " . htmlspecialchars($paymentData['property_name']) . "\n" .
+            "Location: " . htmlspecialchars($paymentData['property_location']) . "\n" .
+            "Property Price: ₹" . number_format(htmlspecialchars($paymentData['property_price'])) . "\n" .
+            "Payment Status: " . htmlspecialchars($paymentData['payment_status']) . "\n" .
+            "Payment Method: " . htmlspecialchars($paymentData['payment_method']) . "\n" .
+            "Original Rent: ₹" . number_format($paymentData['original_rent'], 2) . "\n" .
+            "Security Deposit: ₹" . number_format($paymentData['security_deposit'], 2) . "\n" .
+            "Discount: ₹" . number_format($paymentData['discount_amount'], 2) . "\n" .
+            "Total Paid: ₹" . number_format($paymentData['payment_amount'], 2);
+          ?>
+
           <div class="flex flex-col items-center">
             <div class="bg-white p-4 border border-gray-300 rounded-lg shadow-sm">
-              <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://github.com/Niraj-Paswan"
+              <img
+                src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=<?php echo urlencode($qr_data); ?>"
                 alt="QR Code" />
             </div>
             <p class="text-xs text-gray-500 mt-2">
@@ -274,6 +306,7 @@ $bookingType = $paymentData['booking_type'] ?? 'N/A';
         </div>
       </div>
     </div>
+
 
     <!-- Footer -->
     <div class="bg-gray-50 px-6 py-4 flex flex-col justify-between items-center gap-4 border-t border-gray-200">
