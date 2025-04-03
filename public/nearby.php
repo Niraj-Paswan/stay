@@ -167,17 +167,6 @@ $conn->close();
       </div>
     </div>
 
-    <!-- Contact Buttons (WhatsApp & Call) -->
-    <div class="flex items-center border-[1.5px] border-gray-300 bg-gray-50 rounded-full px-4 py-2 space-x-4">
-      <button class="text-blue-500 hover:text-for">
-        <i class="fa-regular fa-envelope text-sm"></i>
-      </button>
-      <span class="text-gray-400">|</span>
-      <button class="text-blue-500 hover:text-for">
-        <i class="fa-regular fa-phone text-sm"></i>
-      </button>
-    </div>
-
     <!-- Get in Touch Button -->
     <button class="bg-blue-500 text-white px-4 py-3 rounded-full text-sm font-medium hover:bg-blue-600 transition">
       Contact Us
@@ -276,7 +265,7 @@ $conn->close();
                 <div
                   class="badge flex items-center border border-gray-300 bg-white px-3 py-1 rounded-full text-gray-700 text-sm font-medium hover:shadow-sm">
                   <i class="fa-regular fa-home text-for mr-2"></i>
-                  <span>Apartment</span>
+                  <span><?= $property['type'] ?></span>
                 </div>
 
                 <!-- Sharable or Sole Booking -->
