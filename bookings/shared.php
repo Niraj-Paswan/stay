@@ -1,19 +1,29 @@
 <?php
 session_start();
-include '../Database/dbconfig.php';
+// Database connection
+$host = "localhost:3307";
+$username = "root";
+$password = "";
+$database = "stayease";
+
+$conn = new mysqli($host, $username, $password, $database);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 
 // Check if the property ID is passed
 if (isset($_GET['id'])) {
     $property_id = intval($_GET['id']); // Ensure it's an integer
 
-    // Fetch the property price from the properties table
-    $query = "SELECT property_price FROM properties WHERE id = ?";
+    // Fetch data from properties table
+    $query = "SELECT property_price, is_sharable FROM properties WHERE id = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("i", $property_id);
     $stmt->execute();
-    $stmt->bind_result($property_price);
+    $stmt->bind_result($property_price, $is_sharable);
     $stmt->fetch();
     $stmt->close();
+
 
     // Ensure price is a valid number (since it's stored as varchar)
     $property_price = is_numeric($property_price) ? floatval($property_price) : 5000;
@@ -77,6 +87,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['confirm_booking'])) {
             background-size: cover;
             background-position: center;
         }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 
@@ -86,7 +112,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['confirm_booking'])) {
             <i class="fa-solid fa-arrow-left mr-2"></i> Back
         </button>
     </div>
-    <div class="bg-white p-8 rounded-xl shadow-lg max-w-xl w-full border-[1.5px] border-gray-300">
+    <div class="bg-white p-8 rounded-xl shadow-lg max-w-xl w-full border-[1.5px] border-gray-300 animate-fade-in">
         <h2 class="text-xl font-semibold text-gray-800 mb-4 text-center">
             Choose Your Room Booking Option
         </h2>
@@ -120,9 +146,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['confirm_booking'])) {
             </label>
 
             <!-- Shared Booking -->
-            <label id="share-option"
-                class="block bg-gray-100 p-4 rounded-md mb-4 cursor-pointer hover:bg-gray-200 transition relative">
-                <input type="radio" name="booking_option" value="Shared" class="hidden" />
+            <label id="share-option" class="block bg-gray-100 p-4 rounded-md mb-4 transition relative 
+              <?php echo $is_sharable ? 'cursor-pointer hover:bg-gray-200' : 'opacity-50 cursor-not-allowed'; ?>">
+                <input type="radio" name="booking_option" value="Shared" class="hidden" <?php echo !$is_sharable ? 'disabled' : ''; ?> />
                 <div class="flex items-center gap-3">
                     <i class="fa-solid fa-user-group text-xl text-blue-700"></i>
                     <div>
@@ -187,6 +213,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['confirm_booking'])) {
         // Base Rent and Security Deposit Percentage
         const fullRent = <?php echo $property_price; ?>;
         const securityPercentage = 0.25;
+
+        // Disable the shared option if not sharable
+        const isSharable = <?php echo $is_sharable ? 'true' : 'false'; ?>;
+        if (!isSharable) {
+            document.getElementById("share-option").style.pointerEvents = "none";
+        }
+
 
         // Elements
         const rentEl = document.getElementById("rent");
