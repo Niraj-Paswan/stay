@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Styaease | Property Upload</title>
+    <title>StayEase | Property Upload</title>
+    <link rel="stylesheet" href="../assets/css/styles.css" />
     <link
       rel="shortcut icon"
       href="../assets/img/stayease logo.svg"
@@ -17,411 +18,670 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="../assets/css/styles.css" />
     <style>
       body {
         background-image: url("../assets/img/beams-home@95.jpg");
         background-size: cover;
         background-position: center;
       }
+      .file-upload-preview {
+        display: none;
+      }
+
+      .file-upload-area {
+        display: block;
+      }
+
+      .hover-overlay {
+        opacity: 0;
+        transition: opacity 0.2s ease-in-out;
+      }
+
+      .file-upload-preview:hover .hover-overlay {
+        opacity: 1;
+      }
     </style>
   </head>
   <body
-    class="bg-gray-100 flex justify-center items-center min-h-screen font-Nrj-fonts p-12"
+    class="min-h-screen bg-white font-Nrj-fonts p-4 md:p-8 lg:p-12 flex justify-center items-center"
   >
     <div
-      class="bg-white shadow-lg rounded-lg lg:w-[50%] p-12 border border-gray-300"
+      class="w-full max-w-4xl bg-white shadow-lg rounded-lg border border-gray-200 font-Nrj-fonts"
     >
-      <h2 class="text-2xl font-bold mb-4 text-center">Add Property</h2>
-      <form
-        action="insert_property.php"
-        method="post"
-        enctype="multipart/form-data"
-        class="space-y-4"
-      >
-        <div>
-          <label class="block font-medium text-sm text-gray-700"
-            >Property Name</label
-          >
-          <input
-            type="text"
-            name="property_name"
-            required
-            class="w-full mt-2 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-[0.5px] focus:ring-black font-medium"
-          />
-        </div>
+      <!-- Header -->
+      <div class="text-center border-b p-6">
+        <h1 class="text-2xl font-bold text-primary">Add New Property</h1>
+        <p class="text-gray-500">Fill in the details to list property</p>
+      </div>
 
-        <div>
-          <label class="block font-medium text-sm text-gray-700"
-            >Location</label
-          >
-          <input
-            type="text"
-            name="property_location"
-            required
-            class="w-full mt-2 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-[0.5px] focus:ring-black"
-          />
-        </div>
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-  const locationInput = document.querySelector('input[name="property_location"]');
-  const latitudeInput = document.querySelector('input[name="latitude"]');
-  const longitudeInput = document.querySelector('input[name="longitude"]');
-
-  locationInput.addEventListener("input", async function () {
-    const location = locationInput.value.trim();
-    if (location.length > 2) { // Fetch only if input has enough characters
-      fetchCoordinates(location);
-    }
-  });
-
-  async function fetchCoordinates(location) {
-    const MAPBOX_ACCESS_TOKEN = "pk.eyJ1IjoidHlwcm9qZWN0IiwiYSI6ImNtNTZxdWx6bjEwamUyaXMyc2poczd4OHAifQ.tuR-aGDXJdcOWzsmYz4hnw";
-    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(location)}.json?access_token=${MAPBOX_ACCESS_TOKEN}`;
-
-    try {
-      const response = await fetch(url);
-      const data = await response.json();
-
-      if (data.features.length > 0) {
-        const [lon, lat] = data.features[0].center;
-        latitudeInput.value = lat;
-        longitudeInput.value = lon;
-      } else {
-        latitudeInput.value = "";
-        longitudeInput.value = "";
-      }
-    } catch (error) {
-      console.error("Error fetching coordinates:", error);
-    }
-  }
-});
-</script>
-        <div>
-          <label class="block font-medium text-sm text-gray-700">Price</label>
-          <input
-            type="text"
-            name="property_price"
-            required
-            class="w-full mt-2 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-[0.5px] focus:ring-black"
-          />
-        </div>
-
-        <div>
-          <label class="block font-medium text-sm text-gray-700"
-            >Description</label
-          >
-          <textarea
-            name="property_description"
-            required
-            class="w-full mt-2 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-[0.5px] focus:ring-black"
-          ></textarea>
-        </div>
-
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label class="block font-medium text-sm text-gray-700"
-              >Latitude</label
-            >
-            <input
-              type="text"
-              name="latitude"
-              required
-              class="w-full mt-2 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-[0.5px] focus:ring-black"
-            />
-          </div>
-          <div>
-            <label class="block font-medium text-sm text-gray-700"
-              >Longitude</label
-            >
-            <input
-              type="text"
-              name="longitude"
-              required
-              class="w-full mt-2 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-[0.5px] focus:ring-black"
-            />
-          </div>
-        </div>
-
-        <div>
-          <label class="block font-medium text-sm text-gray-700"
-            >Property Type</label
-          >
-          <select
-            name="property_type"
-            required
-            class="w-full mt-2 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-[0.5px] focus:ring-black"
-          >
-            <option value="Apartment">Apartment</option>
-            <option value="House">House</option>
-            <option value="Flat">Flat</option>
-            <option value="Room">Room</option>
-            <option value="Other">Other</option>
-          </select>
-        </div>
-
-        <div class="grid grid-cols-3 gap-4">
-          <div>
-            <label class="block font-medium text-sm text-gray-700"
-              >Bedrooms</label
-            >
-            <input
-              type="number"
-              name="bedrooms"
-              required
-              class="w-full mt-2 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-[0.5px] focus:ring-black"
-            />
-          </div>
-          <div>
-            <label class="block font-medium text-sm text-gray-700"
-              >Bathrooms</label
-            >
-            <input
-              type="number"
-              name="bathrooms"
-              required
-              class="w-full mt-2 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-[0.5px] focus:ring-black"
-            />
-          </div>
-          <div>
-            <label class="block font-medium text-sm text-gray-700"
-              >Area in sq ft</label
-            >
-            <input
-              type="number"
-              name="area"
-              required
-              class="w-full mt-2 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-[0.5px] focus:ring-black"
-            />
-          </div>
-        </div>
-
-        <!-- File Upload Section -->
-        <div class="space-y-4">
-          <!-- Main Image Upload -->
-          <div class="mb-4">
-            <label
-              for="mainImage"
-              class="block text-sm font-medium text-gray-700"
-              >Upload Main Image</label
-            >
-            <div
-              id="mainImageArea"
-              class="border-2 border-dashed border-gray-300 p-5 text-center cursor-pointer bg-gray-50 hover:bg-gray-100 rounded-md mt-2 group text-gray-500 hover:text-black hover:border-gray-400"
-              onclick="triggerFileInput('mainImage')"
-            >
-              <i
-                class="fa-regular fa-arrow-up-from-bracket mr-2 text-gray-500 group-hover:text-black"
-              ></i>
-              Click to Select File
-            </div>
-            <input
-              type="file"
-              id="mainImage"
-              name="main_img"
-              accept=".png, .jpeg, .jpg"
-              class="hidden"
-              onchange="handleFileSelect(event, 'mainImage')"
-            />
-            <div class="flex flex-row justify-between items-center mt-2">
-              <div id="mainImage-info" class="mt-2 text-sm text-gray-600"></div>
-              <i
-                id="mainImage-trash-icon"
-                class="fa-solid fa-trash hidden text-red-400 text-sm cursor-pointer relative hover:text-red-600"
-                onclick="cancelFileSelection('mainImage')"
-              ></i>
-            </div>
-            <p
-              id="mainImage-error"
-              class="text-red-500 text-xs error-message"
-            ></p>
-          </div>
-
-          <!-- Kitchen Image Upload -->
-          <div class="mb-4">
-            <label
-              for="kitchenImage"
-              class="block text-sm font-medium text-gray-700"
-              >Upload Kitchen Image</label
-            >
-            <div
-              id="kitchenImageArea"
-              class="border-2 border-dashed border-gray-300 p-5 text-center cursor-pointer bg-gray-50 hover:bg-gray-100 rounded-md mt-2 group text-gray-500 hover:text-black hover:border-gray-400"
-              onclick="triggerFileInput('kitchenImage')"
-            >
-              <i
-                class="fa-regular fa-arrow-up-from-bracket mr-2 text-gray-500 group-hover:text-black"
-              ></i>
-              Click to Select File
-            </div>
-            <input
-              type="file"
-              id="kitchenImage"
-              name="kitchen_img"
-              accept=".png, .jpeg, .jpg"
-              class="hidden"
-              onchange="handleFileSelect(event, 'kitchenImage')"
-            />
-            <div class="flex flex-row justify-between items-center mt-2">
-              <div
-                id="kitchenImage-info"
-                class="mt-2 text-sm text-gray-600"
-              ></div>
-              <i
-                id="kitchenImage-trash-icon"
-                class="fa-solid fa-trash hidden text-red-400 text-sm cursor-pointer relative hover:text-red-600"
-                onclick="cancelFileSelection('kitchenImage')"
-              ></i>
-            </div>
-            <p
-              id="kitchenImage-error"
-              class="text-red-500 text-xs error-message"
-            ></p>
-          </div>
-
-          <!-- Washroom Image Upload -->
-          <div class="mb-4">
-            <label
-              for="washroomImage"
-              class="block text-sm font-medium text-gray-700"
-              >Upload Washroom Image</label
-            >
-            <div
-              id="washroomImageArea"
-              class="border-2 border-dashed border-gray-300 p-5 text-center cursor-pointer bg-gray-50 hover:bg-gray-100 rounded-md mt-2 group text-gray-500 hover:text-black hover:border-gray-400"
-              onclick="triggerFileInput('washroomImage')"
-            >
-              <i
-                class="fa-regular fa-arrow-up-from-bracket mr-2 text-gray-500 group-hover:text-black"
-              ></i>
-              Click to Select File
-            </div>
-            <input
-              type="file"
-              id="washroomImage"
-              name="washroom_img"
-              accept=".png, .jpeg, .jpg"
-              class="hidden"
-              onchange="handleFileSelect(event, 'washroomImage')"
-            />
-            <div class="flex flex-row justify-between items-center mt-2">
-              <div
-                id="washroomImage-info"
-                class="mt-2 text-sm text-gray-600"
-              ></div>
-              <i
-                id="washroomImage-trash-icon"
-                class="fa-solid fa-trash hidden text-red-400 text-sm cursor-pointer relative hover:text-red-600"
-                onclick="cancelFileSelection('washroomImage')"
-              ></i>
-            </div>
-            <p
-              id="washroomImage-error"
-              class="text-red-500 text-xs error-message"
-            ></p>
-          </div>
-
-          <!-- Gallery Image Upload -->
-          <div class="mb-4">
-            <label
-              for="galleryImage"
-              class="block text-sm font-medium text-gray-700"
-              >Upload Gallery Image</label
-            >
-            <div
-              id="galleryImageArea"
-              class="border-2 border-dashed border-gray-300 p-5 text-center cursor-pointer bg-gray-50 hover:bg-gray-100 rounded-md mt-2 group text-gray-500 hover:text-black hover:border-gray-400"
-              onclick="triggerFileInput('galleryImage')"
-            >
-              <i
-                class="fa-regular fa-arrow-up-from-bracket mr-2 text-gray-500 group-hover:text-black"
-              ></i>
-              Click to Select File
-            </div>
-            <input
-              type="file"
-              id="galleryImage"
-              name="gallery_img"
-              accept=".png, .jpeg, .jpg"
-              class="hidden"
-              onchange="handleFileSelect(event, 'galleryImage')"
-            />
-            <div class="flex flex-row justify-between items-center mt-2">
-              <div
-                id="galleryImage-info"
-                class="mt-2 text-sm text-gray-600"
-              ></div>
-              <i
-                id="galleryImage-trash-icon"
-                class="fa-solid fa-trash hidden text-red-400 text-sm cursor-pointer relative hover:text-red-600"
-                onclick="cancelFileSelection('galleryImage')"
-              ></i>
-            </div>
-            <p
-              id="galleryImage-error"
-              class="text-red-500 text-xs error-message"
-            ></p>
-          </div>
-          <label for="is_sharable">
-            <input
-              type="checkbox"
-              id="is_sharable"
-              name="is_sharable"
-              value="1"
-            />
-            <span class="text-gray-600 text-sm font-medium"></span>
-              <span>Allow Room Sharing</span>(Only applicable for 2-bedroom
-              properties)</span
-            >
-          </label>
-        </div>
-
-        <button
-          type="submit"
-          name="submit"
-          class="w-full h-14 bg-blue-500 text-white text-lg p-2 rounded-md hover:bg-blue-600 transition"
+      <!-- Form Content -->
+      <div class="p-8">
+        <form
+          id="propertyForm"
+          action="insert_property.php"
+          method="post"
+          enctype="multipart/form-data"
+          class="space-y-6"
         >
-          Add Property
-        </button>
-      </form>
+          <!-- Basic Information Section -->
+          <div class="space-y-4">
+            <h3 class="text-lg font-semibold text-primary">
+              Basic Information
+            </h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="space-y-2">
+                <label
+                  for="property_name"
+                  class="block font-medium text-sm text-gray-700"
+                >
+                  Property Name <span class="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="property_name"
+                  name="property_name"
+                  placeholder="Enter property name"
+                  required
+                  class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-[0.5px] focus:ring-black"
+                />
+              </div>
+
+              <div class="space-y-2">
+                <label
+                  for="property_price"
+                  class="block font-medium text-sm text-gray-700"
+                >
+                  Price <span class="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="property_price"
+                  name="property_price"
+                  placeholder="Enter price"
+                  required
+                  class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-[0.5px] focus:ring-black"
+                />
+              </div>
+            </div>
+
+            <div class="space-y-2">
+              <label
+                for="property_location"
+                class="block font-medium text-sm text-gray-700"
+              >
+                Location <span class="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="property_location"
+                name="property_location"
+                placeholder="Enter property location"
+                required
+                class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-[0.5px] focus:ring-black"
+              />
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="space-y-2">
+                <label
+                  for="latitude"
+                  class="block font-medium text-sm text-gray-700"
+                >
+                  Latitude <span class="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="latitude"
+                  name="latitude"
+                  placeholder="Latitude"
+                  required
+                  class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-[0.5px] focus:ring-black"
+                />
+              </div>
+
+              <div class="space-y-2">
+                <label
+                  for="longitude"
+                  class="block font-medium text-sm text-gray-700"
+                >
+                  Longitude <span class="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="longitude"
+                  name="longitude"
+                  placeholder="Longitude"
+                  required
+                  class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-[0.5px] focus:ring-black"
+                />
+              </div>
+            </div>
+
+            <div class="space-y-2">
+              <label
+                for="property_description"
+                class="block font-medium text-sm text-gray-700"
+              >
+                Description <span class="text-red-500">*</span>
+              </label>
+              <textarea
+                id="property_description"
+                name="property_description"
+                placeholder="Describe your property"
+                required
+                class="w-full p-2 min-h-[100px] border border-gray-300 rounded-md focus:outline-none focus:ring-[0.5px] focus:ring-black"
+              ></textarea>
+            </div>
+          </div>
+
+          <hr class="border-gray-200" />
+
+          <!-- Property Details Section -->
+          <div class="space-y-4">
+            <h3 class="text-lg font-semibold text-primary">Property Details</h3>
+
+            <div class="space-y-2">
+              <label
+                for="property_type"
+                class="block font-medium text-sm text-gray-700"
+              >
+                Property Type <span class="text-red-500">*</span>
+              </label>
+              <select
+                id="property_type"
+                name="property_type"
+                required
+                class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-[0.5px] focus:ring-black"
+              >
+                <option value="Apartment">Apartment</option>
+                <option value="House">House</option>
+                <option value="Flat">Flat</option>
+                <option value="Room">Room</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div class="space-y-2">
+                <label
+                  for="bedrooms"
+                  class="block font-medium text-sm text-gray-700"
+                >
+                  Bedrooms <span class="text-red-500">*</span>
+                </label>
+                <input
+                  type="number"
+                  id="bedrooms"
+                  name="bedrooms"
+                  min="0"
+                  placeholder="0"
+                  required
+                  class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-[0.5px] focus:ring-black"
+                />
+              </div>
+
+              <div class="space-y-2">
+                <label
+                  for="bathrooms"
+                  class="block font-medium text-sm text-gray-700"
+                >
+                  Bathrooms <span class="text-red-500">*</span>
+                </label>
+                <input
+                  type="number"
+                  id="bathrooms"
+                  name="bathrooms"
+                  min="0"
+                  placeholder="0"
+                  required
+                  class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-[0.5px] focus:ring-black"
+                />
+              </div>
+
+              <div class="space-y-2">
+                <label
+                  for="area"
+                  class="block font-medium text-sm text-gray-700"
+                >
+                  Area (sq ft) <span class="text-red-500">*</span>
+                </label>
+                <input
+                  type="number"
+                  id="area"
+                  name="area"
+                  min="0"
+                  placeholder="0"
+                  required
+                  class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-[0.5px] focus:ring-black"
+                />
+              </div>
+            </div>
+
+            <div class="flex items-center space-x-2 pt-2">
+              <input
+                type="checkbox"
+                id="is_sharable"
+                name="is_sharable"
+                value="1"
+                class="h-4 w-4 text-primaryborder border-gray-300 rounded-md focus:outline-none focus:ring-[0.5px] focus:ring-black"
+              />
+              <label
+                for="is_sharable"
+                class="text-sm font-medium text-gray-700"
+              >
+                Allow Room Sharing
+                <span class="text-gray-500 text-xs"
+                  >(Only applicable for 2-bedroom properties)</span
+                >
+              </label>
+            </div>
+          </div>
+
+          <hr class="border-gray-200" />
+
+          <!-- Image Upload Section -->
+          <div class="space-y-4">
+            <h3 class="text-lg font-semibold text-primary">Property Images</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- Main Image Upload -->
+              <div class="space-y-2">
+                <label
+                  for="mainImage"
+                  class="block font-medium text-sm text-gray-700"
+                >
+                  Main Image <span class="text-red-500">*</span>
+                </label>
+
+                <!-- Upload Area -->
+                <div
+                  id="mainImageArea"
+                  class="file-upload-area border-2 border-dashed rounded-lg p-4 text-center cursor-pointer hover:bg-gray-50 hover:border-gray-300 transition-colors"
+                  onclick="document.getElementById('mainImage').click()"
+                >
+                  <div class="flex flex-col items-center justify-center py-4">
+                    <i
+                      class="fa-regular fa-arrow-up-from-bracket mr-1 text-lg mb-2 text-gray-500 group-hover:text-black"
+                    ></i>
+                    <p class="text-sm font-medium text-gray-600">
+                      Click to upload
+                    </p>
+                    <p class="text-xs text-gray-500 mt-1">PNG, JPG or JPEG</p>
+                  </div>
+                </div>
+
+                <!-- Preview Area -->
+                <div
+                  id="mainImagePreview"
+                  class="file-upload-preview relative border border-gray-300 rounded-lg overflow-hidden"
+                >
+                  <img
+                    id="mainImagePreviewImg"
+                    src="/placeholder.svg"
+                    alt="Main property preview"
+                    class="w-full h-48 object-cover"
+                  />
+                  <div
+                    class="hover-overlay absolute inset-0 bg-black/60 flex items-center justify-center"
+                  >
+                    <button
+                      type="button"
+                      class="bg-destructive text-white px-3 py-1 rounded-md text-sm flex items-center"
+                      onclick="cancelFileSelection('mainImage')"
+                    >
+                      <i class="fa-regular fa-trash-can mr-1"></i>
+                      Remove
+                    </button>
+                  </div>
+                  <div class="p-2 bg-white flex items-center">
+                    <i
+                      class="fa-regular fa-circle-check text-green-600 mr-2"
+                    ></i>
+                    <span
+                      id="mainImageName"
+                      class="text-sm font-medium truncate"
+                    ></span>
+                  </div>
+                </div>
+
+                <input
+                  type="file"
+                  id="mainImage"
+                  name="main_img"
+                  accept=".png, .jpeg, .jpg"
+                  class="hidden"
+                />
+              </div>
+
+              <!-- Kitchen Image Upload -->
+              <div class="space-y-2">
+                <label
+                  for="kitchenImage"
+                  class="block font-medium text-sm text-gray-700"
+                >
+                  Kitchen Image <span class="text-red-500">*</span>
+                </label>
+
+                <!-- Upload Area -->
+                <div
+                  id="kitchenImageArea"
+                  class="file-upload-area border-2 border-dashed rounded-lg p-4 text-center cursor-pointer hover:bg-gray-50 transition-colors"
+                  onclick="document.getElementById('kitchenImage').click()"
+                >
+                  <div class="flex flex-col items-center justify-center py-4">
+                    <i
+                      class="fa-regular fa-arrow-up-from-bracket mr-1 text-lg mb-2 text-gray-500 group-hover:text-black"
+                    ></i>
+                    <p class="text-sm font-medium text-gray-600">
+                      Click to upload
+                    </p>
+                    <p class="text-xs text-gray-500 mt-1">PNG, JPG or JPEG</p>
+                  </div>
+                </div>
+
+                <!-- Preview Area -->
+                <div
+                  id="kitchenImagePreview"
+                  class="file-upload-preview relative border border-gray-300 rounded-lg overflow-hidden"
+                >
+                  <img
+                    id="kitchenImagePreviewImg"
+                    src="/placeholder.svg"
+                    alt="Kitchen preview"
+                    class="w-full h-48 object-cover"
+                  />
+                  <div
+                    class="hover-overlay absolute inset-0 bg-black/60 flex items-center justify-center"
+                  >
+                    <button
+                      type="button"
+                      class="bg-destructive text-white px-3 py-1 rounded-md text-sm flex items-center"
+                      onclick="cancelFileSelection('kitchenImage')"
+                    >
+                      <i class="fa-regular fa-trash-can mr-1"></i>
+                      Remove
+                    </button>
+                  </div>
+                  <div class="p-2 bg-white flex items-center">
+                    <i
+                      class="fa-regular fa-circle-check text-green-600 mr-2"
+                    ></i>
+                    <span
+                      id="kitchenImageName"
+                      class="text-sm font-medium truncate"
+                    ></span>
+                  </div>
+                </div>
+
+                <input
+                  type="file"
+                  id="kitchenImage"
+                  name="kitchen_img"
+                  accept=".png, .jpeg, .jpg"
+                  class="hidden"
+                />
+              </div>
+
+              <!-- Washroom Image Upload -->
+              <div class="space-y-2">
+                <label
+                  for="washroomImage"
+                  class="block font-medium text-sm text-gray-700"
+                >
+                  Washroom Image <span class="text-red-500">*</span>
+                </label>
+
+                <!-- Upload Area -->
+                <div
+                  id="washroomImageArea"
+                  class="file-upload-area border-2 border-dashed rounded-lg p-4 text-center cursor-pointer hover:bg-gray-50 transition-colors"
+                  onclick="document.getElementById('washroomImage').click()"
+                >
+                  <div class="flex flex-col items-center justify-center py-4">
+                    <i
+                      class="fa-regular fa-arrow-up-from-bracket mr-1 text-lg mb-2 text-gray-500 group-hover:text-black"
+                    ></i>
+                    <p class="text-sm font-medium text-gray-600">
+                      Click to upload
+                    </p>
+                    <p class="text-xs text-gray-500 mt-1">PNG, JPG or JPEG</p>
+                  </div>
+                </div>
+
+                <!-- Preview Area -->
+                <div
+                  id="washroomImagePreview"
+                  class="file-upload-preview relative border border-gray-300 rounded-lg overflow-hidden"
+                >
+                  <img
+                    id="washroomImagePreviewImg"
+                    src="/placeholder.svg"
+                    alt="Washroom preview"
+                    class="w-full h-48 object-cover"
+                  />
+                  <div
+                    class="hover-overlay absolute inset-0 bg-black/60 flex items-center justify-center"
+                  >
+                    <button
+                      type="button"
+                      class="bg-destructive text-white px-3 py-1 rounded-md text-sm flex items-center"
+                      onclick="cancelFileSelection('washroomImage')"
+                    >
+                      <i class="fa-regular fa-trash-can mr-1"></i>
+                      Remove
+                    </button>
+                  </div>
+                  <div class="p-2 bg-white flex items-center">
+                    <i
+                      class="fa-regular fa-circle-check text-green-600 mr-2"
+                    ></i>
+                    <span
+                      id="washroomImageName"
+                      class="text-sm font-medium truncate"
+                    ></span>
+                  </div>
+                </div>
+
+                <input
+                  type="file"
+                  id="washroomImage"
+                  name="washroom_img"
+                  accept=".png, .jpeg, .jpg"
+                  class="hidden"
+                />
+              </div>
+
+              <!-- Gallery Image Upload -->
+              <div class="space-y-2">
+                <label
+                  for="galleryImage"
+                  class="block font-medium text-sm text-gray-700"
+                >
+                  Bedroom Image <span class="text-red-500">*</span>
+                </label>
+
+                <!-- Upload Area -->
+                <div
+                  id="galleryImageArea"
+                  class="file-upload-area border-2 border-dashed rounded-lg p-4 text-center cursor-pointer hover:bg-gray-50 transition-colors"
+                  onclick="document.getElementById('galleryImage').click()"
+                >
+                  <div class="flex flex-col items-center justify-center py-4">
+                    <i
+                      class="fa-regular fa-arrow-up-from-bracket mr-1 text-lg mb-2 text-gray-500 group-hover:text-black"
+                    ></i>
+                    <p class="text-sm font-medium text-gray-600">
+                      Click to upload
+                    </p>
+                    <p class="text-xs text-gray-500 mt-1">PNG, JPG or JPEG</p>
+                  </div>
+                </div>
+
+                <!-- Preview Area -->
+                <div
+                  id="galleryImagePreview"
+                  class="file-upload-preview relative border border-gray-300 rounded-lg overflow-hidden"
+                >
+                  <img
+                    id="galleryImagePreviewImg"
+                    src="/placeholder.svg"
+                    alt="Gallery preview"
+                    class="w-full h-48 object-cover"
+                  />
+                  <div
+                    class="hover-overlay absolute inset-0 bg-black/60 flex items-center justify-center"
+                  >
+                    <button
+                      type="button"
+                      class="bg-destructive text-white px-3 py-1 rounded-md text-sm flex items-center"
+                      onclick="cancelFileSelection('galleryImage')"
+                    >
+                      <i class="fa-regular fa-trash-can mr-1"></i>
+                      Remove
+                    </button>
+                  </div>
+                  <div class="p-2 bg-white flex items-center">
+                    <i
+                      class="fa-regular fa-circle-check text-green-600 mr-2"
+                    ></i>
+                    <span
+                      id="galleryImageName"
+                      class="text-sm font-medium truncate"
+                    ></span>
+                  </div>
+                </div>
+
+                <input
+                  type="file"
+                  id="galleryImage"
+                  name="gallery_img"
+                  accept=".png, .jpeg, .jpg"
+                  class="hidden"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-4 flex justify-between gap-12">
+            <button
+              type="button"
+              onclick="history.back()"
+              class="w-full py-2 bg-gray-500 text-white text-lg font-medium rounded-md hover:bg-gray-600 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="w-full py-2 bg-blue-500 text-white text-lg font-medium rounded-md hover:bg-blue-600 transition-colors"
+            >
+              Add Property
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
 
     <script>
+      // File Upload Handling
+      const fileInputs = [
+        "mainImage",
+        "kitchenImage",
+        "washroomImage",
+        "galleryImage",
+      ];
+
+      fileInputs.forEach((id) => {
+        const fileInput = document.getElementById(id);
+        fileInput.addEventListener("change", function (event) {
+          handleFileSelect(event, id);
+        });
+      });
+
       function handleFileSelect(event, id) {
         const fileInput = event.target;
-        const fileInfo = document.getElementById(id + "-info");
-        const trashIcon = document.getElementById(id + "-trash-icon");
-        const uploadArea = document.getElementById(id + "Area");
+        const uploadArea = document.getElementById(`${id}Area`);
+        const previewArea = document.getElementById(`${id}Preview`);
+        const previewImg = document.getElementById(`${id}PreviewImg`);
+        const nameSpan = document.getElementById(`${id}Name`);
 
-        if (fileInput.files.length > 0) {
-          const fileName = fileInput.files[0].name;
+        if (fileInput.files && fileInput.files.length > 0) {
+          const file = fileInput.files[0];
 
-          // Display file name in bold with a verified badge icon
-          fileInfo.innerHTML = `
-            <span class="font-semibold">${fileName}</span> 
-            <i class="fa-solid fa-badge-check text-blue-400 ml-2"></i>
-        `;
+          // Create a preview URL
+          const previewUrl = URL.createObjectURL(file);
 
-          trashIcon.classList.remove("hidden"); // Show delete icon
-          uploadArea.classList.add("hidden"); // Hide upload section
+          // Update the preview image
+          previewImg.src = previewUrl;
+          nameSpan.textContent = file.name;
+
+          // Show preview, hide upload area
+          uploadArea.style.display = "none";
+          previewArea.style.display = "block";
         }
       }
 
       function cancelFileSelection(id) {
         const fileInput = document.getElementById(id);
-        const fileInfo = document.getElementById(id + "-info");
-        const trashIcon = document.getElementById(id + "-trash-icon");
-        const uploadArea = document.getElementById(id + "Area");
+        const uploadArea = document.getElementById(`${id}Area`);
+        const previewArea = document.getElementById(`${id}Preview`);
+        const previewImg = document.getElementById(`${id}PreviewImg`);
 
-        fileInput.value = ""; // Reset file input
-        fileInfo.innerHTML = ""; // Clear file info
-        trashIcon.classList.add("hidden"); // Hide delete icon
-        uploadArea.classList.remove("hidden"); // Show upload section again
+        // Clear the file input
+        fileInput.value = "";
+
+        // Revoke the object URL to avoid memory leaks
+        if (previewImg.src) {
+          URL.revokeObjectURL(previewImg.src);
+          previewImg.src = "";
+        }
+
+        // Show upload area, hide preview
+        uploadArea.style.display = "block";
+        previewArea.style.display = "none";
       }
 
-      function triggerFileInput(inputId) {
-        document.getElementById(inputId).click();
+      // Location Coordinates Fetching
+      const locationInput = document.getElementById("property_location");
+      const latitudeInput = document.getElementById("latitude");
+      const longitudeInput = document.getElementById("longitude");
+
+      locationInput.addEventListener("input", function () {
+        const location = this.value.trim();
+        if (location.length > 2) {
+          fetchCoordinates(location);
+        }
+      });
+
+      async function fetchCoordinates(location) {
+        const MAPBOX_ACCESS_TOKEN =
+          "pk.eyJ1IjoidHlwcm9qZWN0IiwiYSI6ImNtNTZxdWx6bjEwamUyaXMyc2poczd4OHAifQ.tuR-aGDXJdcOWzsmYz4hnw";
+        const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
+          location
+        )}.json?access_token=${MAPBOX_ACCESS_TOKEN}`;
+
+        try {
+          const response = await fetch(url);
+          const data = await response.json();
+
+          if (data.features && data.features.length > 0) {
+            const [lon, lat] = data.features[0].center;
+            latitudeInput.value = lat;
+            longitudeInput.value = lon;
+          }
+        } catch (error) {
+          console.error("Error fetching coordinates:", error);
+        }
       }
+
+      // Form Submission
+      const form = document.getElementById("propertyForm");
+      form.addEventListener("submit", function (event) {
+        // You can add form validation here if needed
+        // For now, we'll just prevent the default submission for demo purposes
+        // event.preventDefault();
+        // alert('Form submitted successfully!');
+      });
     </script>
   </body>
 </html>
