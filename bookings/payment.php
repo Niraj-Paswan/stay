@@ -72,14 +72,14 @@ error_log("Final Security Deposit: " . $_SESSION['security_deposit']);
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>StayEase | Payment</title>
-    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="../assets/css/styles.css" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
-    <link rel="shortcut icon" href="../assets/img/stayease logo.svg" type="image/x-icon">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+        rel="stylesheet" />
+    <link rel="shortcut icon" href="../assets/img/stayease logo.svg" type="image/x-icon" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
     <script src="https://js.stripe.com/v3/"></script>
     <style>
         body {
@@ -87,8 +87,6 @@ error_log("Final Security Deposit: " . $_SESSION['security_deposit']);
             background-size: cover;
             background-position: center;
         }
-
-
 
         .payment-btn {
             transition: all 0.2s ease;
@@ -120,9 +118,18 @@ error_log("Final Security Deposit: " . $_SESSION['security_deposit']);
 
         .active-option {
             border: 1px solid #2563eb;
-            /* Blue Border for Selected Option */
             background-color: #e0f2fe;
-            /* Light Blue */
+        }
+
+        /* Enhanced Modal Styles */
+        #paymentSuccessModal {
+            transition: opacity 0.5s ease;
+        }
+
+        #modalContent {
+            transform: scale(0.9);
+            opacity: 0;
+            transition: all 0.3s ease;
         }
     </style>
 </head>
@@ -182,7 +189,7 @@ error_log("Final Security Deposit: " . $_SESSION['security_deposit']);
                                     </span>
                                     <input type="text" id="card-name" name="card_name"
                                         class="card-input w-full pl-10 pr-3 py-3 rounded-lg border border-gray-300 focus:outline-none"
-                                        placeholder="Full Name as per the Card" />
+                                        placeholder="Full Name as per the Card" required />
                                 </div>
                             </div>
 
@@ -199,8 +206,8 @@ error_log("Final Security Deposit: " . $_SESSION['security_deposit']);
                                 <p id="payment-status" class="text-gray-500 text-sm mt-1 hidden"></p>
                             </div>
 
-                            <button id="submit"
-                                class="payment-btn w-full py-3 px-4 bg-blue-500 hover:bg-for text-white font-semibold rounded-lg flex items-center justify-center shadow-md">
+                            <button id="submit" type="submit"
+                                class="payment-btn w-full py-3 px-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg flex items-center justify-center shadow-md transition-all duration-300">
                                 <i class="fa-solid fa-credit-card mr-2"></i>
                                 Pay Now ₹ <?= number_format($total_amount, 2); ?>
                             </button>
@@ -209,14 +216,13 @@ error_log("Final Security Deposit: " . $_SESSION['security_deposit']);
 
                     <p class="text-gray-600 text-xs mt-4 text-center">
                         By clicking on the "Pay Now" button, you agree to our
-                        <a href="#" class="text-for hover:underline">Terms & Conditions</a> and
-                        <a href="#" class="text-for hover:underline">Privacy Policy</a>.
+                        <a href="#" class="text-blue-600 hover:underline">Terms & Conditions</a> and
+                        <a href="#" class="text-blue-600 hover:underline">Privacy Policy</a>.
                     </p>
                 </div>
 
                 <!-- Payment Summary Section - 2/5 width on desktop -->
                 <div class="md:col-span-2 bg-white p-6 border border-gray-300">
-
                     <h2 class="text-xl font-semibold text-gray-800 mb-4">Booking Summary</h2>
 
                     <div class="bg-blue-50 border border-gray-300 text-black p-4 rounded-md mb-6 text-sm">
@@ -234,8 +240,7 @@ error_log("Final Security Deposit: " . $_SESSION['security_deposit']);
 
                         <div class="flex justify-between items-center mb-1">
                             <p class="font-medium">Monthly Room Rent:</p>
-                            <p class="font-semibold">₹<span id="rent"><?= number_format($actual_rent, 2); ?></span>
-                            </p>
+                            <p class="font-semibold">₹<span id="rent"><?= number_format($actual_rent, 2); ?></span></p>
                         </div>
 
                         <div class="flex justify-between items-center mb-1">
@@ -253,7 +258,8 @@ error_log("Final Security Deposit: " . $_SESSION['security_deposit']);
                         <div
                             class="border-t-2 border-gray-300 mt-2 pt-2 flex justify-between items-center text-lg font-semibold">
                             <p class="text-gray-800">Total Payable:</p>
-                            <p class="text-for">₹<span id="total"><?= number_format($total_amount, 2); ?></span></p>
+                            <p class="text-blue-600">₹<span id="total"><?= number_format($total_amount, 2); ?></span>
+                            </p>
                         </div>
                     </div>
                     <!-- Security & Support Section -->
@@ -269,7 +275,7 @@ error_log("Final Security Deposit: " . $_SESSION['security_deposit']);
                             <h3 class="text-lg font-semibold text-gray-800 mb-2">Need Help?</h3>
                             <p class="text-gray-600 text-sm mb-2">Contact our support team.</p>
                             <a href="mailto:support@stayease.com"
-                                class="text-for font-semibold hover:underline flex items-center justify-center">
+                                class="text-blue-600 font-semibold hover:underline flex items-center justify-center">
                                 <i class="fa-regular fa-envelope mr-2"></i>
                                 support@stayease.com
                             </a>
@@ -280,6 +286,32 @@ error_log("Final Security Deposit: " . $_SESSION['security_deposit']);
         </div>
     </div>
 
+    <!-- Enhanced Payment Success Modal -->
+    <div id="paymentSuccessModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 hidden">
+        <div class="bg-white p-8 rounded-2xl shadow-2xl w-[400px] text-center relative" id="modalContent">
+            <!-- Animated Check Icon -->
+            <div class="flex justify-center items-center">
+                <div class="w-16 h-16 flex items-center justify-center rounded-full bg-green-100">
+                    <i class="fa-solid fa-circle-check text-green-500 text-4xl"></i>
+                </div>
+            </div>
+            <h2 class="text-2xl font-bold mt-4 text-gray-800">Payment Successful!</h2>
+            <p class="text-gray-600 mt-2">Thank you for your payment. Your transaction was successful.</p>
+
+            <!-- Loading Spinner -->
+            <div id="loadingSpinner" class="mt-4">
+                <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-blue-500 border-solid"></div>
+            </div>
+
+            <!-- Confetti Canvas -->
+            <canvas id="confettiCanvas" class="absolute inset-0 pointer-events-none"></canvas>
+
+            <!-- Redirect Countdown Message -->
+            <p id="redirectMsg" class="hidden text-sm text-gray-500 mt-2">Redirecting in <span
+                    id="countdown">3</span>...</p>
+        </div>
+    </div>
+
     <script>
         // Initialize Stripe
         const stripe = Stripe("pk_test_51QdZIFIsZuG9rUaAUlU1SDR4OPVjRWrXaMJUTji3L5iYn7ZJGOKwfab9SolHF3H6OkAlX6uD8JicEs4eFMxJ153600sMKu54oZ");
@@ -287,27 +319,105 @@ error_log("Final Security Deposit: " . $_SESSION['security_deposit']);
         const card = elements.create("card");
         card.mount("#card-element");
 
-        // Simple form handling
+        // Payment Form Submission
         const form = document.getElementById("payment-form");
         form.addEventListener("submit", async (event) => {
             event.preventDefault();
 
             // Show processing message
-            document.getElementById("payment-status").textContent = "Processing Payment...";
-            document.getElementById("payment-status").classList.remove("hidden");
+            const paymentStatus = document.getElementById("payment-status");
+            paymentStatus.textContent = "Processing Payment...";
+            paymentStatus.classList.remove("hidden");
 
             // Simulate payment processing (2 seconds)
             setTimeout(() => {
-                document.getElementById("payment-status").textContent = "Payment Successful!";
-                document.getElementById("payment-status").classList.remove("text-gray-500");
-                document.getElementById("payment-status").classList.add("text-green-600");
+                paymentStatus.textContent = "Payment Successful!";
+                paymentStatus.classList.remove("text-gray-500");
+                paymentStatus.classList.add("text-green-600");
 
-                // Redirect after successful payment
+                // Instead of immediate redirect, show enhanced modal after a brief delay
                 setTimeout(() => {
-                    window.location.href = "process_payment.php";
-                }, 1500);
+                    showSuccessModal();
+                }, 500);
             }, 2000);
         });
+
+        // Function to display the enhanced success modal with animations
+        function showSuccessModal() {
+            const modal = document.getElementById('paymentSuccessModal');
+            const modalContent = document.getElementById('modalContent');
+            modal.classList.remove('hidden');
+            // Animate modal in
+            setTimeout(() => {
+                modalContent.style.transform = 'scale(1)';
+                modalContent.style.opacity = '1';
+            }, 50);
+
+            // Hide the loading spinner after 1.5 seconds and show the redirect message with confetti
+            setTimeout(() => {
+                document.getElementById('loadingSpinner').classList.add('hidden');
+                document.getElementById('redirectMsg').classList.remove('hidden');
+                startConfetti();
+            }, 1500);
+
+            // Countdown Timer for Redirect (3 seconds)
+            let count = 3;
+            const countdownInterval = setInterval(() => {
+                count--;
+                document.getElementById('countdown').innerText = count;
+                if (count === 0) {
+                    clearInterval(countdownInterval);
+                    window.location.href = "process_payment.php"; // Change to your actual next page if needed
+                }
+            }, 1000);
+        }
+
+        // Confetti Effect Function
+        function startConfetti() {
+            const canvas = document.getElementById("confettiCanvas");
+            const ctx = canvas.getContext("2d");
+
+            // Set canvas to full window size
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            let particles = [];
+            for (let i = 0; i < 100; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    r: Math.random() * 5 + 2,
+                    d: Math.random() * 2 + 1
+                });
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for (let i = 0; i < particles.length; i++) {
+                    ctx.beginPath();
+                    ctx.arc(particles[i].x, particles[i].y, particles[i].r, 0, Math.PI * 2, false);
+                    ctx.fillStyle = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                    ctx.fill();
+                }
+            }
+
+            function update() {
+                for (let i = 0; i < particles.length; i++) {
+                    particles[i].y += particles[i].d;
+                    if (particles[i].y > canvas.height) {
+                        particles[i].y = 0;
+                        particles[i].x = Math.random() * canvas.width;
+                    }
+                }
+            }
+
+            function loop() {
+                draw();
+                update();
+                requestAnimationFrame(loop);
+            }
+            loop();
+        }
     </script>
 </body>
 
