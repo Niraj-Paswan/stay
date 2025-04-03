@@ -171,6 +171,22 @@ $email = isset($_SESSION['user_email']) ? $_SESSION['user_email'] : "Email not f
       top: 16px;
       left: 16px;
     }
+
+    .animate-fade-in {
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
   </style>
 </head>
 
@@ -181,7 +197,7 @@ $email = isset($_SESSION['user_email']) ? $_SESSION['user_email'] : "Email not f
       <i class="fa-solid fa-arrow-left mr-2"></i> Back
     </button>
   </div>
-  <div class="bg-white p-8 rounded-lg shadow-lg w-[550px] border-[0.5px] border-gray-300">
+  <div class="bg-white p-8 rounded-lg shadow-lg w-[550px] border-[0.5px] border-gray-300 animate-fade-in">
     <div class="flex justify-center items-center space-x-1 mb-4">
       <h2 class="text-xl font-semibold text-start text-gray-800">
         Enter Your Personal Information
