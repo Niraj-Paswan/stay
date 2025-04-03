@@ -54,6 +54,8 @@ if (isset($_POST["submit"])) {
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../assets/css/styles.css" />
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- Page Title -->
   <title>Sign Up | StayEase</title>
@@ -86,10 +88,6 @@ if (isset($_POST["submit"])) {
     }
 
     /* Spinner styles */
-    .hidden {
-      display: none;
-    }
-
     .spinner {
       width: 1rem;
       height: 1rem;
@@ -108,6 +106,35 @@ if (isset($_POST["submit"])) {
         transform: rotate(360deg);
       }
     }
+
+    /* Modal animation */
+    .modal-enter {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+
+    .modal-enter-active {
+      opacity: 1;
+      transform: scale(1);
+      transition: opacity 300ms, transform 300ms;
+    }
+
+    .modal-exit {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .modal-exit-active {
+      opacity: 0;
+      transform: scale(0.95);
+      transition: opacity 300ms, transform 300ms;
+    }
+
+    /* Email highlight style */
+    .email-highlight {
+      font-weight: 600;
+      color: #3b82f6;
+    }
   </style>
 
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3.2.0/dist/email.min.js"></script>
@@ -115,6 +142,36 @@ if (isset($_POST["submit"])) {
     emailjs.init("Ei7nopPNhgExd9OLX");
 
     let emailVerified = false;
+
+    function showModal() {
+      const modal = document.getElementById('success-modal');
+      const modalContent = document.getElementById('modal-content');
+
+      // Show the modal
+      modal.classList.remove('hidden');
+
+      // Add a small delay before adding the animation classes
+      setTimeout(() => {
+        modalContent.classList.remove('modal-enter');
+        modalContent.classList.add('modal-enter-active');
+      }, 10);
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('success-modal');
+      const modalContent = document.getElementById('modal-content');
+
+      // Start exit animation
+      modalContent.classList.remove('modal-enter-active');
+      modalContent.classList.add('modal-exit-active');
+
+      // Hide the modal after animation completes
+      setTimeout(() => {
+        modal.classList.add('hidden');
+        modalContent.classList.remove('modal-exit-active');
+        modalContent.classList.add('modal-enter');
+      }, 300);
+    }
 
     function sendOTP() {
       const email = document.getElementById("email").value;
@@ -144,7 +201,12 @@ if (isset($_POST["submit"])) {
           message: `Your OTP is ${otp}`,
         })
         .then(() => {
-          alert("OTP sent to your email.");
+          // Update modal message with the user's email
+          document.getElementById('modal-message').innerHTML =
+            `We've sent a 4-digit OTP to <span class="email-highlight">${email}</span>. Please check your inbox and enter the code to verify.`;
+
+          // Show the modal
+          showModal();
           document.getElementById("otp-section").style.display = "block";
           sendOtpButton.style.display = "none";
           document.getElementById("email").readOnly = true;
@@ -155,6 +217,7 @@ if (isset($_POST["submit"])) {
         .finally(() => {
           buttonText.textContent = "Send OTP";
           spinner.classList.add("hidden");
+          sendOtpButton.disabled = false;
         });
     }
 
@@ -164,14 +227,27 @@ if (isset($_POST["submit"])) {
         .map((input) => input.value)
         .join("");
       const storedOTP = sessionStorage.getItem("otp");
+      const email = document.getElementById("email").value;
 
       if (enteredOTP === storedOTP) {
-        alert("Email verified successfully!");
+        // Show success modal instead of alert
+        document.getElementById('modal-title').textContent = "Email Verified Successfully!";
+        document.getElementById('modal-message').innerHTML =
+          `Your email <span class="email-highlight">${email}</span> has been verified. Please set your password to continue.`;
+        document.getElementById('modal-icon').innerHTML = '<svg class="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>';
+        document.getElementById('modal-icon-bg').classList.replace('bg-red-100', 'bg-green-100');
+        showModal();
+
         emailVerified = true;
         document.getElementById("otp-section").style.display = "none";
         document.getElementById("password-section").style.display = "block";
       } else {
-        alert("Invalid OTP. Please try again.");
+        // Show error modal instead of alert
+        document.getElementById('modal-title').textContent = "Invalid OTP";
+        document.getElementById('modal-message').textContent = "The OTP you entered is incorrect. Please try again.";
+        document.getElementById('modal-icon').innerHTML = '<svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>';
+        document.getElementById('modal-icon-bg').classList.replace('bg-green-100', 'bg-red-100');
+        showModal();
       }
     }
 
@@ -213,7 +289,7 @@ if (isset($_POST["submit"])) {
   </script>
 </head>
 
-<body class="bg-gray-100 flex justify-center items-center min-h-screen">
+<body class="bg-gray-100 flex justify-center items-center min-h-screen font-Nrj-fonts">
   <div class="bg-white p-8 rounded-md shadow-lg w-96 border-[0.5px] border-gray-300">
     <div class="flex justify-center items-center space-x-1 mb-4">
       <div class="flex justify-center items-center space-x-1">
@@ -305,6 +381,43 @@ if (isset($_POST["submit"])) {
         </button>
       </div>
     </form>
+  </div>
+
+  <!-- Success Modal -->
+  <div id="success-modal"
+    class="fixed inset-0 z-50 hidden overflow-y-auto overflow-x-hidden flex items-center justify-center">
+    <!-- Backdrop -->
+    <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity"></div>
+
+    <!-- Modal Content -->
+    <div id="modal-content" class="relative bg-white rounded-lg shadow-xl max-w-md mx-auto p-6 modal-enter">
+      <div class="text-center">
+        <!-- Success Icon -->
+        <div id="modal-icon-bg"
+          class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4">
+          <div id="modal-icon">
+            <svg class="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Modal Title -->
+        <h3 id="modal-title" class="text-lg font-medium text-gray-900 mb-2">OTP Sent Successfully!</h3>
+
+        <!-- Modal Message -->
+        <p id="modal-message" class="text-sm text-gray-500 mb-5">
+          We've sent a 4-digit OTP to your email address. Please check your inbox and enter the code to verify.
+        </p>
+
+        <!-- Continue Button -->
+        <button type="button" onclick="closeModal()"
+          class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-500 text-base font-medium text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-sm transition duration-200">
+          Continue
+        </button>
+      </div>
+    </div>
   </div>
 </body>
 
